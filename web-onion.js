@@ -13,13 +13,27 @@ const WebOnionSDK = {
                 }
             },
             {
-                command: 'wc',
+                command: 'wo',
                 aliases: null,
-                flags: ['info'],
+                flags: ['info', 'inspire'],
                 action: (flags) => {
                     if (flags[0] === 'info') {
-                        WCGenericOutputLibrary.printMessage('Web CLI. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
-                        WCGenericOutputLibrary.printMessage('Current version: 1.0.0', 3);
+                        WCGenericOutputLibrary.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
+                        WCGenericOutputLibrary.printMessage('Current version: 1.1.0', 3);
+                    }
+
+                    if (flags[0] === 'inspire') {
+                        $.get({
+                            url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
+                            cache: false
+                        }).then(data => {
+                            data = data[0];
+
+                            WCGenericOutputLibrary.printMessage();
+                            WCGenericOutputLibrary.printMessage(data.content);
+                            WCGenericOutputLibrary.printMessage(`-${data.title}`, 3);
+                            WCGenericOutputLibrary.printMessage();
+                        })
                     }
                 }
             },

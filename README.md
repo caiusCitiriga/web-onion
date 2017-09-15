@@ -9,8 +9,117 @@ Install the library
 ```
 npm i web-cli
 ```
+### Quick setup
+To quickly implement WebOnion in your project follow these steps:
+* Include JQuery in your project. How it's up to you. You can use the CDNs, a file or NPM. Just make sure that JQuery is included.
 
-### Setup
+* Create an HTML file (or use one you already have). Note that this file must be the index point of your application
+
+* Include in this file the WebOnion script: ```<script src="web-onion.js"></script>```
+
+Now WebOnion is successfully loaded. To initialize the CLI create another JS file and load that file after the WebOnion script loading: ```<script src="my-script.js"></script>```
+
+WebOnion, uses JQuery, the quickest way to initialize the CLI is to add this in your script file:
+```javascript
+$(document).ready(() => { WebOnionSDK.initialize(); });
+```
+With this line of code, you will load up the WebOnion SDK. If you serve your index HTML file, you'll note that the browser will show a dark screen with a little ***>*** sign at the bottom.
+
+![alt text](./assets/web-onion-readme.png)
+
+This is the WebOnion CLI. Right now, it can do pretty much nothing, but here it comes its real power. **The extensibility.** 
+
+WebOnion is based on various **core** libararies. Each file is responsible for accomplishing one or more tasks.
+
+* **WCDispatcherLibrary** takes care of dispatching the right action at the right command.
+* **WCGenericOutputLibrary** this core lib takes care of handling all the generic outputs. 
+* **WCGenericInputLibrary** this library takes care of handling all the interactions with the user
+
+We use the **WebOnionSDK** object to configure the CLI, while we use some of the **libraries** to interact with the CLI.
+
+With the default configuration you will have a set of default commands. These commands can be fired directly from the command line interface from the browser:
+
+#### echo
+Takes one flag (mandatory) **--m**, followed by a semicolon and the text you want to echo in console. 
+
+```javascript
+echo --m:Hello world!
+```
+
+#### wo
+The WebOnion's main command.
+
+Takes multiple flags:
+* **--info**: echos out the info about WebOnion
+* **--inspire**: echos out a random quote using the ***Quotes on design*** web API
+```javascript
+wo --info       // echos infos about WebOnion
+wo --inspire    // echos a random quote
+```
+
+#### clear
+Clears out the console.
+Takes no flags and it has multiple aliases
+```javascript
+clear   //  Full command
+clr     //  Alias
+ccl     //  Alias
+cls     //  Alias
+kk      //  Alias
+```
+
+Before, we talked about **extensibility**, this is one of the main features of WebOnion. It's easier to see the code, since talks by itself, to get an idea:
+
+```javascript
+/**  
+  * This method is used to add a new command to the WebOnion's dispatcher.
+  * It takes an array of command sets.
+  */
+WebOnionSDK.addSetsToDispatcher([
+    {
+        command: 'test',                    //  The command full name
+        aliases: ['t'],                     //  The array of aliases for the command if any.
+        flags: ['title', 'boxed-title'],    //  The array of flags for the command if any.
+        
+        /**
+          * The action that will be executed when the command or one of its aliases matches.
+          * Here you will have access to the flags typed in by the user, if any.
+          * Use them to build your command logic.
+          */
+        action: (flags) => {
+            if(!flags.length) {
+                WCGenericOutputLibrary.printMessage('Command fired with no flags');
+                return;
+            }
+
+            if(flags[0] === 'title'){
+                WCGenericOutputLibrary.printTitle('Command fired with title flag');
+                return;
+            }
+
+            if(flags[0] === 'boxed-title'){
+                WCGenericOutputLibrary.printBoxedTitle('Command fired with boxed-title flag');
+                return;
+            }
+
+            //  Command fired: test "--boxed-title:full_width=false"
+            if(flags[0].indexOf('boxed-title') !== -1 && flags[0].split(':')[1] === 'full_width=false'){
+                WCGenericOutputLibrary.printBoxedTitle('Command fired with boxed-title flag', false);
+                return;
+            }
+
+            //  Command fired: test "--boxed-title:full_width=true"
+            if(flags[0].indexOf('boxed-title') !== -1 && flags[0].split(':')[1] === 'full_width=true'){
+                //  same as calling printBoxedTitle with no second param.
+                WCGenericOutputLibrary.printBoxedTitle('Command fired with boxed-title flag', true);
+                return;
+            }
+        }
+    },
+]);
+```
+
+# Advanced setup
 You can configure the CLI however you like. WebOnion offers a configuration object that can be tweaked using specific methods. Although you could directly access the object properties, it's always better to use the specific method, since it could do some other processes that you're unaware of.
 
 The configuration object strucure:
@@ -106,6 +215,7 @@ Allows raw HTML to be rendered in the console
 WebOnionSdk.allowRawHtml(true);
 ```
 
+# Methods
 
 ## Versioning
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/caiuscitiriga/smart-cli/tags). 

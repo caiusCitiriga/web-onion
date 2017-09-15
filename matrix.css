@@ -5,6 +5,7 @@
     --warn: #ff9900;
     --error: #ff0000;
     --info: #6699ff;
+    --title: #9900cc;
 }
 
 * {
@@ -28,6 +29,28 @@ h1.wc-intialization {
     margin-top: -2rem;
     text-align: center;
     font-family: monospace;
+}
+
+h1.wc-title,
+h1.wc-title-boxed-compact,
+h1.wc-title-boxed-full-width{
+    padding: .5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--title) !important;
+}
+h1.wc-title-boxed-compact,
+h1.wc-title-boxed-full-width {
+    border: 1px solid var(--title);
+}
+
+h1.wc-title-boxed-full-width{
+    width: 100%;
+}
+
+div.wc-title-width-wrapper{
+    display: flex;
+    flex-direction: row;
 }
 
 .wc-wrp {

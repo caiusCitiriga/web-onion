@@ -40,11 +40,25 @@ const WCGenericOutputLibrary = {
     },
 
     printTitle: (text) => {
-        throw Error('Not implemented');
+        if (!WebOnionSDK.__configuration.general.allow_raw_html) {
+            WebOnionSDK.allowRawHtml(true);
+            WCGenericOutputLibrary.printMessage(`<h1 class="wc-title">${text}</h1>`);
+            WebOnionSDK.allowRawHtml(false);
+            return;
+        }
+
+        WCGenericOutputLibrary.printMessage(`<h1 class="wc-title">${text}</h1>`);
     },
 
-    printBoxedTitle: (text) => {
-        throw Error('Not implemented');
+    printBoxedTitle: (text, full_width = true) => {
+        if (!WebOnionSDK.__configuration.general.allow_raw_html) {
+            WebOnionSDK.allowRawHtml(true);
+            WCGenericOutputLibrary.printMessage(`<h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1>`);
+            WebOnionSDK.allowRawHtml(false);
+            return;
+        }
+
+        WCGenericOutputLibrary.printMessage(`<div class="wc-title-width-wrapper"><h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1></div>`);
     },
 
     printSubtitle: (text) => {
