@@ -38,10 +38,10 @@ I will use the Typescript notation since it explains better the possible values 
 ## Dispatcher configuration
 The dispatcher property holds all the configurations for the commands. As you can see, its simple configuration is composed by 4 properties, and 2 of these can be omitted.
 
-* <b>command</b>: Is a string that defines the command full name. This string can be used to trigger the action of the command
-* <b>aliases</b>: can be an array of strings or omitted. These strings will be the aliases of the full command name
-* <b>flags</b>: If the command takes some extra configuration or inputs from the user, you can specify here the flags to be used to trigger the specific functionality.
-* <b>action</b>: This is the code that will be executed when the command fires. If your command can be used in combination with any flag, here you'll have access to a parameter called flags. In this parameter you will find an array of strings. Your choiche on how to separe the value from the flag. 
+* **command**: Is a string that defines the command full name. This string can be used to trigger the action of the command
+* **aliases**: can be an array of strings or omitted. These strings will be the aliases of the full command name
+* **flags**: If the command takes some extra configuration or inputs from the user, you can specify here the flags to be used to trigger the specific functionality.
+* **action**: This is the code that will be executed when the command fires. If your command can be used in combination with any flag, here you'll have access to a parameter called flags. In this parameter you will find an array of strings. Your choiche on how to separe the value from the flag. 
 
 #### Flag - value speparation tip
 You could ask the user to insert a command following this syntax:
@@ -51,19 +51,21 @@ command --flag value
 So when you'll recieve the flag in your <b>action</b> you will simply split it by spaces and take the last value. 
 
 ## Input field configuration
-The input field can be configured to automatically be cleared when the user presses ENTER or not.<br>
+The input field can be configured to automatically be cleared when the user presses ENTER or not.
+
 By default it automatically clears.
 
 ## General configuration
 Here you can tweak the general CLI's options.
-* <b>theme</b>: here you can chose the graphical theme for the CLI. For now only <i>Matrix</i> is supported
-* <b>allow_raw_html</b>: this will prevent or not the parsing of HTML strings in what will be rendered on the console. If you plan to write custom HTML code during the prints, this is the option for you.
+* **theme**: here you can chose the graphical theme for the CLI. For now only <i>Matrix</i> is supported
+* **allow_raw_html**: this will prevent or not the parsing of HTML strings in what will be rendered on the console. If you plan to write custom HTML code during the prints, this is the option for you.
 
 # Setters
 ## addSetsToDispatcher
 
 Adds the given array of sets to the dispatcher configuration
-<b>Parameters</b>: sets {Array<DispatcherSet>}
+
+**Parameters**: sets {Array<DispatcherSet>}
 ```typescript
 const DispatcherSet = {
     command: string, 
@@ -96,7 +98,8 @@ WebOnionSdk.addSetsToDispatcher([
 
 ## allowRawHtml
 Allows raw HTML to be rendered in the console
-<b>Parameters</b>: value {boolean}
+
+**Parameters**: value {boolean}
 
 ### Example
 ```javascript
