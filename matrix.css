@@ -1,0 +1,82 @@
+:root {
+    font-size: 14px;
+    --lime: #32cd32;
+    --message: var(--lime);
+    --warn: #ff9900;
+    --error: #ff0000;
+    --info: #6699ff;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+h1.wc-intialization {
+    color: var(--lime);
+    font-size: 1.5rem;
+    width: 100%;
+    position: absolute;
+    height: 4rem;
+    line-height: 4rem;
+    top: 50%;
+    margin-top: -2rem;
+    text-align: center;
+    font-family: monospace;
+}
+
+.wc-wrp {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    color: var(--lime);
+    font-family: monospace;
+    font-size: 1.35rem; 
+}
+
+.wc-console{
+    flex-grow: 1;
+    max-height: 97%;
+    padding: .5rem;
+    overflow-y: scroll;
+}
+.wc-input{    
+    display: flex;
+    flex-direction: row;
+    height: 2rem;
+    line-height: 2rem;
+    margin-bottom: .5rem;
+}
+
+.wc-input-field{
+    flex-grow: 2;
+    background-color: #000;
+    border: none;   
+    color: var(--lime);
+    outline: none;
+    margin-left: .5rem;
+    font-family: monospace;
+    font-size: 1.1rem;
+}
+
+.wc-message-message {
+    color: var(--message);
+}
+
+.wc-message-error {
+    color: var(--error);
+}
+
+.wc-message-warn {
+    color: var(--warn);
+}
+
+.wc-message-info {
+    color: var(--info);
+}
