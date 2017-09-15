@@ -1,3 +1,4 @@
+
 const WebOnionSDK = {
     //  Configurable properties
     __configuration: {
@@ -103,11 +104,11 @@ const WebOnionSDK = {
      */
     initialize: () => {
         WebOnionSDK.__showInitializationScreen();
-        WebOnionSDK.__loadCoreResources(() => {
-            WebOnionSDK.__clearDocument();
-            WebOnionSDK.__createConsole();
-            WebOnionSDK.__startParser();
-        });
+        // WebOnionSDK.__loadCoreResources(() => {
+        WebOnionSDK.__clearDocument();
+        WebOnionSDK.__createConsole();
+        WebOnionSDK.__startParser();
+        // });
     },
 
     //  Private stuff

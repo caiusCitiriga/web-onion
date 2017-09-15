@@ -34,10 +34,14 @@ h1.wc-intialization {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #000;
     color: var(--lime);
     font-family: monospace;
     font-size: 1.35rem; 
+
+    background-image: url('./assets/console_bg.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #000;
 }
 
 .wc-console{
@@ -56,8 +60,8 @@ h1.wc-intialization {
 
 .wc-input-field{
     flex-grow: 2;
-    background-color: #000;
     border: none;   
+    background-color: #000;
     color: var(--lime);
     outline: none;
     margin-left: .5rem;

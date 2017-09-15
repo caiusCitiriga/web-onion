@@ -1,4 +1,3 @@
-WebOnionSDK.automaticallyClearInputField(false);
 WebOnionSDK.allowRawHtml(true);
 
 WebOnionSDK.addSetsToDispatcher([
@@ -23,9 +22,11 @@ WebOnionSDK.addSetsToDispatcher([
         aliases: null,
         flags: null,
         action: (flags) => {
-            WCInputLibrary.prompt('What\'s your age?', (age) => {
-                WCGenericOutputLibrary.printMessage('So your age is: ' + age);
-                return;
+            WCInputLibrary.prompt('What\'s your age?', 'age', () => {
+                WCInputLibrary.prompt('And what\'s your name?', 'name', () => {
+                    WCGenericOutputLibrary
+                        .printMessage(`Hello ${WCInputLibrary.getInputData('name')}! Your age is: ${WCInputLibrary.getInputData('age')}`);
+                })
             }, 3);
         }
     },
