@@ -16,8 +16,10 @@ const WebOnionSDK = {
                 aliases: null,
                 flags: ['info'],
                 action: (flags) => {
-                    WCGenericOutputLibrary.printMessage('Web CLI. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
-                    WCGenericOutputLibrary.printMessage('Current version: 0.1.1', 3);
+                    if (flags[0] === 'info') {
+                        WCGenericOutputLibrary.printMessage('Web CLI. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
+                        WCGenericOutputLibrary.printMessage('Current version: 1.0.0', 3);
+                    }
                 }
             },
             {
@@ -39,7 +41,6 @@ const WebOnionSDK = {
         },
 
         general: {
-            load_timeout: 100,
             theme: 'matrix', //  TODO implement theme switch function
             allow_raw_html: false
         },
@@ -68,15 +69,6 @@ const WebOnionSDK = {
     },
 
     /**
-     * Sets the timeout for the core resources loading. This will affect the
-     * time that you'll see the loading screen too. A short timeout like 1000ms
-     * should be more than enough everywhere.
-     */
-    setLoadTimeout: (timeout) => {
-        WebOnionSDK.__configuration.general.load_timeout = timeout;
-    },
-
-    /**
      * Sets the behavior for the input field whenever the ENTER key is pressed.
      * By default the input will be cleared after each command is fired.
      *
@@ -98,15 +90,11 @@ const WebOnionSDK = {
 
     initialize: () => {
         WebOnionSDK.__showInitializationScreen();
-        WebOnionSDK.__loadCoreResources();
-
-        //  Wait for the resources to be loaded.
-        //  From now on it will be safe to use the core libraries
-        setTimeout(() => {
-            WebOnionSDK.__clearDocument();
+        WebOnionSDK.__loadCoreResources(() => {
+            WebOnionSDK.__clearConsole();
             WebOnionSDK.__createConsole();
             WebOnionSDK.__startParser();
-        }, WebOnionSDK.__configuration.general.load_timeout);
+        });
     },
 
     clearInput: () => {
@@ -119,7 +107,7 @@ const WebOnionSDK = {
         $('body').append(`<h1 class="wc-intialization">WebCLI is loading...<br><small>v1.0.0</small></h1>`);
     },
 
-    __loadCoreResources: () => {
+    __loadCoreResources: (callback) => {
         //  Append the stylesheet
         const head = document.getElementsByTagName('head')[0];
         const link = document.createElement('link');
@@ -131,22 +119,18 @@ const WebOnionSDK = {
         head.appendChild(link);
 
         //  Load all the core scripts
-        const dispatcher = document.createElement('script');
-        const generic_output = document.createElement('script');
-
-        dispatcher.src = './core/wc-dispatcher.core.js';
-        generic_output.src = './core/wc-generic-output.core.js';
-
-        head.appendChild(dispatcher);
-        head.appendChild(generic_output);
+        $.getScript('./core/wc-dispatcher.core.js').then(() => {
+            $.getScript('./core/wc-generic-output.core.js').then(() => {
+                callback();
+            });
+        })
     },
 
-    __clearDocument: () => {
+    __clearConsole: () => {
         $('body').empty();
     },
 
     __createConsole: () => {
-        //  Create elements
         $('body').append('<div class="wc-wrp"></div>');
         $('.wc-wrp').append('<div class="wc-console"></div>');
         $('.wc-wrp').append('<div class="wc-input"></div>');
@@ -177,7 +161,3 @@ const WebOnionSDK = {
         });
     },
 }
-
-$(document).ready(() => {
-    WebOnionSDK.initialize();
-});
