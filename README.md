@@ -1,4 +1,4 @@
-# WebCLI
+# WebOnion
 A library for creating browser based applications with a old school CLI interface.
 
 ## Getting Started
@@ -11,7 +11,7 @@ npm i web-cli
 ```
 
 ### Setup
-You can configure the CLI however you like. WebCLI offers a configuration object that can be tweaked using specific methods. Although you could directly access the object properties, it's always better to use the specific method, since it could do some other processes that you're unaware of.
+You can configure the CLI however you like. WebOnion offers a configuration object that can be tweaked using specific methods. Although you could directly access the object properties, it's always better to use the specific method, since it could do some other processes that you're unaware of.
 
 The configuration object strucure:
 
@@ -57,7 +57,7 @@ By default it automatically clears.
 
 ## General configuration
 Here you can tweak the general CLI's options.
-* <b>load_timeout</b>: this sets the timeout that WebCLI will give to its core scripts to load. A loading screen will be shown during this time. Increasing the time will give more time to load the file on slower machines. Generally speaking 100ms should be more than enough.
+* <b>load_timeout</b>: this sets the timeout that WebOnion will give to its core scripts to load. A loading screen will be shown during this time. Increasing the time will give more time to load the file on slower machines. Generally speaking 100ms should be more than enough.
 * <b>theme</b>: here you can chose the graphical theme for the CLI. For now only <i>Matrix</i> is supported
 * <b>allow_raw_html</b>: this will prevent or not the parsing of HTML strings in what will be rendered on the console. If you plan to write custom HTML code during the prints, this is the option for you.
 
@@ -76,7 +76,7 @@ const DispatcherSet = {
 ```
 ### Example
 ```javascript
-WebCLISdk.addSetsToDispatcher([
+WebOnionSdk.addSetsToDispatcher([
     {
         command: 'xx',
         aliases: null,
@@ -102,7 +102,7 @@ Sets the loading timeout in ms for the core scripts
 
 ### Example
 ```javascript
-WebCLISdk.setLoadTimeout(100);
+WebOnionSdk.setLoadTimeout(100);
 ```
 
 ## allowRawHtml
@@ -111,7 +111,7 @@ Allows raw HTML to be rendered in the console
 
 ### Example
 ```javascript
-WebCLISdk.allowRawHtml(true);
+WebOnionSdk.allowRawHtml(true);
 ```
 
 
