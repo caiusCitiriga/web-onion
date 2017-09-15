@@ -97,10 +97,6 @@ const WebOnionSDK = {
         });
     },
 
-    clearInput: () => {
-        $('input.wc-input-field').val(null);
-    },
-
     //  Private stuff
     __showInitializationScreen: () => {
         $('body').css('background-color', '#000');
@@ -121,7 +117,9 @@ const WebOnionSDK = {
         //  Load all the core scripts
         $.getScript('./core/wc-dispatcher.core.js').then(() => {
             $.getScript('./core/wc-generic-output.core.js').then(() => {
-                callback();
+                $.getScript('./core/wc-input.core.js').then(() => {
+                    callback();
+                });
             });
         })
     },
@@ -137,12 +135,12 @@ const WebOnionSDK = {
         $('.wc-input').append('<div class="wc-input-pointer">></div>');
         $('.wc-input').append('<input type="text" class="wc-input-field"/>');
 
-        $('input.wc-input-field').focus();
+        WCInputLibrary.focusInput();
     },
 
     __startParser: () => {
-        $('input.wc-input-field').on('keyup', (k) => {
-            if (k.keyCode !== 13) { return; } // if not ENTER
+        $('input.wc-input-field').on('keypress', (k) => {
+            if (k.keyCode !== 13 || k.currentTarget.classList.value.indexOf('wc-input-wait') !== -1) { return; } // if not ENTER or in input wait mode
 
             const raw_command = $('input.wc-input-field').val();
             WebOnionSDK.__command_set.command = raw_command.split('--')[0]; //  This will take only what's before any flag
@@ -157,7 +155,7 @@ const WebOnionSDK = {
             WebOnionSDK.__command_set.command = null;
             WebOnionSDK.__command_set.flags = null;
 
-            WebOnionSDK.__configuration.input_field.clear_after_submit ? WebOnionSDK.clearInput() : null;
+            WebOnionSDK.__configuration.input_field.clear_after_submit ? WCInputLibrary.clearInput() : null;
         });
     },
 }

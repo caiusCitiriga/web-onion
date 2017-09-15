@@ -17,7 +17,18 @@ WebOnionSDK.addSetsToDispatcher([
         action: (flags) => {
             WCGenericOutputLibrary.printMessage('This is a message with info severity', 3);
         }
-    }
+    },
+    {
+        command: 'ask',
+        aliases: null,
+        flags: null,
+        action: (flags) => {
+            WCInputLibrary.prompt('What\'s your age?', (age) => {
+                WCGenericOutputLibrary.printMessage('So your age is: ' + age);
+                return;
+            }, 3);
+        }
+    },
 ]);
 
 $(document).ready(() => {
