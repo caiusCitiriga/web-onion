@@ -1,11 +1,36 @@
 {
-    "name": "web-cli",
-    "version": "0.0.1",
+    "name": "web-onion",
+    "version": "0.0.2",
     "description": "An sdk for building browser CLI web applications",
     "main": "main.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Caius Citiriga",
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "typescript": "^2.5.2",
+        "webpack": "^3.5.6"
+    },
+    "devDependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/caiusCitiriga/web-cli.git"
+    },
+    "keywords": [
+        "web",
+        "cli",
+        "web-cli",
+        "command",
+        "prompt",
+        "web-console",
+        "console",
+        "terminal",
+        "web-terminal",
+        "terminal-web"
+    ],
+    "bugs": {
+        "url": "https://github.com/caiusCitiriga/web-cli/issues"
+    },
+    "homepage": "https://github.com/caiusCitiriga/web-cli#readme"
 }

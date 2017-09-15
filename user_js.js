@@ -1,8 +1,8 @@
-WebCLISdk.setLoadTimeout(100);
-WebCLISdk.automaticallyClearInputField(false);
-WebCLISdk.allowRawHtml(true);
+WebOnionSDK.setLoadTimeout(100);
+WebOnionSDK.automaticallyClearInputField(false);
+WebOnionSDK.allowRawHtml(true);
 
-WebCLISdk.addSetsToDispatcher([
+WebOnionSDK.addSetsToDispatcher([
     {
         command: 'xx',
         aliases: null,

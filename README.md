@@ -109,7 +109,6 @@ WebCLISdk.setLoadTimeout(100);
 Allows raw HTML to be rendered in the console
 <b>Parameters</b>: value {boolean}
 
-
 ### Example
 ```javascript
 WebCLISdk.allowRawHtml(true);

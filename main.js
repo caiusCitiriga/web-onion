@@ -1,4 +1,4 @@
-const WebCLISdk = {
+const WebOnionSDK = {
     //  Configurable properties
     __configuration: {
         dispatcher: [
@@ -17,7 +17,7 @@ const WebCLISdk = {
                 flags: ['info'],
                 action: (flags) => {
                     WCGenericOutputLibrary.printMessage('Web CLI. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
-                    WCGenericOutputLibrary.printMessage('Current version: 0.0.1', 3);
+                    WCGenericOutputLibrary.printMessage('Current version: 0.1.0', 3);
                 }
             },
             {
@@ -63,7 +63,7 @@ const WebCLISdk = {
      */
     addSetsToDispatcher: (sets) => {
         sets.forEach(s => {
-            WebCLISdk.__configuration.dispatcher.push(s);
+            WebOnionSDK.__configuration.dispatcher.push(s);
         });
     },
 
@@ -73,7 +73,7 @@ const WebCLISdk = {
      * should be more than enough everywhere.
      */
     setLoadTimeout: (timeout) => {
-        WebCLISdk.__configuration.general.load_timeout = timeout;
+        WebOnionSDK.__configuration.general.load_timeout = timeout;
     },
 
     /**
@@ -83,7 +83,7 @@ const WebCLISdk = {
      * @param {boolean} value 
      */
     automaticallyClearInputField(value) {
-        WebCLISdk.__configuration.input_field.clear_after_submit = value;
+        WebOnionSDK.__configuration.input_field.clear_after_submit = value;
     },
 
     /**
@@ -93,20 +93,20 @@ const WebCLISdk = {
      * @param {boolean} value 
      */
     allowRawHtml(value) {
-        WebCLISdk.__configuration.general.allow_raw_html = value;
+        WebOnionSDK.__configuration.general.allow_raw_html = value;
     },
 
     initialize: () => {
-        WebCLISdk.__showInitializationScreen();
-        WebCLISdk.__loadCoreResources();
+        WebOnionSDK.__showInitializationScreen();
+        WebOnionSDK.__loadCoreResources();
 
         //  Wait for the resources to be loaded.
         //  From now on it will be safe to use the core libraries
         setTimeout(() => {
-            WebCLISdk.__clearDocument();
-            WebCLISdk.__createConsole();
-            WebCLISdk.__startParser();
-        }, WebCLISdk.__configuration.general.load_timeout);
+            WebOnionSDK.__clearDocument();
+            WebOnionSDK.__createConsole();
+            WebOnionSDK.__startParser();
+        }, WebOnionSDK.__configuration.general.load_timeout);
     },
 
     clearInput: () => {
@@ -161,23 +161,23 @@ const WebCLISdk = {
             if (k.keyCode !== 13) { return; } // if not ENTER
 
             const raw_command = $('input.wc-input-field').val();
-            WebCLISdk.__command_set.command = raw_command.split('--')[0]; //  This will take only what's before any flag
+            WebOnionSDK.__command_set.command = raw_command.split('--')[0]; //  This will take only what's before any flag
 
             const flags = raw_command.split('--');
             flags.shift(); // remove the command from the flags array;
-            WebCLISdk.__command_set.flags = flags;
+            WebOnionSDK.__command_set.flags = flags;
 
-            WCDispatcherLibrary.dispatch(WebCLISdk.__configuration, WebCLISdk.__command_set, WCGenericOutputLibrary);
+            WCDispatcherLibrary.dispatch(WebOnionSDK.__configuration, WebOnionSDK.__command_set, WCGenericOutputLibrary);
 
             //  Reset the command set
-            WebCLISdk.__command_set.command = null;
-            WebCLISdk.__command_set.flags = null;
+            WebOnionSDK.__command_set.command = null;
+            WebOnionSDK.__command_set.flags = null;
 
-            WebCLISdk.__configuration.input_field.clear_after_submit ? WebCLISdk.clearInput() : null;
+            WebOnionSDK.__configuration.input_field.clear_after_submit ? WebOnionSDK.clearInput() : null;
         });
     },
 }
 
 $(document).ready(() => {
-    WebCLISdk.initialize();
+    WebOnionSDK.initialize();
 });

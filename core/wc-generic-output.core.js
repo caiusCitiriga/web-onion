@@ -29,7 +29,7 @@ const WCGenericOutputLibrary = {
 
         $('.wc-console').append(message_wrapper);
         //  Based on the configuration it will prevent the parsing of HTML or not
-        WebCLISdk.__configuration.general.allow_raw_html ? $('.wc-message').last().append(message) : $('.wc-message').last().text(message);
+        WebOnionSDK.__configuration.general.allow_raw_html ? $('.wc-message').last().append(message) : $('.wc-message').last().text(message);
         $('.wc-console').append(`<br>`);
 
         $('.wc-console').scrollTop($('.wc-console')[0].scrollHeight); //scroll to bottom
