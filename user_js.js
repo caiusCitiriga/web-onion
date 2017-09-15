@@ -1,4 +1,3 @@
-WebOnionSDK.setLoadTimeout(100);
 WebOnionSDK.automaticallyClearInputField(false);
 WebOnionSDK.allowRawHtml(true);
 
@@ -20,3 +19,7 @@ WebOnionSDK.addSetsToDispatcher([
         }
     }
 ]);
+
+$(document).ready(() => {
+    WebOnionSDK.initialize();
+})

@@ -30,7 +30,6 @@ I will use the Typescript notation since it explains better the possible values 
     },
 
     general: {
-        load_timeout: number,
         theme: string, // not yet handled
         allow_raw_html: boolean
     }
@@ -57,7 +56,6 @@ By default it automatically clears.
 
 ## General configuration
 Here you can tweak the general CLI's options.
-* <b>load_timeout</b>: this sets the timeout that WebOnion will give to its core scripts to load. A loading screen will be shown during this time. Increasing the time will give more time to load the file on slower machines. Generally speaking 100ms should be more than enough.
 * <b>theme</b>: here you can chose the graphical theme for the CLI. For now only <i>Matrix</i> is supported
 * <b>allow_raw_html</b>: this will prevent or not the parsing of HTML strings in what will be rendered on the console. If you plan to write custom HTML code during the prints, this is the option for you.
 
@@ -94,15 +92,6 @@ WebOnionSdk.addSetsToDispatcher([
         }
     }
 ]);
-```
-
-## setLoadTimeout
-Sets the loading timeout in ms for the core scripts
-<b>Parameters</b>: timeout {number}
-
-### Example
-```javascript
-WebOnionSdk.setLoadTimeout(100);
 ```
 
 ## allowRawHtml
