@@ -17,7 +17,7 @@ const WebOnionSDK = {
                 flags: ['info'],
                 action: (flags) => {
                     WCGenericOutputLibrary.printMessage('Web CLI. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
-                    WCGenericOutputLibrary.printMessage('Current version: 0.1.0', 3);
+                    WCGenericOutputLibrary.printMessage('Current version: 0.1.1', 3);
                 }
             },
             {
