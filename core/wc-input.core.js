@@ -11,10 +11,10 @@ const WCInputLibrary = {
     prompt: (message, callback, severity = 0) => {
         WCInputLibrary.clearInput();
         WCGenericOutputLibrary.printMessage(message, severity);
-        WCInputLibrary.__setInputFieldInSpecialWaitMode(callback);
+        WCInputLibrary.__handleCallbackExecution(callback);
     },
 
-    __setInputFieldInSpecialWaitMode(callback) {
+    __handleCallbackExecution(callback) {
         $('input.wc-input-field').addClass('wc-input-wait'); // this will cause the parser to skip the data
 
         $('input.wc-input-field.wc-input-wait').on('keypress', k => {

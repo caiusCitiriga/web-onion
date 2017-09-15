@@ -88,21 +88,43 @@ const WebOnionSDK = {
         WebOnionSDK.__configuration.general.allow_raw_html = value;
     },
 
+    /**
+     * The starting point of WebOnion.
+     * First it will show a loading screen, while the screen is showing
+     * It will load the core resources. First of all the stylesheets needed
+     * Then the scripts.
+     *
+     * When all the scripts are loaded it will clear the document, removing anything
+     * inside the body.
+     *
+     * Then it'll start creating the console.
+     * When the console is created the parser will start listening the commands flowing
+     * through the input field.
+     */
     initialize: () => {
         WebOnionSDK.__showInitializationScreen();
         WebOnionSDK.__loadCoreResources(() => {
-            WebOnionSDK.__clearConsole();
+            WebOnionSDK.__clearDocument();
             WebOnionSDK.__createConsole();
             WebOnionSDK.__startParser();
         });
     },
 
     //  Private stuff
+    /**
+     * Shows the loading screen
+     */
     __showInitializationScreen: () => {
         $('body').css('background-color', '#000');
         $('body').append(`<h1 class="wc-intialization">WebCLI is loading...<br><small>v1.0.0</small></h1>`);
     },
 
+    /**
+     * Loads all the needed core resources for the SDK to work.
+     *
+     * The first loaded thing MUST be the stylesheet since it's crucial for
+     * the correct terminal displaying.
+     */
     __loadCoreResources: (callback) => {
         //  Append the stylesheet
         const head = document.getElementsByTagName('head')[0];
@@ -124,10 +146,17 @@ const WebOnionSDK = {
         })
     },
 
-    __clearConsole: () => {
+    /**
+     * Removes anything from the body
+     */
+    __clearDocument: () => {
         $('body').empty();
     },
 
+    /**
+     * Creates the elements needed by the UI
+     * The styles are defined in the stylesheet
+     */
     __createConsole: () => {
         $('body').append('<div class="wc-wrp"></div>');
         $('.wc-wrp').append('<div class="wc-console"></div>');
@@ -138,6 +167,9 @@ const WebOnionSDK = {
         WCInputLibrary.focusInput();
     },
 
+    /**
+     * Starts listening for commands coming from the input at each ENTER press
+     */
     __startParser: () => {
         $('input.wc-input-field').on('keypress', (k) => {
             if (k.keyCode !== 13 || k.currentTarget.classList.value.indexOf('wc-input-wait') !== -1) { return; } // if not ENTER or in input wait mode
