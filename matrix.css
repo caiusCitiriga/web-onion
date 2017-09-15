@@ -6,6 +6,9 @@
     --error: #ff0000;
     --info: #6699ff;
     --title: #9900cc;
+    --key: #ffcc00;
+    --value: #cccccc;
+    --kv-sep: #262626;
 }
 
 * {
@@ -106,4 +109,17 @@ div.wc-title-width-wrapper{
 
 .wc-message-info {
     color: var(--info);
+}
+
+span.wc-key {
+    color: var(--key);
+}
+
+span.wc-value {
+    color: var(--value);
+}
+
+hr.wc-kv-sep {
+    margin-top: .2rem;
+    border-color: var(--kv-sep);
 }

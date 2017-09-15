@@ -80,36 +80,36 @@ WebOnionSDK.addSetsToDispatcher([
         command: 'test',                    //  The command full name
         aliases: ['t'],                     //  The array of aliases for the command if any.
         flags: ['title', 'boxed-title'],    //  The array of flags for the command if any.
-        
+
         /**
           * The action that will be executed when the command or one of its aliases matches.
           * Here you will have access to the flags typed in by the user, if any.
           * Use them to build your command logic.
           */
         action: (flags) => {
-            if(!flags.length) {
+            if (!flags.length) {
                 WCGenericOutputLibrary.printMessage('Command fired with no flags');
                 return;
             }
 
-            if(flags[0] === 'title'){
+            if (flags[0] === 'title') {
                 WCGenericOutputLibrary.printTitle('Command fired with title flag');
                 return;
             }
 
-            if(flags[0] === 'boxed-title'){
+            if (flags[0] === 'boxed-title') {
                 WCGenericOutputLibrary.printBoxedTitle('Command fired with boxed-title flag');
                 return;
             }
 
             //  Command fired: test "--boxed-title:full_width=false"
-            if(flags[0].indexOf('boxed-title') !== -1 && flags[0].split(':')[1] === 'full_width=false'){
+            if (flags[0].indexOf('boxed-title') !== -1 && flags[0].split(':')[1] === 'full_width=false') {
                 WCGenericOutputLibrary.printBoxedTitle('Command fired with boxed-title flag', false);
                 return;
             }
 
             //  Command fired: test "--boxed-title:full_width=true"
-            if(flags[0].indexOf('boxed-title') !== -1 && flags[0].split(':')[1] === 'full_width=true'){
+            if (flags[0].indexOf('boxed-title') !== -1 && flags[0].split(':')[1] === 'full_width=true') {
                 //  same as calling printBoxedTitle with no second param.
                 WCGenericOutputLibrary.printBoxedTitle('Command fired with boxed-title flag', true);
                 return;

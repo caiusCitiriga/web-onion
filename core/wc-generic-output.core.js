@@ -35,10 +35,18 @@ const WCGenericOutputLibrary = {
         $('.wc-console').scrollTop($('.wc-console')[0].scrollHeight); //scroll to bottom
     },
 
+    /**
+     * Clears the console
+     */
     clearConsole: () => {
         $('.wc-console').empty();
     },
 
+    /**
+     * Prints a title on the console
+     *
+     * @param {string} text the text for the title
+     */
     printTitle: (text) => {
         if (!WebOnionSDK.__configuration.general.allow_raw_html) {
             WebOnionSDK.allowRawHtml(true);
@@ -50,6 +58,12 @@ const WCGenericOutputLibrary = {
         WCGenericOutputLibrary.printMessage(`<h1 class="wc-title">${text}</h1>`);
     },
 
+    /**
+     * Prints a title with the borders around.
+     *
+     * @param {string} text the text for the title
+     * @param {boolean} full_width if the box should be 100% width or not
+     */
     printBoxedTitle: (text, full_width = true) => {
         if (!WebOnionSDK.__configuration.general.allow_raw_html) {
             WebOnionSDK.allowRawHtml(true);
@@ -61,13 +75,32 @@ const WCGenericOutputLibrary = {
         WCGenericOutputLibrary.printMessage(`<div class="wc-title-width-wrapper"><h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1></div>`);
     },
 
+    /**
+     * Prints a sub-tile
+     *
+     * @param {string} text the text for the title
+     */
     printSubtitle: (text) => {
         throw Error('Not implemented');
     },
 
-    printKeyValuePairs: (set) => {
-        // set will be {key: string, value: string}[]
-        throw Error('Not implemented');
+    /**
+     * Takes an array of key-value objects and prints a list
+     * on the console, illuminating the keys.
+     *
+     * @param {object} set an array of key-values Array<{key: string, value: string}>
+     * @param {string} space_char the string used for the space
+     */
+    printKeyValuePairs: (set, space_char = '&nbsp;') => {
+        const longestKeyLen = set.reduce((p, c) => p < c.key.length ? c.key.length : false, 0);
+        set.forEach(pair => {
+            let spaces = space_char;
+            for (let i = 0; i < (longestKeyLen - pair.key.length); i++) {
+                spaces += space_char;
+            }
+
+            $('.wc-console').append(`<span class="wc-key">${pair.key}:</span><span class="wc-value">${spaces + pair.value}</span><hr class="wc-kv-sep">`);
+        });
     },
 
 
