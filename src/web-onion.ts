@@ -1,3 +1,6 @@
+declare const require: any;
+require("./matrix.css");
+
 import * as $ from 'jquery';
 
 import { WOSDKConfiguration } from './entities/wo-sdk-configuration.entity';
@@ -63,5 +66,3 @@ export class WebOnionSDK {
         WOInput.focusInput();
     }
 }
-
-(<any>window).WOSDK = new WebOnionSDK();

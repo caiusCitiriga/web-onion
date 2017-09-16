@@ -1,7 +1,7 @@
 var path = require("path");
 
 module.exports = {
-    entry: "./src/web-onion.ts",
+    entry: "./demo/demo.ts",
     output: {
         path: path.resolve(__dirname, 'dist/'),
         filename: "bundle.js"
@@ -11,6 +11,15 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.(png|jpg|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {}
+                    }
+                ]
+            },
             {
                 test: /\.tsx?$/,
                 loader: "ts-loader"
