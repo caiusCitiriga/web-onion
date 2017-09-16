@@ -1,6 +1,5 @@
 
 WebOnionSDK.allowRawHtml(true);
-WebOnionSDK.automaticallyClearInputField(false);
 WebOnionSDK.addSetsToDispatcher([
     {
         command: 'test',

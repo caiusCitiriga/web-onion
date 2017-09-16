@@ -1,4 +1,11 @@
 const WODispatcherLibrary = {
+    /**
+     * Takes the command set and looks for an action to dispatch
+     *
+     * @param {object} configuration the WebOnionSDK object's dispatcher configuration
+     * @param {object} command_set the WebOnionSDK object's command_set, containing the command
+     * @param {object} generic_output the WOGenericOutputLibrary to handle the invalid command case
+     */
     __dispatch: (configuration, command_set, generic_output) => {
         let action = null;
         configuration.dispatcher.forEach(element => {

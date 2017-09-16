@@ -38,12 +38,6 @@ const WebOnionSDK = {
                 }
             },
             {
-                command: 'help',
-                aliases: ['h'],
-                flags: null,
-                action: (flags) => alert('Heeeeelp!')
-            },
-            {
                 command: 'clear',
                 aliases: ['clr', 'ccl', 'cls', 'kk'],
                 flags: null,
