@@ -105,3 +105,5 @@ const WOGenericOutputLibrary = {
 
 
 };
+
+module.exports = WOGenericOutputLibrary;

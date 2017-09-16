@@ -70,3 +70,5 @@ const WOInputLibrary = {
         });
     },
 };
+
+module.exports = WOInputLibrary;

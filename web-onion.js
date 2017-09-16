@@ -201,4 +201,4 @@ const WebOnionSDK = {
     },
 }
 
-module.exports = { WebOnionSDK, WOGenericOutputLibrary, WOInputLibrary };
+module.exports = WebOnionSDK;
