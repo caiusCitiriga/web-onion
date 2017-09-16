@@ -179,3 +179,6 @@ export class WebOnionSDK {
         WOInput.focusInput();
     }
 }
+
+export const WOIn = new WOInput();
+export const WOGout = new WOGenericOutput();

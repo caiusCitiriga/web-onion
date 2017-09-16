@@ -157,4 +157,6 @@ WebOnionSDK.configuration = {
     }
 };
 exports.WebOnionSDK = WebOnionSDK;
+exports.WOIn = new wo_input_core_1.WOInput();
+exports.WOGout = new wo_generic_output_core_1.WOGenericOutput();
 //# sourceMappingURL=web-onion.js.map

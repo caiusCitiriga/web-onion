@@ -1,4 +1,6 @@
 import { WODispatcherConfiguration } from './entities/wo-dispatcher-configuration.entity';
+import { WOGenericOutput } from './core/wo-generic-output.core';
+import { WOInput } from './core/wo-input.core';
 export declare class WebOnionSDK {
     private static configuration;
     constructor();
@@ -65,3 +67,5 @@ export declare class WebOnionSDK {
      */
     private createConsole();
 }
+export declare const WOIn: WOInput;
+export declare const WOGout: WOGenericOutput;
