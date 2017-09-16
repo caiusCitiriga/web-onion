@@ -1,4 +1,4 @@
-const WCGenericOutputLibrary = {
+const WOGenericOutputLibrary = {
     /**
      * Prints a message to the console. 
      * The second optional parameter states the severity. (0: msg, 1: err, 2: warn, 3: info)
@@ -50,12 +50,12 @@ const WCGenericOutputLibrary = {
     printTitle: (text) => {
         if (!WebOnionSDK.__configuration.general.allow_raw_html) {
             WebOnionSDK.allowRawHtml(true);
-            WCGenericOutputLibrary.printMessage(`<h1 class="wc-title">${text}</h1>`);
+            WOGenericOutputLibrary.printMessage(`<h1 class="wc-title">${text}</h1>`);
             WebOnionSDK.allowRawHtml(false);
             return;
         }
 
-        WCGenericOutputLibrary.printMessage(`<h1 class="wc-title">${text}</h1>`);
+        WOGenericOutputLibrary.printMessage(`<h1 class="wc-title">${text}</h1>`);
     },
 
     /**
@@ -67,12 +67,12 @@ const WCGenericOutputLibrary = {
     printBoxedTitle: (text, full_width = true) => {
         if (!WebOnionSDK.__configuration.general.allow_raw_html) {
             WebOnionSDK.allowRawHtml(true);
-            WCGenericOutputLibrary.printMessage(`<h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1>`);
+            WOGenericOutputLibrary.printMessage(`<h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1>`);
             WebOnionSDK.allowRawHtml(false);
             return;
         }
 
-        WCGenericOutputLibrary.printMessage(`<div class="wc-title-width-wrapper"><h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1></div>`);
+        WOGenericOutputLibrary.printMessage(`<div class="wc-title-width-wrapper"><h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1></div>`);
     },
 
     /**

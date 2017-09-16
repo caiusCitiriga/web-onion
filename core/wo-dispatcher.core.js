@@ -1,5 +1,5 @@
-const WCDispatcherLibrary = {
-    dispatch: (configuration, command_set, generic_output) => {
+const WODispatcherLibrary = {
+    __dispatch: (configuration, command_set, generic_output) => {
         let action = null;
         configuration.dispatcher.forEach(element => {
             //  Try direct command match

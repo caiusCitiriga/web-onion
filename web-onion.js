@@ -9,7 +9,7 @@ const WebOnionSDK = {
                 flags: ['m'],
                 action: (flags) => {
                     const message = flags[0].split(':')[1];
-                    WCGenericOutputLibrary.printMessage(message);
+                    WOGenericOutputLibrary.printMessage(message);
                 }
             },
             {
@@ -18,8 +18,8 @@ const WebOnionSDK = {
                 flags: ['info', 'inspire'],
                 action: (flags) => {
                     if (flags[0] === 'info') {
-                        WCGenericOutputLibrary.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
-                        WCGenericOutputLibrary.printMessage('Current version: 1.1.0', 3);
+                        WOGenericOutputLibrary.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
+                        WOGenericOutputLibrary.printMessage('Current version: 1.1.0', 3);
                     }
 
                     if (flags[0] === 'inspire') {
@@ -29,10 +29,10 @@ const WebOnionSDK = {
                         }).then(data => {
                             data = data[0];
 
-                            WCGenericOutputLibrary.printMessage();
-                            WCGenericOutputLibrary.printMessage(data.content);
-                            WCGenericOutputLibrary.printMessage(`-${data.title}`, 3);
-                            WCGenericOutputLibrary.printMessage();
+                            WOGenericOutputLibrary.printMessage();
+                            WOGenericOutputLibrary.printMessage(data.content);
+                            WOGenericOutputLibrary.printMessage(`-${data.title}`, 3);
+                            WOGenericOutputLibrary.printMessage();
                         })
                     }
                 }
@@ -47,7 +47,7 @@ const WebOnionSDK = {
                 command: 'clear',
                 aliases: ['clr', 'ccl', 'cls', 'kk'],
                 flags: null,
-                action: (flags) => WCGenericOutputLibrary.clearConsole()
+                action: (flags) => WOGenericOutputLibrary.clearConsole()
             }
         ],
 
@@ -152,9 +152,9 @@ const WebOnionSDK = {
         head.appendChild(link);
 
         //  Load all the core scripts
-        $.getScript('./core/wc-dispatcher.core.js').then(() => {
-            $.getScript('./core/wc-generic-output.core.js').then(() => {
-                $.getScript('./core/wc-input.core.js').then(() => {
+        $.getScript('./core/wo-dispatcher.core.js').then(() => {
+            $.getScript('./core/wo-generic-output.core.js').then(() => {
+                $.getScript('./core/wo-input.core.js').then(() => {
                     callback();
                 });
             });
@@ -179,7 +179,7 @@ const WebOnionSDK = {
         $('.wc-input').append('<div class="wc-input-pointer">></div>');
         $('.wc-input').append('<input type="text" class="wc-input-field"/>');
 
-        WCInputLibrary.focusInput();
+        WOInputLibrary.focusInput();
     },
 
     /**
@@ -196,13 +196,13 @@ const WebOnionSDK = {
             flags.shift(); // remove the command from the flags array;
             WebOnionSDK.__command_set.flags = flags;
 
-            WCDispatcherLibrary.dispatch(WebOnionSDK.__configuration, WebOnionSDK.__command_set, WCGenericOutputLibrary);
+            WODispatcherLibrary.__dispatch(WebOnionSDK.__configuration, WebOnionSDK.__command_set, WOGenericOutputLibrary);
 
             //  Reset the command set
             WebOnionSDK.__command_set.command = null;
             WebOnionSDK.__command_set.flags = null;
 
-            WebOnionSDK.__configuration.input_field.clear_after_submit ? WCInputLibrary.clearInput() : null;
+            WebOnionSDK.__configuration.input_field.clear_after_submit ? WOInputLibrary.clearInput() : null;
         });
     },
 }

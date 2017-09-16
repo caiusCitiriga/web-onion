@@ -8,29 +8,29 @@ WebOnionSDK.addSetsToDispatcher([
         flags: ['title', 'boxed-title', 'key-value'],
         action: (flags) => {
             if (!flags.length) {
-                WCGenericOutputLibrary.printMessage(`This command has to be used in combination with a flag. ['--title', '--boxed-title']`, 2);
+                WOGenericOutputLibrary.printMessage(`This command has to be used in combination with a flag. ['--title', '--boxed-title']`, 2);
                 return;
             }
 
             if (flags[0] === 'title') {
-                WCGenericOutputLibrary.printTitle('This is a title');
+                WOGenericOutputLibrary.printTitle('This is a title');
                 return;
             }
 
             if (flags[0].indexOf('boxed-title') !== -1) {
                 console.log(flags[0].split(':'));
                 if (!flags[0].split(':')[1] || flags[0].split(':')[1] === 'full_width=true') {
-                    WCGenericOutputLibrary.printBoxedTitle('This is a title');
+                    WOGenericOutputLibrary.printBoxedTitle('This is a title');
                 }
 
                 if (flags[0].split(':')[1] === 'full_width=false') {
-                    WCGenericOutputLibrary.printBoxedTitle('This is a title', false);
+                    WOGenericOutputLibrary.printBoxedTitle('This is a title', false);
                 }
                 return;
             }
 
             if (flags[0] === 'key-value') {
-                WCGenericOutputLibrary.printKeyValuePairs([
+                WOGenericOutputLibrary.printKeyValuePairs([
                     {
                         key: 'Test key 1',
                         value: 'Test value 1'
@@ -47,7 +47,7 @@ WebOnionSDK.addSetsToDispatcher([
                 return;
             }
 
-            WCGenericOutputLibrary.printMessage('Invalid command', 1);
+            WOGenericOutputLibrary.printMessage('Invalid command', 1);
         }
     },
     {
@@ -55,12 +55,21 @@ WebOnionSDK.addSetsToDispatcher([
         aliases: null,
         flags: null,
         action: (flags) => {
-            WCInputLibrary.prompt('What\'s your age?', 'age', () => {
-                WCInputLibrary.prompt('And what\'s your name?', 'name', () => {
-                    WCGenericOutputLibrary
-                        .printMessage(`Hello ${WCInputLibrary.getInputData('name')}! Your age is: ${WCInputLibrary.getInputData('age')}`);
-                })
-            }, 3);
+            const askName = (next) => {
+                WOInputLibrary.prompt(`What's your name?`, 'name', next);
+            }
+
+            const askAge = (next) => {
+                WOInputLibrary.prompt(`And what's your age?`, 'age', next);
+            }
+
+            askName(() => {
+                askAge(() => {
+                    const name = WOInputLibrary.getInputData('name');
+                    const age = WOInputLibrary.getInputData('age');
+                    WOGenericOutputLibrary.printMessage(`You are ${name} and you are ${age} years old`);
+                });
+            });
         }
     },
 ]);
@@ -69,6 +78,6 @@ $(document).ready(() => {
     WebOnionSDK.initialize();
 
     $('.wc-console').dblclick((clk) => {
-        WCInputLibrary.focusInput();
+        WOInputLibrary.focusInput();
     });
 })

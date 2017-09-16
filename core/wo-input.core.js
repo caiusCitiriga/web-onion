@@ -1,4 +1,4 @@
-const WCInputLibrary = {
+const WOInputLibrary = {
 
     clearInput: () => {
         $('input.wc-input-field').val(null);
@@ -9,9 +9,9 @@ const WCInputLibrary = {
     },
 
     prompt: (message, dataKey, callback, severity = 0) => {
-        WCInputLibrary.clearInput();
-        WCGenericOutputLibrary.printMessage(message, severity);
-        WCInputLibrary.__handleCallbackExecution(callback, dataKey);
+        WOInputLibrary.clearInput();
+        WOGenericOutputLibrary.printMessage(message, severity);
+        WOInputLibrary.__handleCallbackExecution(callback, dataKey);
     },
 
     getInputData(dataKey) {
@@ -25,8 +25,7 @@ const WCInputLibrary = {
             if (k.keyCode !== 13) { return; }
 
             const value = $('input.wc-input-field').val();
-            WCInputLibrary.clearInput();
-            console.log(value);
+            WOInputLibrary.clearInput();
             sessionStorage.setItem(`@wc-user-data-${dataKey}`, value);
 
             $('input.wc-input-field.wc-input-wait')
@@ -35,7 +34,7 @@ const WCInputLibrary = {
             $('.wc-input > .wc-input-pointer')
                 .after('<input type="text" class="wc-input-field"/>');   // and replace it with a new one
 
-            WCInputLibrary.focusInput();
+            WOInputLibrary.focusInput();
             WebOnionSDK.__startParser();
 
             callback();
