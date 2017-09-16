@@ -1,7 +1,7 @@
 {
     "name": "web-onion",
     "version": "2.0.0-alpha.7",
-    "description": "An sdk for building browser CLI web applications",
+    "description": "A fully extesible SDK for building browser based applications, with an old school CLI UX",
     "main": "web-onion.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,18 +10,11 @@
     "author": "Caius Citiriga",
     "license": "MIT",
     "dependencies": {
-        "@types/jquery": "^3.2.12",
-        "jquery": "^3.2.1",
-        "style-loader": "^0.18.2",
-        "typescript": "^2.5.2"
+        "typescript": "^2.5.2",
+        "@types/jquery": "^3.2.12"
     },
     "devDependencies": {
-        "css-loader": "^0.28.7",
-        "file-loader": "^0.11.2",
-        "rimraf": "^2.6.2",
-        "ts-loader": "^2.3.7",
-        "webpack": "^3.6.0",
-        "webpack-dev-server": "^2.8.2"
+        "rimraf": "^2.6.2"
     },
     "repository": {
         "type": "git",

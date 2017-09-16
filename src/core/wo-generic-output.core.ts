@@ -1,4 +1,4 @@
-import * as $ from 'jquery';
+declare const $: any;
 
 import { WOSeverityEnum } from '../enums/wo-severity.enum';
 import { WebOnionSDK } from '../web-onion';

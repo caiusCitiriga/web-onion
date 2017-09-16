@@ -1,4 +1,3 @@
-import * as $ from 'jquery';
 import { WOSeverityEnum } from '../enums/wo-severity.enum';
 import { WOGenericOutput } from './wo-generic-output.core';
 import { WOParser } from './wo-parser.core';

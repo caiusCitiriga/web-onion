@@ -1,7 +1,7 @@
 declare const require: any;
 require("./matrix.css");
 
-import * as $ from 'jquery';
+declare const $: any;
 
 import { WOSDKConfiguration } from './entities/wo-sdk-configuration.entity';
 import { WODispatcherConfiguration } from './entities/wo-dispatcher-configuration.entity';

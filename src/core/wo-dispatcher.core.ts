@@ -3,6 +3,15 @@ import { WOCommandSet } from '../entities/wo-command-set.entity';
 import { WOGenericOutput } from './wo-generic-output.core';
 
 export class WODispatcher {
+    /**
+     * 
+     * 
+     * @static
+     * @param {WODispatcherConfiguration[]} configuration 
+     * @param {WOCommandSet} command_set 
+     * @returns 
+     * @memberof WODispatcher
+     */
     public static dispatch(configuration: WODispatcherConfiguration[], command_set: WOCommandSet) {
         let action: any = null;
 
