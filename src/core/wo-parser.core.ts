@@ -7,11 +7,19 @@ import { WOCommandSet } from '../entities/wo-command-set.entity';
 import { WODispatcherConfiguration } from '../entities/wo-dispatcher-configuration.entity';
 
 export class WOParser {
+
     private static command_set: WOCommandSet = {
         command: null,
         flags: null
     };
 
+    /**
+     * 
+     * 
+     * @static
+     * @param {WODispatcherConfiguration[]} dispatcher_conf 
+     * @memberof WOParser
+     */
     public static startParser(dispatcher_conf: WODispatcherConfiguration[]) {
         $('input.wc-input-field').on('keypress', (k: any) => {
             if (
@@ -33,6 +41,13 @@ export class WOParser {
         });
     }
 
+    /**
+     * 
+     * 
+     * @private
+     * @static
+     * @memberof WOParser
+     */
     private static resetCommandSet() {
         this.command_set.command = null;
         this.command_set.flags = null;

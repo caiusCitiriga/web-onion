@@ -6,31 +6,35 @@ import { WebOnionSDK } from '../web-onion';
 
 export class WOInput {
     /**
-     * Clears the input field
+     * 
+     * 
+     * @static
+     * @memberof WOInput
      */
     public static clearInput() {
         $('input.wc-input-field').val('');
     }
 
     /**
-     * Focuses the cursor to the input field
+     * 
+     * 
+     * @static
+     * @memberof WOInput
      */
     public static focusInput() {
         $('input.wc-input-field').focus();
     }
 
     /**
-    * Prompts the user with the given question and executes the callback when
-    * the ENTER key is pressed.
-    *
-    * The input field will go in a input-wait mode, and whatever it's passed in
-    * that mode will be stored in the session as valid data.
-    *
-    * @param {string} message the message to show to the user on the console
-    * @param {string} dataKey the name of the key that will store the data in session.
-    * @param {function} callback the callback to be executed when the user presses ENTER
-    * @param {number} severity the severity of the message
-    */
+     * 
+     * 
+     * @static
+     * @param {string} message 
+     * @param {string} dataKey 
+     * @param {() => void} callback 
+     * @param {WOSeverityEnum} [severity=WOSeverityEnum.message] 
+     * @memberof WOInput
+     */
     public static prompt(message: string, dataKey: string, callback: () => void, severity: WOSeverityEnum = WOSeverityEnum.message) {
         WOInput.clearInput();
         WOGenericOutput.printMessage(message, severity);
@@ -38,19 +42,25 @@ export class WOInput {
     }
 
     /**
-     * It takes the name of the key and searches for that name in the session.
-     * If nothing is found null is returned
-     * @param {string} dataKey the name of the key
-     * @returns {string | null} the value or null if not found
+     * 
+     * 
+     * @static
+     * @param {string} dataKey 
+     * @returns {(string | null)} 
+     * @memberof WOInput
      */
-    public static getInputData(dataKey: string) {
+    public static getInputData(dataKey: string): string | null {
         return sessionStorage.getItem(`@wc-user-data-${dataKey}`) ? sessionStorage.getItem(`@wc-user-data-${dataKey}`) : null;
     }
 
     /**
-     * Handles the execution of the callback.
-     * @param {function} callback the callback function to be executed when the data is successfully saved
-     * @param {any} dataKey the name of the key where the data will be stored
+     * 
+     * 
+     * @private
+     * @static
+     * @param {() => void} callback 
+     * @param {string} dataKey 
+     * @memberof WOInput
      */
     private static handleCallbackExecution(callback: () => void, dataKey: string) {
         $('input.wc-input-field').addClass('wc-input-wait'); // this will cause the parser to skip the data

@@ -70,132 +70,100 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const $ = __webpack_require__(2);
-const wo_severity_enum_1 = __webpack_require__(4);
-class WOGenericOutput {
-    /**
-     * Shows the loading screen
-     */
-    static showInitializationScreen() {
-        $('body').css('background-color', '#000');
-        $('body').append(`<h1 class="wc-intialization">WebCLI is loading...<br><small>v1.0.0</small></h1>`);
-    }
-    /**
-     * Prints a message to the console.
-     * The second optional parameter states the severity. (0: msg, 1: err, 2: warn, 3: info)
-     *
-     * @param {string} message
-     * @param {number} [severity=0] 1: error, 2: warning, 3: info
-     */
-    static printMessage(message, severity = wo_severity_enum_1.WOSeverityEnum.message) {
-        let message_wrapper = '';
-        switch (severity) {
-            case 0:
-                message_wrapper = `<span class="wc-message wc-message-message"></span>`;
-                break;
-            case 1:
-                message_wrapper = `<span class="wc-message wc-message-error"></span>`;
-                break;
-            case 2:
-                message_wrapper = `<span class="wc-message wc-message-warn"></span>`;
-                break;
-            case 3:
-                message_wrapper = `<span class="wc-message wc-message-info"></span>`;
-                break;
-            default:
-                message_wrapper = `<span class="wc-message wc-message-message"></span>`;
-                break;
-        }
-        $('.wc-console').append(message_wrapper);
-        $('.wc-message').last().append(message);
-        $('.wc-console').append(`<br>`);
-        $('.wc-console').scrollTop($('.wc-console')[0].scrollHeight); //scroll to bottom
-    }
-    /**
-     * Clears the console
-     */
-    static clearConsole() {
-        $('.wc-console').empty();
-    }
-    /**
-     * Prints a title on the console
-     *
-     * @param {string} text the text for the title
-     */
-    static printTitle(text) {
-        WOGenericOutput.printMessage(`<h1 class="wc-title">${text}</h1>`);
-    }
-    /**
-     * Prints a title with the borders around.
-     *
-     * @param {string} text the text for the title
-     * @param {boolean} full_width if the box should be 100% width or not
-     */
-    static printBoxedTitle(text, full_width = true) {
-        WOGenericOutput.printMessage(`<div class="wc-title-width-wrapper"><h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1></div>`);
-    }
-    /**
-     * Prints a sub-tile
-     *
-     * @param {string} text the text for the title
-     */
-    static printSubtitle(text) {
-        throw Error('Not implemented');
-    }
-    /**
-     * Takes an array of key-value objects and prints a list
-     * on the console, illuminating the keys.
-     *
-     * @param {object} set an array of key-values Array<{key: string, value: string}>
-     * @param {string} space_char the string used for the space
-     */
-    static printKeyValuePairs(set, space_char = '&nbsp;') {
-        const longestKeyLen = set.reduce((p, c) => p < c.key.length ? c.key.length : false, 0);
-        set.forEach(pair => {
-            let spaces = space_char;
-            for (let i = 0; i < (longestKeyLen - pair.key.length); i++) {
-                spaces += space_char;
-            }
-            $('.wc-console').append(`<span class="wc-key">${pair.key}:</span><span class="wc-value">${spaces + pair.value}</span><hr class="wc-kv-sep">`);
-        });
-    }
-}
-exports.WOGenericOutput = WOGenericOutput;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(7);
-const $ = __webpack_require__(2);
-const wo_generic_output_core_1 = __webpack_require__(0);
-const wo_input_core_1 = __webpack_require__(3);
+const $ = __webpack_require__(1);
+const wo_generic_output_core_1 = __webpack_require__(2);
+const wo_input_core_1 = __webpack_require__(4);
 const wo_parser_core_1 = __webpack_require__(5);
 class WebOnionSDK {
     constructor() {
-        wo_generic_output_core_1.WOGenericOutput.showInitializationScreen();
-        this.clearDocument();
-        this.createConsole();
-        wo_parser_core_1.WOParser.startParser(WebOnionSDK.configuration.dispatcher);
+        //  Start a listener for the double click on console
+        $('body').dblclick(c => {
+            if (c.currentTarget.classList.contains('wo-dbl-click-autofocus')) {
+                wo_input_core_1.WOInput.focusInput();
+            }
+        });
     }
+    /**
+     *
+     *
+     * @readonly
+     * @static
+     * @memberof WebOnionSDK
+     */
     static get dispatcherConfiguration() {
         return WebOnionSDK.configuration.dispatcher;
     }
+    /**
+     *
+     *
+     * @readonly
+     * @static
+     * @type {boolean}
+     * @memberof WebOnionSDK
+     */
     static get clearAfterSubmit() {
         return WebOnionSDK.configuration.input_field.clear_after_submit;
     }
+    /**
+     *
+     * @param {boolean} value
+     * @memberof WebOnionSDK
+     */
+    set dbl_click_focus_to_input(value) {
+        if (!value) {
+            $('body').removeClass('wo-dbl-click-autofocus');
+            return;
+        }
+        $('body').addClass('wo-dbl-click-autofocus');
+    }
+    /**
+     *
+     * @param {boolean} value
+     * @memberof WebOnionSDK
+     */
+    set clear_after_submit(value) {
+        WebOnionSDK.configuration.input_field.clear_after_submit = value;
+    }
+    /**
+     *
+     *
+     * @memberof WebOnionSDK
+     */
+    initialize() {
+        wo_generic_output_core_1.WOGenericOutput.showInitializationScreen();
+        setTimeout(() => {
+            this.clearDocument();
+            this.createConsole();
+            wo_parser_core_1.WOParser.startParser(WebOnionSDK.configuration.dispatcher);
+        }, WebOnionSDK.configuration.general.loading_screen_time);
+    }
+    /**
+     *
+     *
+     * @param {WODispatcherConfiguration[]} sets
+     * @memberof WebOnionSDK
+     */
     addSetsToDispatcher(sets) {
         sets.forEach(s => {
             WebOnionSDK.configuration.dispatcher.push(s);
         });
     }
+    /**
+     *
+     *
+     * @private
+     * @memberof WebOnionSDK
+     */
     clearDocument() {
         $('body').empty();
     }
+    /**
+     *
+     *
+     * @private
+     * @memberof WebOnionSDK
+     */
     createConsole() {
         $('body').append('<div class="wc-wrp"></div>');
         $('.wc-wrp').append('<div class="wc-console"></div>');
@@ -208,24 +176,54 @@ class WebOnionSDK {
 WebOnionSDK.configuration = {
     dispatcher: [
         {
-            command: 'test',
+            command: 'echo',
+            flags: ['m'],
             action: (flags) => {
-                console.log('Working');
+                const message = flags[0].split(':')[1];
+                wo_generic_output_core_1.WOGenericOutput.printMessage(message);
             }
+        },
+        {
+            command: 'wo',
+            flags: ['info', 'inspire'],
+            action: (flags) => {
+                if (flags[0] === 'info') {
+                    wo_generic_output_core_1.WOGenericOutput.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
+                    wo_generic_output_core_1.WOGenericOutput.printMessage('Current version: 1.1.0', 3);
+                }
+                if (flags[0] === 'inspire') {
+                    $.get({
+                        url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
+                        cache: false
+                    }).then(data => {
+                        data = data[0];
+                        wo_generic_output_core_1.WOGenericOutput.printMessage('');
+                        wo_generic_output_core_1.WOGenericOutput.printMessage(data.content);
+                        wo_generic_output_core_1.WOGenericOutput.printMessage(`-${data.title}`, 3);
+                        wo_generic_output_core_1.WOGenericOutput.printMessage('');
+                    });
+                }
+            }
+        },
+        {
+            command: 'clear',
+            aliases: ['clr', 'ccl', 'cls', 'kk'],
+            action: (flags) => wo_generic_output_core_1.WOGenericOutput.clearConsole()
         }
     ],
     input_field: {
         clear_after_submit: true
     },
     general: {
-        theme: 'Matrix',
+        theme: 'matrix',
+        loading_screen_time: 1000
     }
 };
 exports.WebOnionSDK = WebOnionSDK;
 
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10485,60 +10483,200 @@ return jQuery;
 
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const $ = __webpack_require__(1);
+const wo_severity_enum_1 = __webpack_require__(3);
+class WOGenericOutput {
+    /**
+     *
+     *
+     * @static
+     * @memberof WOGenericOutput
+     */
+    static showInitializationScreen() {
+        $('body').css('background-color', '#000');
+        $('body').append(`<h1 class="wc-intialization">WebCLI is loading...<br><small>v1.0.0</small></h1>`);
+    }
+    /**
+     *
+     *
+     * @static
+     * @param {string} message
+     * @param {WOSeverityEnum} [severity=WOSeverityEnum.message]
+     * @memberof WOGenericOutput
+     */
+    static printMessage(message, severity = wo_severity_enum_1.WOSeverityEnum.message) {
+        let message_wrapper = '';
+        switch (severity) {
+            case 0:
+                message_wrapper = `<span class="wc-message wc-message-message"></span>`;
+                break;
+            case 1:
+                message_wrapper = `<span class="wc-message wc-message-error"></span>`;
+                break;
+            case 2:
+                message_wrapper = `<span class="wc-message wc-message-warn"></span>`;
+                break;
+            case 3:
+                message_wrapper = `<span class="wc-message wc-message-info"></span>`;
+                break;
+            default:
+                message_wrapper = `<span class="wc-message wc-message-message"></span>`;
+                break;
+        }
+        $('.wc-console').append(message_wrapper);
+        $('.wc-message').last().append(message);
+        $('.wc-console').append(`<br>`);
+        $('.wc-console').scrollTop($('.wc-console')[0].scrollHeight); //scroll to bottom
+    }
+    /**
+     *
+     *
+     * @static
+     * @memberof WOGenericOutput
+     */
+    static clearConsole() {
+        $('.wc-console').empty();
+    }
+    /**
+     *
+     *
+     * @static
+     * @param {string} text
+     * @memberof WOGenericOutput
+     */
+    static printTitle(text) {
+        WOGenericOutput.printMessage(`<h1 class="wc-title">${text}</h1>`);
+    }
+    /**
+     *
+     *
+     * @static
+     * @param {string} text
+     * @param {boolean} [full_width=true]
+     * @memberof WOGenericOutput
+     */
+    static printBoxedTitle(text, full_width = true) {
+        WOGenericOutput.printMessage(`<div class="wc-title-width-wrapper"><h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1></div>`);
+    }
+    /**
+     *
+     *
+     * @static
+     * @param {string} text
+     * @memberof WOGenericOutput
+     */
+    static printSubtitle(text) {
+        throw Error('Not implemented');
+    }
+    /**
+     *
+     *
+     * @static
+     * @param {{ key: string, value: string }[]} set
+     * @param {string} [space_char='&nbsp;']
+     * @memberof WOGenericOutput
+     */
+    static printKeyValuePairs(set, space_char = '&nbsp;') {
+        const longestKeyLen = set.reduce((p, c) => p < c.key.length ? c.key.length : false, 0);
+        set.forEach(pair => {
+            let spaces = space_char;
+            for (let i = 0; i < (longestKeyLen - pair.key.length); i++) {
+                spaces += space_char;
+            }
+            $('.wc-console').append(`<span class="wc-key">${pair.key}:</span><span class="wc-value">${spaces + pair.value}</span><hr class="wc-kv-sep">`);
+        });
+    }
+}
+exports.WOGenericOutput = WOGenericOutput;
+
+
+/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const $ = __webpack_require__(2);
-const wo_severity_enum_1 = __webpack_require__(4);
-const wo_generic_output_core_1 = __webpack_require__(0);
+var WOSeverityEnum;
+(function (WOSeverityEnum) {
+    WOSeverityEnum[WOSeverityEnum["message"] = 0] = "message";
+    WOSeverityEnum[WOSeverityEnum["error"] = 1] = "error";
+    WOSeverityEnum[WOSeverityEnum["warning"] = 2] = "warning";
+    WOSeverityEnum[WOSeverityEnum["info"] = 3] = "info";
+})(WOSeverityEnum = exports.WOSeverityEnum || (exports.WOSeverityEnum = {}));
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const $ = __webpack_require__(1);
+const wo_severity_enum_1 = __webpack_require__(3);
+const wo_generic_output_core_1 = __webpack_require__(2);
 const wo_parser_core_1 = __webpack_require__(5);
-const web_onion_1 = __webpack_require__(1);
+const web_onion_1 = __webpack_require__(0);
 class WOInput {
     /**
-     * Clears the input field
+     *
+     *
+     * @static
+     * @memberof WOInput
      */
     static clearInput() {
         $('input.wc-input-field').val('');
     }
     /**
-     * Focuses the cursor to the input field
+     *
+     *
+     * @static
+     * @memberof WOInput
      */
     static focusInput() {
         $('input.wc-input-field').focus();
     }
     /**
-    * Prompts the user with the given question and executes the callback when
-    * the ENTER key is pressed.
-    *
-    * The input field will go in a input-wait mode, and whatever it's passed in
-    * that mode will be stored in the session as valid data.
-    *
-    * @param {string} message the message to show to the user on the console
-    * @param {string} dataKey the name of the key that will store the data in session.
-    * @param {function} callback the callback to be executed when the user presses ENTER
-    * @param {number} severity the severity of the message
-    */
+     *
+     *
+     * @static
+     * @param {string} message
+     * @param {string} dataKey
+     * @param {() => void} callback
+     * @param {WOSeverityEnum} [severity=WOSeverityEnum.message]
+     * @memberof WOInput
+     */
     static prompt(message, dataKey, callback, severity = wo_severity_enum_1.WOSeverityEnum.message) {
         WOInput.clearInput();
         wo_generic_output_core_1.WOGenericOutput.printMessage(message, severity);
         WOInput.handleCallbackExecution(callback, dataKey);
     }
     /**
-     * It takes the name of the key and searches for that name in the session.
-     * If nothing is found null is returned
-     * @param {string} dataKey the name of the key
-     * @returns {string | null} the value or null if not found
+     *
+     *
+     * @static
+     * @param {string} dataKey
+     * @returns {(string | null)}
+     * @memberof WOInput
      */
     static getInputData(dataKey) {
         return sessionStorage.getItem(`@wc-user-data-${dataKey}`) ? sessionStorage.getItem(`@wc-user-data-${dataKey}`) : null;
     }
     /**
-     * Handles the execution of the callback.
-     * @param {function} callback the callback function to be executed when the data is successfully saved
-     * @param {any} dataKey the name of the key where the data will be stored
+     *
+     *
+     * @private
+     * @static
+     * @param {() => void} callback
+     * @param {string} dataKey
+     * @memberof WOInput
      */
     static handleCallbackExecution(callback, dataKey) {
         $('input.wc-input-field').addClass('wc-input-wait'); // this will cause the parser to skip the data
@@ -10563,32 +10701,23 @@ exports.WOInput = WOInput;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var WOSeverityEnum;
-(function (WOSeverityEnum) {
-    WOSeverityEnum[WOSeverityEnum["message"] = 0] = "message";
-    WOSeverityEnum[WOSeverityEnum["error"] = 1] = "error";
-    WOSeverityEnum[WOSeverityEnum["warning"] = 2] = "warning";
-    WOSeverityEnum[WOSeverityEnum["info"] = 3] = "info";
-})(WOSeverityEnum = exports.WOSeverityEnum || (exports.WOSeverityEnum = {}));
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const web_onion_1 = __webpack_require__(1);
-const wo_input_core_1 = __webpack_require__(3);
-const wo_dispatcher_core_1 = __webpack_require__(13);
+const web_onion_1 = __webpack_require__(0);
+const wo_input_core_1 = __webpack_require__(4);
+const wo_dispatcher_core_1 = __webpack_require__(12);
 class WOParser {
+    /**
+     *
+     *
+     * @static
+     * @param {WODispatcherConfiguration[]} dispatcher_conf
+     * @memberof WOParser
+     */
     static startParser(dispatcher_conf) {
         $('input.wc-input-field').on('keypress', (k) => {
             if (k.keyCode !== 13 ||
@@ -10605,6 +10734,13 @@ class WOParser {
             web_onion_1.WebOnionSDK.clearAfterSubmit ? wo_input_core_1.WOInput.clearInput() : null;
         });
     }
+    /**
+     *
+     *
+     * @private
+     * @static
+     * @memberof WOParser
+     */
     static resetCommandSet() {
         this.command_set.command = null;
         this.command_set.flags = null;
@@ -10624,21 +10760,12 @@ exports.WOParser = WOParser;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const web_onion_1 = __webpack_require__(1);
-const wo_input_core_1 = __webpack_require__(3);
-const wo_generic_output_core_1 = __webpack_require__(0);
+const web_onion_1 = __webpack_require__(0);
 $(document).ready(() => {
     const WO = new web_onion_1.WebOnionSDK();
-    WO.addSetsToDispatcher([
-        {
-            command: 'culo',
-            action: () => {
-                wo_input_core_1.WOInput.prompt('Yolo?', 'yolo', () => {
-                    wo_generic_output_core_1.WOGenericOutput.printMessage('Done, you typed: ' + wo_input_core_1.WOInput.getInputData('yolo'));
-                });
-            }
-        }
-    ]);
+    WO.dbl_click_focus_to_input = true;
+    WO.clear_after_submit = false;
+    WO.initialize();
 });
 
 
@@ -10657,7 +10784,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(10)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -10682,7 +10809,7 @@ exports = module.exports = __webpack_require__(9)(undefined);
 
 
 // module
-exports.push([module.i, ":root {\n    font-size: 14px;\n    --lime: #32cd32;\n    --message: var(--lime);\n    --warn: #ff9900;\n    --error: #ff0000;\n    --info: #6699ff;\n    --title: #9900cc;\n    --key: #ffcc00;\n    --value: #cccccc;\n    --kv-sep: #262626;\n}\n\n* {\n    padding: 0;\n    margin: 0;\n}\n\nhtml,\nbody {\n    height: 100%;\n}\n\nh1.wc-intialization {\n    color: var(--lime);\n    font-size: 1.5rem;\n    width: 100%;\n    position: absolute;\n    height: 4rem;\n    line-height: 4rem;\n    top: 50%;\n    margin-top: -2rem;\n    text-align: center;\n    font-family: monospace;\n}\n\nh1.wc-title,\nh1.wc-title-boxed-compact,\nh1.wc-title-boxed-full-width{\n    padding: .5rem;\n    font-size: 2rem;\n    font-weight: bold;\n    color: var(--title) !important;\n}\nh1.wc-title-boxed-compact,\nh1.wc-title-boxed-full-width {\n    border: 1px solid var(--title);\n}\n\nh1.wc-title-boxed-full-width{\n    width: 100%;\n}\n\ndiv.wc-title-width-wrapper{\n    display: flex;\n    flex-direction: row;\n}\n\n.wc-wrp {\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n    color: var(--lime);\n    font-family: monospace;\n    font-size: 1.35rem; \n\n    background-image: url(" + __webpack_require__(10) + ");\n    background-position: center;\n    background-repeat: no-repeat;\n    background-color: #000;\n}\n\n.wc-console{\n    flex-grow: 1;\n    max-height: 97%;\n    padding: .5rem;\n    overflow-y: scroll;\n}\n.wc-input{    \n    display: flex;\n    flex-direction: row;\n    height: 2rem;\n    line-height: 2rem;\n    margin-bottom: .5rem;\n}\n\n.wc-input-field{\n    flex-grow: 2;\n    border: none;   \n    background-color: #000;\n    color: var(--lime);\n    outline: none;\n    margin-left: .5rem;\n    font-family: monospace;\n    font-size: 1.1rem;\n}\n\n.wc-message-message {\n    color: var(--message);\n}\n\n.wc-message-error {\n    color: var(--error);\n}\n\n.wc-message-warn {\n    color: var(--warn);\n}\n\n.wc-message-info {\n    color: var(--info);\n}\n\nspan.wc-key {\n    color: var(--key);\n}\n\nspan.wc-value {\n    color: var(--value);\n}\n\nhr.wc-kv-sep {\n    margin-top: .2rem;\n    border-color: var(--kv-sep);\n}", ""]);
+exports.push([module.i, ":root {\n    font-size: 14px;\n    --lime: #32cd32;\n    --message: var(--lime);\n    --warn: #ff9900;\n    --error: #ff0000;\n    --info: #6699ff;\n    --title: #9900cc;\n    --key: #ffcc00;\n    --value: #cccccc;\n    --kv-sep: #262626;\n}\n\n* {\n    padding: 0;\n    margin: 0;\n}\n\nhtml,\nbody {\n    height: 100%;\n}\n\nh1.wc-intialization {\n    color: var(--lime);\n    font-size: 1.5rem;\n    width: 100%;\n    position: absolute;\n    height: 4rem;\n    line-height: 4rem;\n    top: 50%;\n    margin-top: -2rem;\n    text-align: center;\n    font-family: monospace;\n}\n\nh1.wc-title,\nh1.wc-title-boxed-compact,\nh1.wc-title-boxed-full-width{\n    padding: .5rem;\n    font-size: 2rem;\n    font-weight: bold;\n    color: var(--title) !important;\n}\nh1.wc-title-boxed-compact,\nh1.wc-title-boxed-full-width {\n    border: 1px solid var(--title);\n}\n\nh1.wc-title-boxed-full-width{\n    width: 100%;\n}\n\ndiv.wc-title-width-wrapper{\n    display: flex;\n    flex-direction: row;\n}\n\n.wc-wrp {\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n    color: var(--lime);\n    font-family: monospace;\n    font-size: 1.35rem; \n\n    background-image: url('/assets/console_bg.png');\n    background-position: center;\n    background-repeat: no-repeat;\n    background-color: #000;\n}\n\n.wc-console{\n    flex-grow: 1;\n    max-height: 97%;\n    padding: .5rem;\n    overflow-y: scroll;\n}\n.wc-input{    \n    display: flex;\n    flex-direction: row;\n    height: 2rem;\n    line-height: 2rem;\n    margin-bottom: .5rem;\n}\n\n.wc-input-pointer{\n    padding-left: 1rem;\n}\n\n.wc-input-field{\n    flex-grow: 2;\n    border: none;   \n    background-color: #000;\n    color: var(--lime);\n    outline: none;\n    margin-left: .5rem;\n    font-family: monospace;\n    font-size: 1.1rem;\n}\n\n.wc-message-message {\n    color: var(--message);\n}\n\n.wc-message-error {\n    color: var(--error);\n}\n\n.wc-message-warn {\n    color: var(--warn);\n}\n\n.wc-message-info {\n    color: var(--info);\n}\n\nspan.wc-key {\n    color: var(--key);\n}\n\nspan.wc-value {\n    color: var(--value);\n}\n\nhr.wc-kv-sep {\n    margin-top: .2rem;\n    border-color: var(--kv-sep);\n}", ""]);
 
 // exports
 
@@ -10773,12 +10900,6 @@ function toComment(sourceMap) {
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "6df8ea32715bcef4dc024c941a39fc66.png";
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
 	Author Tobias Koppers @sokra
@@ -10822,7 +10943,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(12);
+var	fixUrls = __webpack_require__(11);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -11135,7 +11256,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 
@@ -11230,13 +11351,13 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const wo_generic_output_core_1 = __webpack_require__(0);
+const wo_generic_output_core_1 = __webpack_require__(2);
 class WODispatcher {
     static dispatch(configuration, command_set) {
         let action = null;

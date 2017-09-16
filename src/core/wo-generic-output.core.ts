@@ -6,7 +6,10 @@ import { WOInput } from './wo-input.core';
 
 export class WOGenericOutput {
     /**
-     * Shows the loading screen
+     * 
+     * 
+     * @static
+     * @memberof WOGenericOutput
      */
     public static showInitializationScreen() {
         $('body').css('background-color', '#000');
@@ -14,11 +17,12 @@ export class WOGenericOutput {
     }
 
     /**
-     * Prints a message to the console. 
-     * The second optional parameter states the severity. (0: msg, 1: err, 2: warn, 3: info)
-     *
+     * 
+     * 
+     * @static
      * @param {string} message 
-     * @param {number} [severity=0] 1: error, 2: warning, 3: info
+     * @param {WOSeverityEnum} [severity=WOSeverityEnum.message] 
+     * @memberof WOGenericOutput
      */
     public static printMessage(message: string, severity: WOSeverityEnum = WOSeverityEnum.message) {
         let message_wrapper = '';
@@ -49,46 +53,56 @@ export class WOGenericOutput {
     }
 
     /**
-     * Clears the console
+     * 
+     * 
+     * @static
+     * @memberof WOGenericOutput
      */
     public static clearConsole() {
         $('.wc-console').empty();
     }
 
     /**
-     * Prints a title on the console
-     *
-     * @param {string} text the text for the title
+     * 
+     * 
+     * @static
+     * @param {string} text 
+     * @memberof WOGenericOutput
      */
     public static printTitle(text: string) {
         WOGenericOutput.printMessage(`<h1 class="wc-title">${text}</h1>`);
     }
 
     /**
-     * Prints a title with the borders around.
-     *
-     * @param {string} text the text for the title
-     * @param {boolean} full_width if the box should be 100% width or not
+     * 
+     * 
+     * @static
+     * @param {string} text 
+     * @param {boolean} [full_width=true] 
+     * @memberof WOGenericOutput
      */
     public static printBoxedTitle(text: string, full_width: boolean = true) {
         WOGenericOutput.printMessage(`<div class="wc-title-width-wrapper"><h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1></div>`);
     }
 
     /**
-     * Prints a sub-tile
-     *
-     * @param {string} text the text for the title
+     * 
+     * 
+     * @static
+     * @param {string} text 
+     * @memberof WOGenericOutput
      */
     public static printSubtitle(text: string) {
         throw Error('Not implemented');
     }
 
     /**
-     * Takes an array of key-value objects and prints a list
-     * on the console, illuminating the keys.
-     *
-     * @param {object} set an array of key-values Array<{key: string, value: string}>
-     * @param {string} space_char the string used for the space
+     * 
+     * 
+     * @static
+     * @param {{ key: string, value: string }[]} set 
+     * @param {string} [space_char='&nbsp;'] 
+     * @memberof WOGenericOutput
      */
     public static printKeyValuePairs(set: { key: string, value: string }[], space_char: string = '&nbsp;') {
         const longestKeyLen = <number>set.reduce((p, c) => p < c.key.length ? c.key.length : false, 0);

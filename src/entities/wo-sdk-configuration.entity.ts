@@ -6,6 +6,7 @@ export class WOSDKConfiguration {
         clear_after_submit: boolean
     };
     general: {
-        theme: string
+        theme: string,
+        loading_screen_time?: number | undefined
     }
 }
