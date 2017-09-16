@@ -2,6 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_generic_output_core_1 = require("./wo-generic-output.core");
 class WODispatcher {
+    /**
+     *
+     *
+     * @static
+     * @param {WODispatcherConfiguration[]} configuration
+     * @param {WOCommandSet} command_set
+     * @returns
+     * @memberof WODispatcher
+     */
     static dispatch(configuration, command_set) {
         let action = null;
         configuration.forEach(cs => {

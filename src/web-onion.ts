@@ -34,7 +34,7 @@ export class WebOnionSDK {
                         $.get({
                             url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
                             cache: false
-                        }).then(data => {
+                        }).then((data: any) => {
                             data = data[0];
 
                             WOGenericOutput.printMessage('');
@@ -64,7 +64,7 @@ export class WebOnionSDK {
 
     public constructor() {
         //  Start a listener for the double click on console
-        $('body').dblclick(c => {
+        $('body').dblclick((c: any) => {
             if (c.currentTarget.classList.contains('wo-dbl-click-autofocus')) {
                 WOInput.focusInput();
             }

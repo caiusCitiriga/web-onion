@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const $ = require("jquery");
 const wo_severity_enum_1 = require("../enums/wo-severity.enum");
 const wo_generic_output_core_1 = require("./wo-generic-output.core");
 const wo_parser_core_1 = require("./wo-parser.core");
