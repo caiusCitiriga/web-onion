@@ -1,5 +1,5 @@
 # WebOnion
-A library for creating browser based applications with an old school CLI interface.
+An extensible sdk for building browser based applications with an old school CLI look
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine.
