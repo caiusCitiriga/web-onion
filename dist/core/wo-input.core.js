@@ -1,12 +1,19 @@
 "use strict";
-exports.__esModule = true;
-var $ = require("jquery");
-var wo_severity_enum_1 = require("../enums/wo-severity.enum");
-var wo_generic_output_core_1 = require("./wo-generic-output.core");
-var wo_parser_core_1 = require("./wo-parser.core");
-var web_onion_1 = require("../web-onion");
-var WOInput = /** @class */ (function () {
-    function WOInput() {
+Object.defineProperty(exports, "__esModule", { value: true });
+const $ = require("jquery");
+const wo_severity_enum_1 = require("../enums/wo-severity.enum");
+const wo_generic_output_core_1 = require("./wo-generic-output.core");
+const wo_parser_core_1 = require("./wo-parser.core");
+const web_onion_1 = require("../web-onion");
+class WOInput {
+    /**
+     *
+     *
+     * @static
+     * @memberof WOInput
+     */
+    static clearInput() {
+        $('input.wc-input-field').val('');
     }
     /**
      *
@@ -14,18 +21,9 @@ var WOInput = /** @class */ (function () {
      * @static
      * @memberof WOInput
      */
-    WOInput.clearInput = function () {
-        $('input.wc-input-field').val('');
-    };
-    /**
-     *
-     *
-     * @static
-     * @memberof WOInput
-     */
-    WOInput.focusInput = function () {
+    static focusInput() {
         $('input.wc-input-field').focus();
-    };
+    }
     /**
      *
      *
@@ -36,12 +34,11 @@ var WOInput = /** @class */ (function () {
      * @param {WOSeverityEnum} [severity=WOSeverityEnum.message]
      * @memberof WOInput
      */
-    WOInput.prompt = function (message, dataKey, callback, severity) {
-        if (severity === void 0) { severity = wo_severity_enum_1.WOSeverityEnum.message; }
+    static prompt(message, dataKey, callback, severity = wo_severity_enum_1.WOSeverityEnum.message) {
         WOInput.clearInput();
         wo_generic_output_core_1.WOGenericOutput.printMessage(message, severity);
         WOInput.handleCallbackExecution(callback, dataKey);
-    };
+    }
     /**
      *
      *
@@ -50,9 +47,9 @@ var WOInput = /** @class */ (function () {
      * @returns {(string | null)}
      * @memberof WOInput
      */
-    WOInput.getInputData = function (dataKey) {
-        return sessionStorage.getItem("@wc-user-data-" + dataKey) ? sessionStorage.getItem("@wc-user-data-" + dataKey) : null;
-    };
+    static getInputData(dataKey) {
+        return sessionStorage.getItem(`@wc-user-data-${dataKey}`) ? sessionStorage.getItem(`@wc-user-data-${dataKey}`) : null;
+    }
     /**
      *
      *
@@ -62,15 +59,15 @@ var WOInput = /** @class */ (function () {
      * @param {string} dataKey
      * @memberof WOInput
      */
-    WOInput.handleCallbackExecution = function (callback, dataKey) {
+    static handleCallbackExecution(callback, dataKey) {
         $('input.wc-input-field').addClass('wc-input-wait'); // this will cause the parser to skip the data
-        $('input.wc-input-field.wc-input-wait').on('keypress', function (k) {
+        $('input.wc-input-field.wc-input-wait').on('keypress', k => {
             if (k.keyCode !== 13) {
                 return;
             }
-            var value = $('input.wc-input-field').val();
+            const value = $('input.wc-input-field').val();
             WOInput.clearInput();
-            sessionStorage.setItem("@wc-user-data-" + dataKey, value);
+            sessionStorage.setItem(`@wc-user-data-${dataKey}`, value);
             $('input.wc-input-field.wc-input-wait')
                 .remove(); // remove the previous input field
             $('.wc-input > .wc-input-pointer')
@@ -79,7 +76,7 @@ var WOInput = /** @class */ (function () {
             wo_parser_core_1.WOParser.startParser(web_onion_1.WebOnionSDK.dispatcherConfiguration);
             callback();
         });
-    };
-    return WOInput;
-}());
+    }
+}
 exports.WOInput = WOInput;
+//# sourceMappingURL=wo-input.core.js.map
