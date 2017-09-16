@@ -7,7 +7,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installing
 Install the library
 ```
-npm i web-cli
+npm i web-onion
 ```
 ### Quick setup
 To quickly implement WebOnion in your project follow these steps:
