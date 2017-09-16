@@ -4,6 +4,20 @@ import { WOOutput } from './wo-output.core';
 import { WebOnionSDK } from '../web-onion';
 
 export class WODispatcher {
+
+    /**
+     * Takes the configuration containing all the available commands, the current command set,
+     * and the sdk itself to read the user command, search it through all the available
+     * commands in the configuration.
+     * If a match is found the action binded to that command will be executed.
+     * Otherwise an error on the console will be printed.
+     * 
+     * @param {WODispatcherConfiguration[]} configuration 
+     * @param {WOCommandSet} command_set 
+     * @param {WebOnionSDK} sdk 
+     * @returns 
+     * @memberof WODispatcher
+     */
     public dispatch(configuration: WODispatcherConfiguration[], command_set: WOCommandSet, sdk: WebOnionSDK) {
         let action: any = null;
 

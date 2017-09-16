@@ -34,6 +34,12 @@ export class WOParser {
         });
     }
 
+    /**
+     * Resets the command set
+     * 
+     * @private
+     * @memberof WOParser
+     */
     private resetCommandSet() {
         this.command_set.command = null;
         this.command_set.flags = null;
