@@ -1,18 +1,10 @@
 import { WODispatcherConfiguration } from '../entities/wo-dispatcher-configuration.entity';
 import { WOCommandSet } from '../entities/wo-command-set.entity';
-import { WOGenericOutput } from './wo-generic-output.core';
+import { WOOutput } from './wo-output.core';
+import { WebOnionSDK } from '../web-onion';
 
 export class WODispatcher {
-    /**
-     * 
-     * 
-     * @static
-     * @param {WODispatcherConfiguration[]} configuration 
-     * @param {WOCommandSet} command_set 
-     * @returns 
-     * @memberof WODispatcher
-     */
-    public static dispatch(configuration: WODispatcherConfiguration[], command_set: WOCommandSet) {
+    public dispatch(configuration: WODispatcherConfiguration[], command_set: WOCommandSet, sdk: WebOnionSDK) {
         let action: any = null;
 
         configuration.forEach(cs => {
@@ -29,7 +21,7 @@ export class WODispatcher {
 
         //  Last check, if action is still null, fire an invalid command error
         if (!action) {
-            WOGenericOutput.printMessage('Invalid command', 1);
+            sdk.out_lib.printMessage('Invalid command', 1);
             return;
         }
 

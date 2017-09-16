@@ -8,19 +8,12 @@ import { WODispatcherConfiguration } from '../entities/wo-dispatcher-configurati
 
 export class WOParser {
 
-    private static command_set: WOCommandSet = {
+    private command_set: WOCommandSet = {
         command: null,
         flags: null
     };
 
-    /**
-     * 
-     * 
-     * @static
-     * @param {WODispatcherConfiguration[]} dispatcher_conf 
-     * @memberof WOParser
-     */
-    public static startParser(dispatcher_conf: WODispatcherConfiguration[]) {
+    public startParser(dispatcher_conf: WODispatcherConfiguration[], sdk: WebOnionSDK) {
         $('input.wc-input-field').on('keypress', (k: any) => {
             if (
                 k.keyCode !== 13 ||
@@ -34,21 +27,14 @@ export class WOParser {
             flags.shift(); // remove the command from the flags array;
             this.command_set.flags = flags;
 
-            WODispatcher.dispatch(dispatcher_conf, this.command_set);
+            sdk.dispatcher_lib.dispatch(dispatcher_conf, this.command_set, sdk);
             this.resetCommandSet();
 
-            WebOnionSDK.clearAfterSubmit ? WOInput.clearInput() : null;
+            sdk.clearAfterSubmit ? sdk.input_lib.clearInput() : null;
         });
     }
 
-    /**
-     * 
-     * 
-     * @private
-     * @static
-     * @memberof WOParser
-     */
-    private static resetCommandSet() {
+    private resetCommandSet() {
         this.command_set.command = null;
         this.command_set.flags = null;
     }

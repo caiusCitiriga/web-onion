@@ -5,20 +5,25 @@ declare const $: any;
 
 import { WOSDKConfiguration } from './entities/wo-sdk-configuration.entity';
 import { WODispatcherConfiguration } from './entities/wo-dispatcher-configuration.entity';
-import { WOGenericOutput } from './core/wo-generic-output.core';
+import { WOOutput } from './core/wo-output.core';
 import { WOInput } from './core/wo-input.core';
 import { WODispatcher } from './core/wo-dispatcher.core';
 import { WOParser } from './core/wo-parser.core';
 
 export class WebOnionSDK {
-    private static configuration: WOSDKConfiguration = {
+    public readonly out_lib: WOOutput;
+    public readonly input_lib: WOInput;
+    public readonly parser_lib: WOParser;
+    public readonly dispatcher_lib: WODispatcher;
+
+    private configuration: WOSDKConfiguration = {
         dispatcher: [
             {
                 command: 'echo',
                 flags: ['m'],
                 action: (flags) => {
                     const message = flags[0].split(':')[1];
-                    WOGenericOutput.printMessage(message);
+                    this.out_lib.printMessage(message);
                 }
             },
             {
@@ -26,8 +31,8 @@ export class WebOnionSDK {
                 flags: ['info', 'inspire'],
                 action: (flags) => {
                     if (flags[0] === 'info') {
-                        WOGenericOutput.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
-                        WOGenericOutput.printMessage('Current version: 1.1.0', 3);
+                        this.out_lib.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
+                        this.out_lib.printMessage('Current version: 1.1.0', 3);
                     }
 
                     if (flags[0] === 'inspire') {
@@ -37,10 +42,10 @@ export class WebOnionSDK {
                         }).then((data: any) => {
                             data = data[0];
 
-                            WOGenericOutput.printMessage('');
-                            WOGenericOutput.printMessage(data.content);
-                            WOGenericOutput.printMessage(`-${data.title}`, 3);
-                            WOGenericOutput.printMessage('');
+                            this.out_lib.printMessage('');
+                            this.out_lib.printMessage(data.content);
+                            this.out_lib.printMessage(`-${data.title}`, 3);
+                            this.out_lib.printMessage('');
                         })
                     }
                 }
@@ -48,7 +53,7 @@ export class WebOnionSDK {
             {
                 command: 'clear',
                 aliases: ['clr', 'ccl', 'cls', 'kk'],
-                action: (flags) => WOGenericOutput.clearConsole()
+                action: (flags) => this.out_lib.clearConsole()
             }
         ],
 
@@ -63,42 +68,27 @@ export class WebOnionSDK {
     }
 
     public constructor() {
+        this.out_lib = new WOOutput();
+        this.input_lib = new WOInput();
+        this.parser_lib = new WOParser();
+        this.dispatcher_lib = new WODispatcher();
+
         //  Start a listener for the double click on console
         $('body').dblclick((c: any) => {
             if (c.currentTarget.classList.contains('wo-dbl-click-autofocus')) {
-                WOInput.focusInput();
+                this.input_lib.focusInput();
             }
         });
     }
 
-    /**
-     * 
-     * 
-     * @readonly
-     * @static
-     * @memberof WebOnionSDK
-     */
-    public static get dispatcherConfiguration() {
-        return WebOnionSDK.configuration.dispatcher;
+    public get dispatcherConfiguration() {
+        return this.configuration.dispatcher;
     }
 
-    /**
-     * 
-     * 
-     * @readonly
-     * @static
-     * @type {boolean}
-     * @memberof WebOnionSDK
-     */
-    public static get clearAfterSubmit(): boolean {
-        return WebOnionSDK.configuration.input_field.clear_after_submit;
+    public get clearAfterSubmit(): boolean {
+        return this.configuration.input_field.clear_after_submit;
     }
 
-    /**
-     * 
-     * @param {boolean} value
-     * @memberof WebOnionSDK
-     */
     public set dbl_click_focus_to_input(value: boolean) {
         if (!value) {
             $('body').removeClass('wo-dbl-click-autofocus');
@@ -108,67 +98,34 @@ export class WebOnionSDK {
         $('body').addClass('wo-dbl-click-autofocus');
     }
 
-    /**
-     * 
-     * @param {boolean} value
-     * @memberof WebOnionSDK
-     */
     public set clear_after_submit(value: boolean) {
-        WebOnionSDK.configuration.input_field.clear_after_submit = value;
+        this.configuration.input_field.clear_after_submit = value;
     }
 
-    /**
-     * 
-     * 
-     * @memberof WebOnionSDK
-     */
     public set load_timeout(value: number) {
-        WebOnionSDK.configuration.general.loading_screen_time = value;
+        this.configuration.general.loading_screen_time = value;
     }
 
-    /**
-     * 
-     * 
-     * @memberof WebOnionSDK
-     */
     public initialize() {
-        WOGenericOutput.showInitializationScreen();
+        this.out_lib.showInitializationScreen();
 
         setTimeout(() => {
             this.clearDocument();
             this.createConsole();
-            WOParser.startParser(WebOnionSDK.configuration.dispatcher);
-        }, WebOnionSDK.configuration.general.loading_screen_time);
+            this.parser_lib.startParser(this.configuration.dispatcher, this);
+        }, this.configuration.general.loading_screen_time);
     }
 
-    /**
-     * 
-     * 
-     * @param {WODispatcherConfiguration[]} sets 
-     * @memberof WebOnionSDK
-     */
     public addSetsToDispatcher(sets: WODispatcherConfiguration[]) {
         sets.forEach(s => {
-            WebOnionSDK.configuration.dispatcher.push(s);
+            this.configuration.dispatcher.push(s);
         });
     }
 
-    /**
-     * 
-     * 
-     * @private
-     * @memberof WebOnionSDK
-     */
     private clearDocument() {
         $('body').empty();
     }
 
-    /**
-     * 
-     * 
-     * @private
-     * @memberof WebOnionSDK
-     */
     private createConsole() {
         $('body').append('<div class="wc-wrp"></div>');
         $('.wc-wrp').append('<div class="wc-console"></div>');
@@ -176,9 +133,6 @@ export class WebOnionSDK {
         $('.wc-input').append('<div class="wc-input-pointer">></div>');
         $('.wc-input').append('<input type="text" class="wc-input-field"/>');
 
-        WOInput.focusInput();
+        this.input_lib.focusInput();
     }
 }
-
-export const WOIn = new WOInput();
-export const WOGout = new WOGenericOutput();

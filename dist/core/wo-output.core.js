@@ -1,26 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = require("../enums/wo-severity.enum");
-class WOGenericOutput {
-    /**
-     *
-     *
-     * @static
-     * @memberof WOGenericOutput
-     */
-    static showInitializationScreen() {
+class WOOutput {
+    showInitializationScreen() {
         $('body').css('background-color', '#000');
         $('body').append(`<h1 class="wc-intialization">WebCLI is loading...<br><small>v1.0.0</small></h1>`);
     }
-    /**
-     *
-     *
-     * @static
-     * @param {string} message
-     * @param {WOSeverityEnum} [severity=WOSeverityEnum.message]
-     * @memberof WOGenericOutput
-     */
-    static printMessage(message, severity = wo_severity_enum_1.WOSeverityEnum.message) {
+    printMessage(message, severity = wo_severity_enum_1.WOSeverityEnum.message) {
         let message_wrapper = '';
         switch (severity) {
             case 0:
@@ -44,55 +30,19 @@ class WOGenericOutput {
         $('.wc-console').append(`<br>`);
         $('.wc-console').scrollTop($('.wc-console')[0].scrollHeight); //scroll to bottom
     }
-    /**
-     *
-     *
-     * @static
-     * @memberof WOGenericOutput
-     */
-    static clearConsole() {
+    clearConsole() {
         $('.wc-console').empty();
     }
-    /**
-     *
-     *
-     * @static
-     * @param {string} text
-     * @memberof WOGenericOutput
-     */
-    static printTitle(text) {
-        WOGenericOutput.printMessage(`<h1 class="wc-title">${text}</h1>`);
+    printTitle(text) {
+        this.printMessage(`<h1 class="wc-title">${text}</h1>`);
     }
-    /**
-     *
-     *
-     * @static
-     * @param {string} text
-     * @param {boolean} [full_width=true]
-     * @memberof WOGenericOutput
-     */
-    static printBoxedTitle(text, full_width = true) {
-        WOGenericOutput.printMessage(`<div class="wc-title-width-wrapper"><h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1></div>`);
+    printBoxedTitle(text, full_width = true) {
+        this.printMessage(`<div class="wc-title-width-wrapper"><h1 class="wc-title-boxed-${full_width ? 'full-width' : 'compact'}">${text}</h1></div>`);
     }
-    /**
-     *
-     *
-     * @static
-     * @param {string} text
-     * @memberof WOGenericOutput
-     */
-    static printSubtitle(text) {
+    printSubtitle(text) {
         throw Error('Not implemented');
     }
-    /**
-     *
-     *
-     * @static
-     * @param {{ key: string, value: string }[]} set
-     * @param {string} [space_char='&nbsp;']
-     * @memberof WOGenericOutput
-     */
-    static printKeyValuePairs(set, space_char = '&nbsp;') {
+    printKeyValuePairs(set, space_char = '&nbsp;') {
         const longestKeyLen = set.reduce((p, c) => p < c.key.length ? c.key.length : false, 0);
         set.forEach(pair => {
             let spaces = space_char;
@@ -103,5 +53,5 @@ class WOGenericOutput {
         });
     }
 }
-exports.WOGenericOutput = WOGenericOutput;
-//# sourceMappingURL=wo-generic-output.core.js.map
+exports.WOOutput = WOOutput;
+//# sourceMappingURL=wo-output.core.js.map

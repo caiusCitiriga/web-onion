@@ -1,17 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const wo_generic_output_core_1 = require("./wo-generic-output.core");
 class WODispatcher {
-    /**
-     *
-     *
-     * @static
-     * @param {WODispatcherConfiguration[]} configuration
-     * @param {WOCommandSet} command_set
-     * @returns
-     * @memberof WODispatcher
-     */
-    static dispatch(configuration, command_set) {
+    dispatch(configuration, command_set, sdk) {
         let action = null;
         configuration.forEach(cs => {
             //  Try direct command match
@@ -25,7 +15,7 @@ class WODispatcher {
         });
         //  Last check, if action is still null, fire an invalid command error
         if (!action) {
-            wo_generic_output_core_1.WOGenericOutput.printMessage('Invalid command', 1);
+            sdk.out_lib.printMessage('Invalid command', 1);
             return;
         }
         action(command_set.flags); // Exec the action providing the flags
