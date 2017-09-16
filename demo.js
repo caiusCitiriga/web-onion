@@ -1,5 +1,5 @@
 
-WebOnionSDK.allowRawHtml(true);
+WebOnionSDK.allowRawHtml(false);
 WebOnionSDK.addSetsToDispatcher([
     {
         command: 'test',

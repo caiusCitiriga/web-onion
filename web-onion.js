@@ -200,3 +200,5 @@ const WebOnionSDK = {
         });
     },
 }
+
+module.exports = { WebOnionSDK, WOGenericOutputLibrary, WOInputLibrary };
