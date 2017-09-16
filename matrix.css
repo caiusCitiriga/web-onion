@@ -5,6 +5,10 @@
     --warn: #ff9900;
     --error: #ff0000;
     --info: #6699ff;
+    --title: #9900cc;
+    --key: #ffcc00;
+    --value: #cccccc;
+    --kv-sep: #262626;
 }
 
 * {
@@ -30,14 +34,40 @@ h1.wc-intialization {
     font-family: monospace;
 }
 
+h1.wc-title,
+h1.wc-title-boxed-compact,
+h1.wc-title-boxed-full-width{
+    padding: .5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--title) !important;
+}
+h1.wc-title-boxed-compact,
+h1.wc-title-boxed-full-width {
+    border: 1px solid var(--title);
+}
+
+h1.wc-title-boxed-full-width{
+    width: 100%;
+}
+
+div.wc-title-width-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+
 .wc-wrp {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #000;
     color: var(--lime);
     font-family: monospace;
     font-size: 1.35rem; 
+
+    background-image: url('./assets/console_bg.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #000;
 }
 
 .wc-console{
@@ -56,8 +86,8 @@ h1.wc-intialization {
 
 .wc-input-field{
     flex-grow: 2;
-    background-color: #000;
     border: none;   
+    background-color: #000;
     color: var(--lime);
     outline: none;
     margin-left: .5rem;
@@ -79,4 +109,17 @@ h1.wc-intialization {
 
 .wc-message-info {
     color: var(--info);
+}
+
+span.wc-key {
+    color: var(--key);
+}
+
+span.wc-value {
+    color: var(--value);
+}
+
+hr.wc-kv-sep {
+    margin-top: .2rem;
+    border-color: var(--kv-sep);
 }
