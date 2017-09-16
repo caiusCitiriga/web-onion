@@ -122,6 +122,15 @@ export class WebOnionSDK {
      * 
      * @memberof WebOnionSDK
      */
+    public set load_timeout(value: number) {
+        WebOnionSDK.configuration.general.loading_screen_time = value;
+    }
+
+    /**
+     * 
+     * 
+     * @memberof WebOnionSDK
+     */
     public initialize() {
         WOGenericOutput.showInitializationScreen();
 
