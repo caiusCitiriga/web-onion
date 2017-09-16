@@ -1,3 +1,3 @@
-import * as WebOnionSDK from './src/web-onion';
-import * as WOInput from './src/core/wo-input.core';
-import * as WOGenericOutput from './src/core/wo-generic-output.core';
+export * from './src/web-onion';
+export * from './src/core/wo-input.core';
+export * from './src/core/wo-generic-output.core';
