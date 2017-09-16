@@ -59,6 +59,14 @@ class WebOnionSDK {
      *
      * @memberof WebOnionSDK
      */
+    set load_timeout(value) {
+        WebOnionSDK.configuration.general.loading_screen_time = value;
+    }
+    /**
+     *
+     *
+     * @memberof WebOnionSDK
+     */
     initialize() {
         wo_generic_output_core_1.WOGenericOutput.showInitializationScreen();
         setTimeout(() => {

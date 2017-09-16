@@ -36,6 +36,12 @@ export declare class WebOnionSDK {
      *
      * @memberof WebOnionSDK
      */
+    load_timeout: number;
+    /**
+     *
+     *
+     * @memberof WebOnionSDK
+     */
     initialize(): void;
     /**
      *
