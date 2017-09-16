@@ -5,7 +5,7 @@
     "main": "web-onion.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "webpack"
+        "build": "rimraf ./dist && mkdir ./dist && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/ && tsc"
     },
     "author": "Caius Citiriga",
     "license": "MIT",
@@ -18,6 +18,7 @@
     "devDependencies": {
         "css-loader": "^0.28.7",
         "file-loader": "^0.11.2",
+        "rimraf": "^2.6.2",
         "ts-loader": "^2.3.7",
         "webpack": "^3.6.0",
         "webpack-dev-server": "^2.8.2"
