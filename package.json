@@ -1,6 +1,6 @@
 {
     "name": "web-onion",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "An sdk for building browser CLI web applications",
     "main": "web-onion.js",
     "scripts": {
