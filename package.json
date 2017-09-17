@@ -1,6 +1,6 @@
 {
     "name": "web-onion",
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0",
     "description": "A fully extesible SDK for building browser based applications, with an old school CLI UX",
     "main": "web-onion.js",
     "scripts": {

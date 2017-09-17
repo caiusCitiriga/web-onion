@@ -126,7 +126,7 @@ export class WebOnionSDK {
      * @type {boolean}
      * @memberof WebOnionSDK
      */
-    public get dblClickFoucsToInput(): boolean {
+    public get dblClickFocusesInput(): boolean {
         return $('body').hasClass('wo-dbl-click-autofocus');
     }
 
@@ -137,7 +137,7 @@ export class WebOnionSDK {
      * @param {boolean} value
      * @memberof WebOnionSDK
      */
-    public set dbl_click_focus_to_input(value: boolean) {
+    public set dbl_click_focuses_input(value: boolean) {
         if (!value) {
             $('body').removeClass('wo-dbl-click-autofocus');
             return;
