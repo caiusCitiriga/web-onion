@@ -6,6 +6,6 @@ export declare class WOSDKConfiguration {
     };
     general: {
         theme: string;
-        loading_screen_time?: number | undefined;
+        loading_screen_time?: number;
     };
 }

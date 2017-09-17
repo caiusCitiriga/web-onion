@@ -64,25 +64,90 @@ class WebOnionSDK {
             }
         });
     }
+    /**
+     * Returns the array containing the dispatcher configurations
+     *
+     * @readonly
+     * @type {WODispatcherConfiguration[]}
+     * @memberof WebOnionSDK
+     */
     get dispatcherConfiguration() {
         return this.configuration.dispatcher;
     }
+    /**
+     * Returns true if the input gets cleared after each ENTER press.
+     * False otherwise
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof WebOnionSDK
+     */
     get clearAfterSubmit() {
-        return this.configuration.input_field.clear_after_submit;
+        return this.configuration.input_field.clear_after_submit ? true : false;
     }
-    set dbl_click_focus_to_input(value) {
+    /**
+     * Returns the loading screen timeout if set.
+     * Null will be returned otherwise
+     *
+     * @readonly
+     * @type {(number | null)}
+     * @memberof WebOnionSDK
+     */
+    get loadTimeout() {
+        return this.configuration.general.loading_screen_time ?
+            this.configuration.general.loading_screen_time :
+            null;
+    }
+    /**
+     * Returns true if the input focuses automatically when
+     * double clicking on the console. False otherwise
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof WebOnionSDK
+     */
+    get dblClickFocusesInput() {
+        return $('body').hasClass('wo-dbl-click-autofocus');
+    }
+    /**
+     * Enables or disables the input focus
+     * when double clicking on the console
+     *
+     * @param {boolean} value
+     * @memberof WebOnionSDK
+     */
+    set dbl_click_focuses_input(value) {
         if (!value) {
             $('body').removeClass('wo-dbl-click-autofocus');
             return;
         }
         $('body').addClass('wo-dbl-click-autofocus');
     }
+    /**
+     * Enables or disables the input field
+     * auto clear on each ENTER press
+     *
+     * @param {boolean} value
+     * @memberof WebOnionSDK
+     */
     set clear_after_submit(value) {
         this.configuration.input_field.clear_after_submit = value;
     }
+    /**
+     * Sets the amount of time to wait before
+     * the legacy loading screen hides
+     *
+     * @param {number} value
+     * @memberof WebOnionSDK
+     */
     set load_timeout(value) {
         this.configuration.general.loading_screen_time = value;
     }
+    /**
+     * Initializes the SDK with the given configurations
+     *
+     * @memberof WebOnionSDK
+     */
     initialize() {
         this.out_lib.showInitializationScreen();
         setTimeout(() => {
@@ -91,14 +156,34 @@ class WebOnionSDK {
             this.parser_lib.startParser(this.configuration.dispatcher, this);
         }, this.configuration.general.loading_screen_time);
     }
-    addSetsToDispatcher(sets) {
-        sets.forEach(s => {
+    /**
+     * Adds the array of dispatcher configurations
+     * to the current configurations.
+     *
+     * @param {WODispatcherConfiguration[]} configurations
+     * @memberof WebOnionSDK
+     */
+    addConfigurationsToDispatcher(configurations) {
+        configurations.forEach(s => {
             this.configuration.dispatcher.push(s);
         });
     }
+    /**
+     * Clears the content of the body
+     *
+     * @private
+     * @memberof WebOnionSDK
+     */
     clearDocument() {
         $('body').empty();
     }
+    /**
+     * Creates the HTML elements needed to render
+     * the console and focuses the input
+     *
+     * @private
+     * @memberof WebOnionSDK
+     */
     createConsole() {
         $('body').append('<div class="wc-wrp"></div>');
         $('.wc-wrp').append('<div class="wc-console"></div>');
