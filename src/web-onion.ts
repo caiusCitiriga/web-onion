@@ -81,14 +81,62 @@ export class WebOnionSDK {
         });
     }
 
-    public get dispatcherConfiguration() {
+    /**
+     * Returns the array containing the dispatcher configurations
+     * 
+     * @readonly
+     * @type {WODispatcherConfiguration[]}
+     * @memberof WebOnionSDK
+     */
+    public get dispatcherConfiguration(): WODispatcherConfiguration[] {
         return this.configuration.dispatcher;
     }
 
+    /**
+     * Returns true if the input gets cleared after each ENTER press.
+     * False otherwise
+     * 
+     * @readonly
+     * @type {boolean}
+     * @memberof WebOnionSDK
+     */
     public get clearAfterSubmit(): boolean {
-        return this.configuration.input_field.clear_after_submit;
+        return this.configuration.input_field.clear_after_submit ? true : false;
     }
 
+    /**
+     * Returns the loading screen timeout if set.
+     * Null will be returned otherwise
+     *
+     * @readonly
+     * @type {(number | null)}
+     * @memberof WebOnionSDK
+     */
+    public get loadTimeout(): number | null {
+        return this.configuration.general.loading_screen_time ?
+            this.configuration.general.loading_screen_time :
+            null;
+    }
+
+    /**
+     * Returns true if the input focuses automatically when
+     * double clicking on the console. False otherwise
+     * 
+     * @readonly
+     * @type {boolean}
+     * @memberof WebOnionSDK
+     */
+    public get dblClickFoucsToInput(): boolean {
+        return $('body').hasClass('wo-dbl-click-autofocus');
+    }
+
+    /**
+     * Enables or disables the input focus
+     * when double clicking on the console
+     *
+     * @param {boolean} value
+     * @memberof WebOnionSDK
+     */
     public set dbl_click_focus_to_input(value: boolean) {
         if (!value) {
             $('body').removeClass('wo-dbl-click-autofocus');
@@ -98,14 +146,33 @@ export class WebOnionSDK {
         $('body').addClass('wo-dbl-click-autofocus');
     }
 
+    /**
+     * Enables or disables the input field
+     * auto clear on each ENTER press
+     *
+     * @param {boolean} value
+     * @memberof WebOnionSDK
+     */
     public set clear_after_submit(value: boolean) {
         this.configuration.input_field.clear_after_submit = value;
     }
 
+    /**
+     * Sets the amount of time to wait before
+     * the legacy loading screen hides
+     *
+     * @param {number} value
+     * @memberof WebOnionSDK
+     */
     public set load_timeout(value: number) {
         this.configuration.general.loading_screen_time = value;
     }
 
+    /**
+     * Initializes the SDK with the given configurations
+     * 
+     * @memberof WebOnionSDK
+     */
     public initialize() {
         this.out_lib.showInitializationScreen();
 
@@ -116,16 +183,36 @@ export class WebOnionSDK {
         }, this.configuration.general.loading_screen_time);
     }
 
-    public addSetsToDispatcher(sets: WODispatcherConfiguration[]) {
-        sets.forEach(s => {
+    /**
+     * Adds the array of dispatcher configurations
+     * to the current configurations.
+     * 
+     * @param {WODispatcherConfiguration[]} configurations 
+     * @memberof WebOnionSDK
+     */
+    public addConfigurationsToDispatcher(configurations: WODispatcherConfiguration[]) {
+        configurations.forEach(s => {
             this.configuration.dispatcher.push(s);
         });
     }
 
+    /**
+     * Clears the content of the body
+     * 
+     * @private
+     * @memberof WebOnionSDK
+     */
     private clearDocument() {
         $('body').empty();
     }
 
+    /**
+     * Creates the HTML elements needed to render
+     * the console and focuses the input
+     * 
+     * @private
+     * @memberof WebOnionSDK
+     */
     private createConsole() {
         $('body').append('<div class="wc-wrp"></div>');
         $('.wc-wrp').append('<div class="wc-console"></div>');

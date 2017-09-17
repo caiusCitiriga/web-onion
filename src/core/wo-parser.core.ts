@@ -13,6 +13,13 @@ export class WOParser {
         flags: null
     };
 
+    /**
+     * Starts the parser.
+     * 
+     * @param {WODispatcherConfiguration[]} dispatcher_conf 
+     * @param {WebOnionSDK} sdk 
+     * @memberof WOParser
+     */
     public startParser(dispatcher_conf: WODispatcherConfiguration[], sdk: WebOnionSDK) {
         $('input.wc-input-field').on('keypress', (k: any) => {
             if (
@@ -25,7 +32,7 @@ export class WOParser {
 
             const flags = raw_command.split('--');
             flags.shift(); // remove the command from the flags array;
-            this.command_set.flags = flags;
+            this.command_set.flags = flags.map(f => f.toLowerCase());
 
             sdk.dispatcher_lib.dispatch(dispatcher_conf, this.command_set, sdk);
             this.resetCommandSet();
