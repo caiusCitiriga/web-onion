@@ -64,7 +64,7 @@ div.wc-title-width-wrapper{
     font-family: monospace;
     font-size: 1.35rem; 
 
-    background-image: url('./assets/console_bg.png');
+    background-image: url('~/node_modules/web-onion/dist/assets/console_bg.png'); /* Trick for the imports to work */
     background-position: center;
     background-repeat: no-repeat;
     background-color: #000;
@@ -82,6 +82,10 @@ div.wc-title-width-wrapper{
     height: 2rem;
     line-height: 2rem;
     margin-bottom: .5rem;
+}
+
+.wc-input-pointer{
+    padding-left: 1rem;
 }
 
 .wc-input-field{

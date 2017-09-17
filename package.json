@@ -1,15 +1,21 @@
 {
     "name": "web-onion",
-    "version": "1.1.3",
-    "description": "An sdk for building browser CLI web applications",
+    "version": "2.0.0-rc.1",
+    "description": "A fully extesible SDK for building browser based applications, with an old school CLI UX",
     "main": "web-onion.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "rimraf ./dist && mkdir ./dist && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/ && tsc"
     },
     "author": "Caius Citiriga",
     "license": "MIT",
-    "dependencies": {},
-    "devDependencies": {},
+    "dependencies": {
+        "typescript": "^2.5.2",
+        "@types/jquery": "^3.2.12"
+    },
+    "devDependencies": {
+        "rimraf": "^2.6.2"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/caiusCitiriga/web-onion.git"
