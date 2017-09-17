@@ -57,7 +57,7 @@ export class WOInput {
      * @memberof WOInput
      */
     public getInputData(dataKey: string): string | null {
-        return sessionStorage.getItem(`@wc-user-data-${dataKey}`) ? sessionStorage.getItem(`@wc-user-data-${dataKey}`) : null;
+        return sessionStorage.getItem(`@wo-user-data-${dataKey}`) ? sessionStorage.getItem(`@wo-user-data-${dataKey}`) : null;
     }
 
     /**
@@ -78,7 +78,7 @@ export class WOInput {
 
             const value = <string>$('input.wc-input-field').val();
             this.clearInput();
-            sessionStorage.setItem(`@wc-user-data-${dataKey}`, value);
+            sessionStorage.setItem(`@wo-user-data-${dataKey}`, value);
 
             $('input.wc-input-field.wc-input-wait')
                 .remove();   // remove the previous input field

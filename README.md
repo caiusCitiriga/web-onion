@@ -2,7 +2,9 @@
 
 A fully extensible SDK for building powerful browser based applications. With an old school CLI user interface and interaction system. 
 
-### Get started
+#### ***This is a complete rewrite of the library in Typescript. The old Javascript library documentation is no more available, but you can find the .js files inside the ```/dist``` folder***
+
+## Get started
 
 #### #1 Install WebOnion
 ```
@@ -45,6 +47,12 @@ This is the building block of your application.
 
 Inside the action you can build your command logic, let's see a quick example.
 We will create a command called ```test-me```. We will provide one alias ```tm``` and three flags ```['f1', 'f2', 'f3']```. 
+
+In the configuration, only two properties are required. The **command** and the **action**. 
+
+The flags aren't actually used yet, but in the upcoming releases there will be a ```helpManager``` object that will use these flags to create the help structure for that command.
+
+#### Note that you declare the flags normally, while the user will have to use them with the double dash notation: ```--flag-name```.
 
 ```typescript
 import {WebOnionSDK} from 'web-onion/dist/web-onion';
@@ -89,13 +97,15 @@ WO.addConfigurationsToDispatcher([
 
 $(document).ready(() => WO.initialize());
 ```
-While the first four statements are pretty simple to understand, the last one can be a bit tricky. But it's not that complex once you get the what it does.
+While the first four statements are pretty simple to understand, the last one can be a bit tricky. But it's not that complex once you get what it does.
 
 Suppose to have this command ```list --f3:value=33```
 
-* It splits each flag by ```:```, obtaining ```['f3', 'value=33']```
-* It takes the second value in the array: ```value=33```
-* It splits the value by ```=```, obtaining ```['value', '33']```
+The last statement:
+* splits each flag by the ```:``` character, obtaining ```['f3', 'value=33']```
+* takes the second value in the array: ```value=33```
+* splits the value by the ```=``` character, obtaining ```['value', '33']```
+* takes the second value in the array. The value passed along with the flag
 
 Using this trick you can build advanced and complex commands.
 
@@ -120,7 +130,7 @@ Returns true if the input gets cleared after each ENTER press. False otherwise
 * **@return:** ```{boolean}```
 * **@memberof:** ```WebOnionSDK```
 
-### ```+ dblClickFoucsToInput()```
+### ```+ dblClickFocusesInput()```
 Returns true if the input focuses automatically when double clicking on the console. False otherwise
 * **@return:** ```{boolean}```
 * **@memberof:** ```WebOnionSDK```
@@ -131,7 +141,7 @@ Returns the array containing the dispatcher configurations
 * **@memberof:** ```WebOnionSDK```
 
 # Setters
-### ```+ dbl_click_focus_to_input```
+### ```+ dbl_click_focuses_input```
 Enables or disables the input autofocus when double-clicking on the console
 * **@param:** ```{boolean} value```
 * **@memberof:** ```WebOnionSDK```
@@ -159,12 +169,11 @@ import {WebOnionSDK} from 'web-onion/dist/web-onion';
 const WO = new WebOnionSDK();
 
 WO.out_lib      // WOOut library
-WO.input_lib    // WOInput librart
+WO.input_lib    // WOInput library
 ```
 ## ```WOOutput``` library
----
 #### ```+ showInitializationScreen()```
-Phows the legacy loading screen
+Shows the legacy loading screen
 
 * **@memberof:**  ```WOOutput```
 
@@ -202,7 +211,6 @@ Prints a list of key value pairs.
 * **@memberof:** ```WOOutput```
 
 ## ```WOInput``` library
-----
 #### ```+ clearInput()```
 Clears the input field
 
@@ -224,14 +232,85 @@ that will be executed when the user continues by pressing ENTER and providing a 
 * **@param:** ```{WOSeverityEnum} [severity=WOSeverityEnum.message] ```
 * **@memberof:** ```WOInput```
 
+#### A few words about ```prompt()```:
+This method is a powerful tool that you can use to interact with the user. Besides the message, the sdk and the callback function parameters, it takes a ```dataKey``` parameter. A string, which will be the identifier used by WebOnion to **store** the user's answer to the message prompted. This value gets stored in the browser's session storage prefixed by ```@wo-user-data-``` and followed by the ```dataKey``` value.  
+
+The same library exposes a method to retrieve the data stored by the prompt, and it can be used anytime to retrieve values stored previously. This method is called ```getInputData()```
+
 #### ```+ getInputData()```
-Gets the input data from the storage saved earlier. If the given key matches one in the storage, the value will be returned. Otherwise null will be returned
+Gets the input data saved previously from the storage. If the given dataKey matches one identifier in the storage, the value will be returned. Otherwise null will be returned
 
 * **@param:** ```{string} dataKey ```
 * **@returns:** ```{(string | null)} ```
 * **@memberof:** ```WOInput```
 
-## Help WebOnion grow
+# Entities
+#### ```+ WOCommandSet```
+```typescript
+class WOCommandSet {
+    command: string | null;
+    flags: string[] | null;
+}
+```
+
+#### ```+ WOSDKConfiguration```
+```typescript
+class WOSDKConfiguration {
+    dispatcher: WODispatcherConfiguration[];
+    input_field: {
+        clear_after_submit: boolean
+    };
+    general: {
+        theme: string,
+        loading_screen_time?: number
+    }
+}
+```
+
+#### ```+ WODispatcherConfiguration```
+```typescript
+class WODispatcherConfiguration {
+    command: string;
+    aliases?: string[];
+    flags?: string[];
+    action: (flags: string[]) => void
+}
+```
+
+# Enums
+
+#### ```+ WOSeverityEnum```
+The severity types of the messages printed out by the ```WOOut``` and ```WOIn``` libraries.
+```typescript
+enum WOSeverityEnum {
+    message = 0,
+    error = 1,
+    warning = 2,
+    info = 3
+}
+```
+---
+## Upcoming features
+### **Help manager**
+A library that will read the dispatcher configuration and generates a help screen for the whole application
+
+### **Flags matching character configuration**
+There will be a getter and a setter, along with a new entry in the main configuration object that will allow you to set the character used by the parser to identify the flags. Currently fixed to ```--```
+
+### **Theme configuration**
+There will be a getter and a setter, along with a new entry in the main configuration object that will allow you to change the console's theme. Right now is fixed to ```Matrix.css```
+
+### **Subtitle method implementation in WOOut library**
+It will be bossible to print out subtitles along with titles and boxed titles
+
+### **Complex outputs to WOOut lib**
+It will be added a set of methods to this library that will handle complex outputs, like tables, images, special data presentation layouts and so on.
+
+### **Auto completition of commands**
+There will be a library that will handle the autcompletition process for the current commands set
+
+
+# Help WebOnion grow
 If you like this project please help me with your feedback. Found a bug? Want a feature? Want some help? Feel free to open a [Issue on GitHub](https://github.com/caiuscitiriga/smart-cli/issues).
 
 ## Versioning
