@@ -94,7 +94,7 @@ $(document).ready(() => {
             command: 'test',
             aliases: ['t', 'tt'],
             flags: ['f1', 'f2'],
-            action: () => {
+            action: (fl) => {
                 WO.out_lib.printMessage('Working');
             }
         },
