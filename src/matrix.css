@@ -9,6 +9,12 @@
     --key: #ffcc00;
     --value: #cccccc;
     --kv-sep: #262626;
+    --tbl-border: #262626;
+    --tbl-text: #777777;
+    --tbl-title: #cccccc;
+    --tbl-command: #ffcc00;
+    --tbl-flags: #6699ff;
+    --tbl-aliases: #6699ff;
 }
 
 * {
@@ -98,6 +104,47 @@ div.wc-title-width-wrapper {
     margin-left: .5rem;
     font-family: monospace;
     font-size: 1.1rem;
+}
+
+.wo-help-table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid var(--tbl-border);
+}
+
+.wo-help-table td {
+    color: var(--tbl-text);    
+}
+
+.wo-help-table ul {
+    list-style: none;
+}
+
+.wo-help-table tbody tr:first-child td {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--tbl-title);
+    border-bottom: 1px solid var(--tbl-border);
+    border-left: 1px solid var(--tbl-border);
+}
+
+.wo-help-table td:first-child {
+    color: var(--tbl-command);
+}
+
+.wo-help-table td:nth-child(3) {
+    color: var(--tbl-aliases);
+}
+
+.wo-help-table td .flag-name {
+    color: var(--tbl-flags);
+}
+
+.wo-help-table td {
+    padding: .5rem;
+    border-bottom: 1px solid var(--tbl-border);
+    border-left: 1px solid var(--tbl-border);
 }
 
 .wc-message-message {

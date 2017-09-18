@@ -87,8 +87,8 @@ var WOSeverityEnum;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const web_onion_1 = __webpack_require__(2);
-$(document).ready(() => {
-    const WO = new web_onion_1.WebOnionSDK();
+const WO = new web_onion_1.WebOnionSDK();
+$().ready(() => {
     WO.load_timeout = 0;
     WO.dbl_click_focuses_input = true;
     WO.addConfigurationsToDispatcher([
@@ -98,15 +98,11 @@ $(document).ready(() => {
             flags: [
                 {
                     flag: 'f1',
-                    desc: 'Runs the command with flag 1'
-                },
-                {
-                    flag: 'f2',
-                    desc: 'Runs the command with flag 2'
+                    desc: 'Flag one description'
                 }
             ],
-            action: (fl) => {
-                WO.help_manager.generateHelpFromDispatcherConfig(WO);
+            action: (flags) => {
+                WO.out_lib.printMessage('Command working');
             }
         }
     ]);
@@ -133,6 +129,7 @@ class WebOnionSDK {
             dispatcher: [
                 {
                     command: 'echo',
+                    desc: 'Echoes a message in console',
                     flags: [
                         {
                             flag: 'm',
@@ -143,6 +140,7 @@ class WebOnionSDK {
                 },
                 {
                     command: 'wo',
+                    desc: 'WebOnion\'s main command. See flags for actions',
                     flags: [
                         {
                             flag: 'info',
@@ -151,12 +149,17 @@ class WebOnionSDK {
                         {
                             flag: 'inspire',
                             desc: 'Returns a random design quote from the "Quotes for design API"'
+                        },
+                        {
+                            flag: 'help',
+                            desc: 'Show all the available commands with aliases and flags'
                         }
                     ],
                     action: (flags) => this.handleWOCommand(flags)
                 },
                 {
                     command: 'clear',
+                    desc: 'Clears the console',
                     aliases: ['clr', 'ccl', 'cls', 'kk'],
                     action: (flags) => this.out_lib.clearConsole()
                 }
@@ -175,8 +178,8 @@ class WebOnionSDK {
         this.dispatcher_lib = new wo_dispatcher_core_1.WODispatcher();
         this.help_manager = new wo_help_manager_core_1.WOHelpManager();
         //  Start a listener for the double click on console
-        $('body').dblclick((c) => {
-            if (c.currentTarget.classList.contains('wo-dbl-click-autofocus')) {
+        $('html').dblclick((c) => {
+            if ($('body').hasClass('wo-dbl-click-autofocus')) {
                 this.input_lib.focusInput();
             }
         });
@@ -310,15 +313,15 @@ class WebOnionSDK {
         this.input_lib.focusInput();
     }
     handleEchoCommand(flags) {
-        const message = flags[0].flag.split(':')[1];
+        const message = flags[0].split(':')[1];
         this.out_lib.printMessage(message);
     }
     handleWOCommand(flags) {
-        if (flags[0].flag === 'info') {
+        if (flags[0] === 'info') {
             this.out_lib.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
             this.out_lib.printMessage('Current version: 2.0.1', 3);
         }
-        if (flags[0].flag === 'inspire') {
+        if (flags[0] === 'inspire') {
             $.get({
                 url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
                 cache: false
@@ -329,6 +332,10 @@ class WebOnionSDK {
                 this.out_lib.printMessage(`-${data.title}`, 3);
                 this.out_lib.printMessage('');
             });
+        }
+        if (flags[0] === 'help') {
+            this.help_manager.generateHelpFromDispatcherConfig(this);
+            return;
         }
     }
 }
@@ -375,7 +382,7 @@ exports = module.exports = __webpack_require__(5)(undefined);
 
 
 // module
-exports.push([module.i, ":root {\r\n    font-size: 14px;\r\n    --lime: #32cd32;\r\n    --message: var(--lime);\r\n    --warn: #ff9900;\r\n    --error: #ff0000;\r\n    --info: #6699ff;\r\n    --title: #9900cc;\r\n    --key: #ffcc00;\r\n    --value: #cccccc;\r\n    --kv-sep: #262626;\r\n}\r\n\r\n* {\r\n    padding: 0;\r\n    margin: 0;\r\n}\r\n\r\nhtml,\r\nbody {\r\n    height: 100%;\r\n}\r\n\r\nh1.wc-intialization {\r\n    color: var(--lime);\r\n    font-size: 1.5rem;\r\n    width: 100%;\r\n    position: absolute;\r\n    height: 4rem;\r\n    line-height: 4rem;\r\n    top: 50%;\r\n    margin-top: -2rem;\r\n    text-align: center;\r\n    font-family: monospace;\r\n}\r\n\r\nh1.wc-title,\r\nh1.wc-title-boxed-compact,\r\nh1.wc-title-boxed-full-width {\r\n    padding: .5rem;\r\n    font-size: 2rem;\r\n    font-weight: bold;\r\n    color: var(--title) !important;\r\n}\r\n\r\nh1.wc-title-boxed-compact,\r\nh1.wc-title-boxed-full-width {\r\n    border: 1px solid var(--title);\r\n}\r\n\r\nh1.wc-title-boxed-full-width {\r\n    width: 100%;\r\n}\r\n\r\ndiv.wc-title-width-wrapper {\r\n    display: flex;\r\n    flex-direction: row;\r\n}\r\n\r\n.wc-wrp {\r\n    height: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    color: var(--lime);\r\n    font-family: monospace;\r\n    font-size: 1.35rem;\r\n    background-image: url('https://imgur.com/YuMYVq1.png');\r\n    background-position: center;\r\n    background-repeat: no-repeat;\r\n    background-color: #000;\r\n}\r\n\r\n.wc-console {\r\n    flex-grow: 1;\r\n    max-height: 97%;\r\n    padding: .5rem;\r\n    overflow-y: scroll;\r\n}\r\n\r\n.wc-input {\r\n    display: flex;\r\n    flex-direction: row;\r\n    height: 2rem;\r\n    line-height: 2rem;\r\n    margin-bottom: .5rem;\r\n}\r\n\r\n.wc-input-pointer {\r\n    padding-left: 1rem;\r\n}\r\n\r\n.wc-input-field {\r\n    flex-grow: 2;\r\n    border: none;\r\n    background-color: #000;\r\n    color: var(--lime);\r\n    outline: none;\r\n    margin-left: .5rem;\r\n    font-family: monospace;\r\n    font-size: 1.1rem;\r\n}\r\n\r\n.wc-message-message {\r\n    color: var(--message);\r\n}\r\n\r\n.wc-message-error {\r\n    color: var(--error);\r\n}\r\n\r\n.wc-message-warn {\r\n    color: var(--warn);\r\n}\r\n\r\n.wc-message-info {\r\n    color: var(--info);\r\n}\r\n\r\nspan.wc-key {\r\n    color: var(--key);\r\n}\r\n\r\nspan.wc-value {\r\n    color: var(--value);\r\n}\r\n\r\nhr.wc-kv-sep {\r\n    margin-top: .2rem;\r\n    border-color: var(--kv-sep);\r\n}", ""]);
+exports.push([module.i, ":root {\n    font-size: 14px;\n    --lime: #32cd32;\n    --message: var(--lime);\n    --warn: #ff9900;\n    --error: #ff0000;\n    --info: #6699ff;\n    --title: #9900cc;\n    --key: #ffcc00;\n    --value: #cccccc;\n    --kv-sep: #262626;\n    --tbl-border: #262626;\n    --tbl-text: #777777;\n    --tbl-title: #cccccc;\n    --tbl-command: #ffcc00;\n    --tbl-flags: #6699ff;\n    --tbl-aliases: #6699ff;\n}\n\n* {\n    padding: 0;\n    margin: 0;\n}\n\nhtml,\nbody {\n    height: 100%;\n}\n\nh1.wc-intialization {\n    color: var(--lime);\n    font-size: 1.5rem;\n    width: 100%;\n    position: absolute;\n    height: 4rem;\n    line-height: 4rem;\n    top: 50%;\n    margin-top: -2rem;\n    text-align: center;\n    font-family: monospace;\n}\n\nh1.wc-title,\nh1.wc-title-boxed-compact,\nh1.wc-title-boxed-full-width {\n    padding: .5rem;\n    font-size: 2rem;\n    font-weight: bold;\n    color: var(--title) !important;\n}\n\nh1.wc-title-boxed-compact,\nh1.wc-title-boxed-full-width {\n    border: 1px solid var(--title);\n}\n\nh1.wc-title-boxed-full-width {\n    width: 100%;\n}\n\ndiv.wc-title-width-wrapper {\n    display: flex;\n    flex-direction: row;\n}\n\n.wc-wrp {\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n    color: var(--lime);\n    font-family: monospace;\n    font-size: 1.35rem;\n    background-image: url('https://imgur.com/YuMYVq1.png');\n    background-position: center;\n    background-repeat: no-repeat;\n    background-color: #000;\n}\n\n.wc-console {\n    flex-grow: 1;\n    max-height: 97%;\n    padding: .5rem;\n    overflow-y: scroll;\n}\n\n.wc-input {\n    display: flex;\n    flex-direction: row;\n    height: 2rem;\n    line-height: 2rem;\n    margin-bottom: .5rem;\n}\n\n.wc-input-pointer {\n    padding-left: 1rem;\n}\n\n.wc-input-field {\n    flex-grow: 2;\n    border: none;\n    background-color: #000;\n    color: var(--lime);\n    outline: none;\n    margin-left: .5rem;\n    font-family: monospace;\n    font-size: 1.1rem;\n}\n\n.wo-help-table {\n    border-collapse: collapse;\n    width: 100%;\n    border: 1px solid var(--tbl-border);\n}\n\n.wo-help-table td {\n    color: var(--tbl-text);    \n}\n\n.wo-help-table ul {\n    list-style: none;\n}\n\n.wo-help-table tbody tr:first-child td {\n    font-size: 1.5rem;\n    text-transform: uppercase;\n    text-align: center;\n    color: var(--tbl-title);\n    border-bottom: 1px solid var(--tbl-border);\n    border-left: 1px solid var(--tbl-border);\n}\n\n.wo-help-table td:first-child {\n    color: var(--tbl-command);\n}\n\n.wo-help-table td:nth-child(3) {\n    color: var(--tbl-aliases);\n}\n\n.wo-help-table td .flag-name {\n    color: var(--tbl-flags);\n}\n\n.wo-help-table td {\n    padding: .5rem;\n    border-bottom: 1px solid var(--tbl-border);\n    border-left: 1px solid var(--tbl-border);\n}\n\n.wc-message-message {\n    color: var(--message);\n}\n\n.wc-message-error {\n    color: var(--error);\n}\n\n.wc-message-warn {\n    color: var(--warn);\n}\n\n.wc-message-info {\n    color: var(--info);\n}\n\nspan.wc-key {\n    color: var(--key);\n}\n\nspan.wc-value {\n    color: var(--value);\n}\n\nhr.wc-kv-sep {\n    margin-top: .2rem;\n    border-color: var(--kv-sep);\n}", ""]);
 
 // exports
 
@@ -1215,14 +1222,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class WOHelpManager {
     generateHelpFromDispatcherConfig(sdk) {
         const config = sdk.dispatcherConfiguration;
-        config.forEach(config => {
-            console.log(config.command);
-            console.log(config.aliases ? config.aliases : 'No aliases');
-            if (config.flags) {
-                config.flags.forEach(f => {
-                    if (f.desc) {
-                        console.log(f.flag + ': ' + f.desc);
-                    }
+        $('.wc-console').append('<table>');
+        $('.wc-console > table').addClass('wo-help-table');
+        $('.wo-help-table').append('<tbody>');
+        $('.wo-help-table > tbody').append('<tr>');
+        $('.wo-help-table > tbody > tr').last().append('<td>');
+        $('.wo-help-table > tbody > tr > td').last().append('<strong>Command</strong>');
+        $('.wo-help-table > tbody > tr').last().append('<td>');
+        $('.wo-help-table > tbody > tr > td').last().append('<strong>Description</strong>');
+        $('.wo-help-table > tbody > tr').last().append('<td>');
+        $('.wo-help-table > tbody > tr > td').last().append('<strong>Aliases</strong>');
+        $('.wo-help-table > tbody > tr').last().append('<td>');
+        $('.wo-help-table > tbody > tr > td').last().append('<strong>Flags</strong>');
+        config.forEach(conf => {
+            $('.wo-help-table > tbody').append('<tr>');
+            $('.wo-help-table > tbody > tr').last().append('<td>');
+            $('.wo-help-table > tbody > tr > td').last().append(conf.command);
+            $('.wo-help-table > tbody > tr').last().append('<td>');
+            $('.wo-help-table > tbody > tr > td').last().append(conf.desc);
+            $('.wo-help-table > tbody > tr').last().append('<td>');
+            $('.wo-help-table > tbody > tr > td').last().append('<ul>');
+            if (conf.aliases) {
+                conf.aliases.forEach(als => {
+                    $('.wo-help-table > tbody > tr > td > ul').last().append('<li>');
+                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(als);
+                });
+            }
+            $('.wo-help-table > tbody > tr').last().append('<td>');
+            $('.wo-help-table > tbody > tr > td').last().append('<ul>');
+            if (conf.flags) {
+                conf.flags.forEach(flag => {
+                    $('.wo-help-table > tbody > tr > td > ul').last().append('<li>');
+                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<strong class="flag-name">--${flag.flag}: \t</strong>`);
+                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<i>${flag.desc}</i>`);
                 });
             }
         });

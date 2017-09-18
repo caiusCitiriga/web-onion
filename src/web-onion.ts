@@ -1,8 +1,6 @@
 declare const require: any;
 require("./matrix.css");
 
-declare const $: any;
-
 import { WOSDKConfiguration } from './entities/wo-sdk-configuration.entity';
 import { WODispatcherConfiguration } from './entities/wo-dispatcher-configuration.entity';
 import { WOOutput } from './core/wo-output.core';
@@ -23,6 +21,7 @@ export class WebOnionSDK {
         dispatcher: [
             {
                 command: 'echo',
+                desc: 'Echoes a message in console',
                 flags: [
                     {
                         flag: 'm',
@@ -34,6 +33,7 @@ export class WebOnionSDK {
 
             {
                 command: 'wo',
+                desc: 'WebOnion\'s main command. See flags for actions',
                 flags: [
                     {
                         flag: 'info',
@@ -42,6 +42,10 @@ export class WebOnionSDK {
                     {
                         flag: 'inspire',
                         desc: 'Returns a random design quote from the "Quotes for design API"'
+                    },
+                    {
+                        flag: 'help',
+                        desc: 'Show all the available commands with aliases and flags'
                     }
                 ],
                 action: (flags) => this.handleWOCommand(flags)
@@ -49,6 +53,7 @@ export class WebOnionSDK {
 
             {
                 command: 'clear',
+                desc: 'Clears the console',
                 aliases: ['clr', 'ccl', 'cls', 'kk'],
                 action: (flags) => this.out_lib.clearConsole()
             }
@@ -71,8 +76,9 @@ export class WebOnionSDK {
         this.dispatcher_lib = new WODispatcher();
         this.help_manager = new WOHelpManager();
         //  Start a listener for the double click on console
-        $('body').dblclick((c: any) => {
-            if (c.currentTarget.classList.contains('wo-dbl-click-autofocus')) {
+
+        $('html').dblclick((c: any) => {
+            if ($('body').hasClass('wo-dbl-click-autofocus')) {
                 this.input_lib.focusInput();
             }
         });
@@ -220,18 +226,18 @@ export class WebOnionSDK {
         this.input_lib.focusInput();
     }
 
-    private handleEchoCommand(flags: WOFlag[]) {
-        const message = flags[0].flag.split(':')[1];
+    private handleEchoCommand(flags: string[]) {
+        const message = flags[0].split(':')[1];
         this.out_lib.printMessage(message);
     }
 
-    private handleWOCommand(flags: WOFlag[]) {
-        if (flags[0].flag === 'info') {
+    private handleWOCommand(flags: string[]) {
+        if (flags[0] === 'info') {
             this.out_lib.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
             this.out_lib.printMessage('Current version: 2.0.1', 3);
         }
 
-        if (flags[0].flag === 'inspire') {
+        if (flags[0] === 'inspire') {
             $.get({
                 url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
                 cache: false
@@ -243,6 +249,11 @@ export class WebOnionSDK {
                 this.out_lib.printMessage(`-${data.title}`, 3);
                 this.out_lib.printMessage('');
             })
+        }
+
+        if (flags[0] === 'help') {
+            this.help_manager.generateHelpFromDispatcherConfig(this);
+            return;
         }
     }
 }
