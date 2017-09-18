@@ -36,22 +36,23 @@ h1.wc-intialization {
 
 h1.wc-title,
 h1.wc-title-boxed-compact,
-h1.wc-title-boxed-full-width{
+h1.wc-title-boxed-full-width {
     padding: .5rem;
     font-size: 2rem;
     font-weight: bold;
     color: var(--title) !important;
 }
+
 h1.wc-title-boxed-compact,
 h1.wc-title-boxed-full-width {
     border: 1px solid var(--title);
 }
 
-h1.wc-title-boxed-full-width{
+h1.wc-title-boxed-full-width {
     width: 100%;
 }
 
-div.wc-title-width-wrapper{
+div.wc-title-width-wrapper {
     display: flex;
     flex-direction: row;
 }
@@ -62,21 +63,21 @@ div.wc-title-width-wrapper{
     flex-direction: column;
     color: var(--lime);
     font-family: monospace;
-    font-size: 1.35rem; 
-
-    background-image: url('~/node_modules/web-onion/dist/assets/console_bg.png'); /* Trick for the imports to work */
+    font-size: 1.35rem;
+    background-image: url('https://imgur.com/YuMYVq1.png');
     background-position: center;
     background-repeat: no-repeat;
     background-color: #000;
 }
 
-.wc-console{
+.wc-console {
     flex-grow: 1;
     max-height: 97%;
     padding: .5rem;
     overflow-y: scroll;
 }
-.wc-input{    
+
+.wc-input {
     display: flex;
     flex-direction: row;
     height: 2rem;
@@ -84,13 +85,13 @@ div.wc-title-width-wrapper{
     margin-bottom: .5rem;
 }
 
-.wc-input-pointer{
+.wc-input-pointer {
     padding-left: 1rem;
 }
 
-.wc-input-field{
+.wc-input-field {
     flex-grow: 2;
-    border: none;   
+    border: none;
     background-color: #000;
     color: var(--lime);
     outline: none;
