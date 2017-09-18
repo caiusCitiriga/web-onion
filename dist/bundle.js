@@ -89,15 +89,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const web_onion_1 = __webpack_require__(2);
 $(document).ready(() => {
     const WO = new web_onion_1.WebOnionSDK();
+    WO.load_timeout = 0;
+    WO.dbl_click_focuses_input = true;
     WO.addConfigurationsToDispatcher([
         {
             command: 'test',
             aliases: ['t', 'tt'],
-            flags: ['f1', 'f2'],
+            flags: [
+                {
+                    flag: 'f1',
+                    desc: 'Runs the command with flag 1'
+                },
+                {
+                    flag: 'f2',
+                    desc: 'Runs the command with flag 2'
+                }
+            ],
             action: (fl) => {
-                WO.out_lib.printMessage('Working');
+                WO.help_manager.generateHelpFromDispatcherConfig(WO);
             }
-        },
+        }
     ]);
     WO.initialize();
 });
@@ -115,39 +126,34 @@ const wo_output_core_1 = __webpack_require__(8);
 const wo_input_core_1 = __webpack_require__(9);
 const wo_dispatcher_core_1 = __webpack_require__(10);
 const wo_parser_core_1 = __webpack_require__(11);
+const wo_help_manager_core_1 = __webpack_require__(12);
 class WebOnionSDK {
     constructor() {
         this.configuration = {
             dispatcher: [
                 {
                     command: 'echo',
-                    flags: ['m'],
-                    action: (flags) => {
-                        const message = flags[0].split(':')[1];
-                        this.out_lib.printMessage(message);
-                    }
+                    flags: [
+                        {
+                            flag: 'm',
+                            desc: 'Message'
+                        }
+                    ],
+                    action: (flags) => this.handleEchoCommand(flags)
                 },
                 {
                     command: 'wo',
-                    flags: ['info', 'inspire'],
-                    action: (flags) => {
-                        if (flags[0] === 'info') {
-                            this.out_lib.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
-                            this.out_lib.printMessage('Current version: 1.1.0', 3);
+                    flags: [
+                        {
+                            flag: 'info',
+                            desc: 'Returns the informations about WebOnion'
+                        },
+                        {
+                            flag: 'inspire',
+                            desc: 'Returns a random design quote from the "Quotes for design API"'
                         }
-                        if (flags[0] === 'inspire') {
-                            $.get({
-                                url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
-                                cache: false
-                            }).then((data) => {
-                                data = data[0];
-                                this.out_lib.printMessage('');
-                                this.out_lib.printMessage(data.content);
-                                this.out_lib.printMessage(`-${data.title}`, 3);
-                                this.out_lib.printMessage('');
-                            });
-                        }
-                    }
+                    ],
+                    action: (flags) => this.handleWOCommand(flags)
                 },
                 {
                     command: 'clear',
@@ -167,6 +173,7 @@ class WebOnionSDK {
         this.input_lib = new wo_input_core_1.WOInput();
         this.parser_lib = new wo_parser_core_1.WOParser();
         this.dispatcher_lib = new wo_dispatcher_core_1.WODispatcher();
+        this.help_manager = new wo_help_manager_core_1.WOHelpManager();
         //  Start a listener for the double click on console
         $('body').dblclick((c) => {
             if (c.currentTarget.classList.contains('wo-dbl-click-autofocus')) {
@@ -301,6 +308,28 @@ class WebOnionSDK {
         $('.wc-input').append('<div class="wc-input-pointer">></div>');
         $('.wc-input').append('<input type="text" class="wc-input-field"/>');
         this.input_lib.focusInput();
+    }
+    handleEchoCommand(flags) {
+        const message = flags[0].flag.split(':')[1];
+        this.out_lib.printMessage(message);
+    }
+    handleWOCommand(flags) {
+        if (flags[0].flag === 'info') {
+            this.out_lib.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
+            this.out_lib.printMessage('Current version: 2.0.1', 3);
+        }
+        if (flags[0].flag === 'inspire') {
+            $.get({
+                url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
+                cache: false
+            }).then((data) => {
+                data = data[0];
+                this.out_lib.printMessage('');
+                this.out_lib.printMessage(data.content);
+                this.out_lib.printMessage(`-${data.title}`, 3);
+                this.out_lib.printMessage('');
+            });
+        }
     }
 }
 exports.WebOnionSDK = WebOnionSDK;
@@ -1174,6 +1203,32 @@ class WOParser {
     }
 }
 exports.WOParser = WOParser;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class WOHelpManager {
+    generateHelpFromDispatcherConfig(sdk) {
+        const config = sdk.dispatcherConfiguration;
+        config.forEach(config => {
+            console.log(config.command);
+            console.log(config.aliases ? config.aliases : 'No aliases');
+            if (config.flags) {
+                config.flags.forEach(f => {
+                    if (f.desc) {
+                        console.log(f.flag + ': ' + f.desc);
+                    }
+                });
+            }
+        });
+    }
+}
+exports.WOHelpManager = WOHelpManager;
 
 
 /***/ })

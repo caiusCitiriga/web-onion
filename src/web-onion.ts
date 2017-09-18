@@ -9,47 +9,44 @@ import { WOOutput } from './core/wo-output.core';
 import { WOInput } from './core/wo-input.core';
 import { WODispatcher } from './core/wo-dispatcher.core';
 import { WOParser } from './core/wo-parser.core';
+import { WOFlag } from './entities/wo-flag.entity';
+import { WOHelpManager } from './core/wo-help-manager.core';
 
 export class WebOnionSDK {
     public readonly out_lib: WOOutput;
     public readonly input_lib: WOInput;
     public readonly parser_lib: WOParser;
     public readonly dispatcher_lib: WODispatcher;
+    public readonly help_manager: WOHelpManager;
 
     private configuration: WOSDKConfiguration = {
         dispatcher: [
             {
                 command: 'echo',
-                flags: ['m'],
-                action: (flags) => {
-                    const message = flags[0].split(':')[1];
-                    this.out_lib.printMessage(message);
-                }
+                flags: [
+                    {
+                        flag: 'm',
+                        desc: 'Message'
+                    }
+                ],
+                action: (flags) => this.handleEchoCommand(flags)
             },
+
             {
                 command: 'wo',
-                flags: ['info', 'inspire'],
-                action: (flags) => {
-                    if (flags[0] === 'info') {
-                        this.out_lib.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
-                        this.out_lib.printMessage('Current version: 1.1.0', 3);
+                flags: [
+                    {
+                        flag: 'info',
+                        desc: 'Returns the informations about WebOnion'
+                    },
+                    {
+                        flag: 'inspire',
+                        desc: 'Returns a random design quote from the "Quotes for design API"'
                     }
-
-                    if (flags[0] === 'inspire') {
-                        $.get({
-                            url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
-                            cache: false
-                        }).then((data: any) => {
-                            data = data[0];
-
-                            this.out_lib.printMessage('');
-                            this.out_lib.printMessage(data.content);
-                            this.out_lib.printMessage(`-${data.title}`, 3);
-                            this.out_lib.printMessage('');
-                        })
-                    }
-                }
+                ],
+                action: (flags) => this.handleWOCommand(flags)
             },
+
             {
                 command: 'clear',
                 aliases: ['clr', 'ccl', 'cls', 'kk'],
@@ -72,7 +69,7 @@ export class WebOnionSDK {
         this.input_lib = new WOInput();
         this.parser_lib = new WOParser();
         this.dispatcher_lib = new WODispatcher();
-
+        this.help_manager = new WOHelpManager();
         //  Start a listener for the double click on console
         $('body').dblclick((c: any) => {
             if (c.currentTarget.classList.contains('wo-dbl-click-autofocus')) {
@@ -221,5 +218,31 @@ export class WebOnionSDK {
         $('.wc-input').append('<input type="text" class="wc-input-field"/>');
 
         this.input_lib.focusInput();
+    }
+
+    private handleEchoCommand(flags: WOFlag[]) {
+        const message = flags[0].flag.split(':')[1];
+        this.out_lib.printMessage(message);
+    }
+
+    private handleWOCommand(flags: WOFlag[]) {
+        if (flags[0].flag === 'info') {
+            this.out_lib.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
+            this.out_lib.printMessage('Current version: 2.0.1', 3);
+        }
+
+        if (flags[0].flag === 'inspire') {
+            $.get({
+                url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
+                cache: false
+            }).then((data: any) => {
+                data = data[0];
+
+                this.out_lib.printMessage('');
+                this.out_lib.printMessage(data.content);
+                this.out_lib.printMessage(`-${data.title}`, 3);
+                this.out_lib.printMessage('');
+            })
+        }
     }
 }

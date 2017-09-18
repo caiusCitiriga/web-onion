@@ -3,11 +3,13 @@ import { WOOutput } from './core/wo-output.core';
 import { WOInput } from './core/wo-input.core';
 import { WODispatcher } from './core/wo-dispatcher.core';
 import { WOParser } from './core/wo-parser.core';
+import { WOHelpManager } from './core/wo-help-manager.core';
 export declare class WebOnionSDK {
     readonly out_lib: WOOutput;
     readonly input_lib: WOInput;
     readonly parser_lib: WOParser;
     readonly dispatcher_lib: WODispatcher;
+    readonly help_manager: WOHelpManager;
     private configuration;
     constructor();
     /**
@@ -98,4 +100,6 @@ export declare class WebOnionSDK {
      * @memberof WebOnionSDK
      */
     private createConsole();
+    private handleEchoCommand(flags);
+    private handleWOCommand(flags);
 }
