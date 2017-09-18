@@ -85,4 +85,6 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/osx,linux,macos,windows,visualstudiocode
 
 # Node modules
-node_modules/*
+node_modules
+demo
+.vscode
