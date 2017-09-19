@@ -91,6 +91,7 @@ const WO = new web_onion_1.WebOnionSDK();
 $().ready(() => {
     WO.load_timeout = 0;
     WO.dbl_click_focuses_input = true;
+    WO.flag_delimiter = '-';
     WO.addConfigurationsToDispatcher([
         {
             command: 'test',
@@ -107,6 +108,7 @@ $().ready(() => {
             }
         }
     ]);
+    console.log(WO);
     WO.initialize();
 });
 
@@ -166,7 +168,8 @@ class WebOnionSDK {
                 }
             ],
             input_field: {
-                clear_after_submit: true
+                clear_after_submit: true,
+                flag_delimiter: '--'
             },
             general: {
                 theme: 'matrix',
@@ -205,6 +208,16 @@ class WebOnionSDK {
      */
     get clearAfterSubmit() {
         return this.configuration.input_field.clear_after_submit ? true : false;
+    }
+    /**
+     * Returns the flag delimiter in use
+     *
+     * @readonly
+     * @type {string}
+     * @memberof WebOnionSDK
+     */
+    get flagDelimiter() {
+        return this.configuration.input_field.flag_delimiter;
     }
     /**
      * Returns the loading screen timeout if set.
@@ -253,6 +266,16 @@ class WebOnionSDK {
      */
     set clear_after_submit(value) {
         this.configuration.input_field.clear_after_submit = value;
+    }
+    /**
+     * Sets the value of the flag delimiter. If a empty string is passed
+     * '--' will be used
+     *
+     * @param {string} value the value of the flag delimiter.
+     * @memberof WebOnionSDK
+     */
+    set flag_delimiter(value) {
+        this.configuration.input_field.flag_delimiter = value.length ? value : '--';
     }
     /**
      * Sets the amount of time to wait before
@@ -1190,8 +1213,8 @@ class WOParser {
                 return;
             } // if not ENTER or in input wait mode
             const raw_command = $('input.wc-input-field').val();
-            this.command_set.command = raw_command.split('--')[0]; //  This will take only what's before any flag
-            const flags = raw_command.split('--');
+            this.command_set.command = raw_command.split(sdk.flagDelimiter)[0].trim(); //  This will take only what's before any flag
+            const flags = raw_command.split(sdk.flagDelimiter);
             flags.shift(); // remove the command from the flags array;
             this.command_set.flags = flags.map(f => f.toLowerCase());
             sdk.dispatcher_lib.dispatch(dispatcher_conf, this.command_set, sdk);

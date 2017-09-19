@@ -30,6 +30,14 @@ export declare class WebOnionSDK {
      */
     readonly clearAfterSubmit: boolean;
     /**
+     * Returns the flag delimiter in use
+     *
+     * @readonly
+     * @type {string}
+     * @memberof WebOnionSDK
+     */
+    readonly flagDelimiter: string;
+    /**
      * Returns the loading screen timeout if set.
      * Null will be returned otherwise
      *
@@ -63,6 +71,14 @@ export declare class WebOnionSDK {
      * @memberof WebOnionSDK
      */
     clear_after_submit: boolean;
+    /**
+     * Sets the value of the flag delimiter. If a empty string is passed
+     * '--' will be used
+     *
+     * @param {string} value the value of the flag delimiter.
+     * @memberof WebOnionSDK
+     */
+    flag_delimiter: string;
     /**
      * Sets the amount of time to wait before
      * the legacy loading screen hides

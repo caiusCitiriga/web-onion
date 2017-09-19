@@ -60,7 +60,8 @@ export class WebOnionSDK {
         ],
 
         input_field: {
-            clear_after_submit: true
+            clear_after_submit: true,
+            flag_delimiter: '--'
         },
 
         general: {
@@ -105,6 +106,17 @@ export class WebOnionSDK {
      */
     public get clearAfterSubmit(): boolean {
         return this.configuration.input_field.clear_after_submit ? true : false;
+    }
+
+    /**
+     * Returns the flag delimiter in use
+     * 
+     * @readonly
+     * @type {string}
+     * @memberof WebOnionSDK
+     */
+    public get flagDelimiter(): string {
+        return this.configuration.input_field.flag_delimiter;
     }
 
     /**
@@ -158,6 +170,17 @@ export class WebOnionSDK {
      */
     public set clear_after_submit(value: boolean) {
         this.configuration.input_field.clear_after_submit = value;
+    }
+
+    /**
+     * Sets the value of the flag delimiter. If a empty string is passed
+     * '--' will be used
+     *
+     * @param {string} value the value of the flag delimiter.
+     * @memberof WebOnionSDK
+     */
+    public set flag_delimiter(value: string) {
+        this.configuration.input_field.flag_delimiter = value.length ? value : '--';
     }
 
     /**

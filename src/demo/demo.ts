@@ -4,6 +4,7 @@ const WO = new WebOnionSDK();
 $().ready(() => {
     WO.load_timeout = 0;
     WO.dbl_click_focuses_input = true;
+    WO.flag_delimiter = '-';
 
     WO.addConfigurationsToDispatcher([
         {
@@ -21,5 +22,6 @@ $().ready(() => {
             }
         }
     ]);
+    console.log(WO);
     WO.initialize();
 });
