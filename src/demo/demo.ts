@@ -22,6 +22,6 @@ $().ready(() => {
             }
         }
     ]);
-    console.log(WO);
+
     WO.initialize();
 });
