@@ -9,6 +9,7 @@ $().ready(() => {
         {
             command: 'test',
             aliases: ['t', 'tt'],
+            desc: 'Demo test command',
             flags: [
                 {
                     flag: 'f1',
