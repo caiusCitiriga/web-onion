@@ -66,29 +66,29 @@ WO.addConfigurationsToDispatcher([
         flags: ['f1', 'f2', 'f3'],
         action: (flags: string[]) => {
             if(!flags.length){
-                alert('Command fired without any flag');
+                alert('Command fired test-me without any flag');
                 return;
             }
             
             if(flags.find(f => f === 'f1')){
-                alert('Fired command list with flag --f1');
+                alert('Fired command test-me with flag --f1');
                 return;
             }
 
             if(flags.find(f => f === 'f2')){
-                alert('Fired command list with flag --f2');
+                alert('Fired command test-me with flag --f2');
                 return;
             }
 
             if(flags.find(f => f === 'f3')){
-                alert('Fired command list with flag --f3');
+                alert('Fired command test-me with flag --f3');
                 return;
             }
 
             flags.forEach(f => {
                 if(f.split(':').length && f.split(':')[1].split('=')[0] === 'value'){
                     const val = f.split(':').length && f.split(':')[1].split('=')[1]);
-                    alert('Fired command with flag --f3 and with value: ' + val);
+                    alert('Fired command test-me with flag --f3 and with value: ' + val);
                 }
             });
         };
