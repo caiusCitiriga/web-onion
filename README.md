@@ -2,8 +2,6 @@
 
 A fully extensible SDK for building powerful browser based applications. With an old school CLI user interface and interaction system. 
 
-#### ***This is a complete rewrite of the library in Typescript. The old Javascript library documentation is no more available, but you can find the .js files inside the ```/dist``` folder***
-
 ## Get started
 
 #### #1 Install WebOnion
@@ -33,16 +31,18 @@ WebOnion is meant to be an SDK for building applications that runs on commands. 
 This method takes one parameter which is an array of ```WODispatcherConfiguration``` objects.
 ```typescript
 class WODispatcherConfiguration {
+    desc: string;
+    flags?: string[];
     command: string;
     aliases?: string[];
-    flags?: string[];
     action: (flags: string[]) => void;
 }
 ```
 This is the building block of your application.
+* **desc**: The description for this command. This field will be used when generating the help for the user.
+* **flags**: An array of strings with all the possible flags. For example: ```['files', 'folders']```
 * **command**: The full name of your command. For example ```list```
 * **aliases**: An array of strings with all the aliases. For example: ```['l', 'll']```
-* **flags**: An array of strings with all the possible flags. For example: ```['files', 'folders']```
 * **action**: A function that takes one parameter. This parameter will be the flags passed by the user.
 
 Inside the action you can build your command logic, let's see a quick example.
@@ -52,7 +52,7 @@ In the configuration, only two properties are required. The **command** and the 
 
 The flags aren't actually used yet, but in the upcoming releases there will be a ```helpManager``` object that will use these flags to create the help structure for that command.
 
-#### Note that you declare the flags normally, while the user will have to use them with the double dash notation: ```--flag-name```.
+Note that you declare the flags normally, while the user will have to use them with the specified notation, which by default is a double dash: ```--flag-name```.
 
 ```typescript
 import {WebOnionSDK} from 'web-onion/dist/web-onion';
@@ -61,9 +61,10 @@ const WO = new WebOnionSDK();
 
 WO.addConfigurationsToDispatcher([
     {
-        command: 'test-me',
         aliases: ['tm'],
+        command: 'test-me',
         flags: ['f1', 'f2', 'f3'],
+        desc: 'My first awesome command',
         action: (flags: string[]) => {
             if(!flags.length){
                 alert('Command fired test-me without any flag');
@@ -244,6 +245,12 @@ Gets the input data saved previously from the storage. If the given dataKey matc
 * **@returns:** ```{(string | null)} ```
 * **@memberof:** ```WOInput```
 
+## ```WOHelpManager```
+#### ```+ generateHelpFromDispatcherConfig(sdk: WebOnionSDK)```
+Prints a table that illustrates all the registered commands. With the respective description, aliases, and flags for each command.
+
+* **@memberof:**  ```WOHelpManager```
+
 # Entities
 #### ```+ WOCommandSet```
 ```typescript
@@ -276,6 +283,8 @@ class WODispatcherConfiguration {
     action: (flags: string[]) => void
 }
 ```
+
+#
 
 # Enums
 

@@ -1,20 +1,26 @@
 {
     "name": "web-onion",
-    "version": "2.0.1",
+    "version": "3.0.0",
     "description": "A fully extesible SDK for building browser based applications, with an old school CLI UX",
     "main": "web-onion.js",
     "scripts": {
+        "prePublishOnly": "rimraf ./dist && tsc  && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "rimraf ./dist && mkdir ./dist && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/ && tsc"
+        "demo": "webpack",
+        "build-dev": "rimraf ./dist && tsc  && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/"
     },
     "author": "Caius Citiriga",
     "license": "MIT",
     "dependencies": {
-        "typescript": "^2.5.2",
-        "@types/jquery": "^3.2.12"
+        "typescript": "2.5.2",
+        "@types/jquery": "3.2.12"
     },
     "devDependencies": {
-        "rimraf": "^2.6.2"
+        "css-loader": "0.28.7",
+        "rimraf": "2.6.2",
+        "style-loader": "0.18.2",
+        "ts-loader": "2.3.7",
+        "webpack": "3.6.0"
     },
     "repository": {
         "type": "git",

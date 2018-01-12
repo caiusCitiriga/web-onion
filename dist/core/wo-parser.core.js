@@ -21,8 +21,8 @@ class WOParser {
                 return;
             } // if not ENTER or in input wait mode
             const raw_command = $('input.wc-input-field').val();
-            this.command_set.command = raw_command.split('--')[0]; //  This will take only what's before any flag
-            const flags = raw_command.split('--');
+            this.command_set.command = raw_command.split(sdk.flagDelimiter)[0].trim(); //  This will take only what's before any flag
+            const flags = raw_command.split(sdk.flagDelimiter);
             flags.shift(); // remove the command from the flags array;
             this.command_set.flags = flags.map(f => f.toLowerCase());
             sdk.dispatcher_lib.dispatch(dispatcher_conf, this.command_set, sdk);
