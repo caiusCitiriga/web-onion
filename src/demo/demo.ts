@@ -8,18 +8,38 @@ $().ready(() => {
 
     WO.addConfigurationsToDispatcher([
         {
-            command: 'test',
-            aliases: ['t', 'tt'],
-            desc: 'Demo test command',
-            flags: [
-                {
-                    flag: 'f1',
-                    desc: 'Flag one description'
+            command: 'list',
+            flags: ['f1', 'f2', 'f3'],
+            aliases: ['l', 'll', 'ls'],
+            desc: 'My first awesome command',
+            action: (flags: string[]) => {
+                if (!flags.length) {
+                    alert('Command fired test-me without any flag');
+                    return;
                 }
-            ],
-            action: (flags) => {
-                WO.out_lib.printMessage('Command working');
-            }
+
+                if (flags.find(f => f === 'f1')) {
+                    alert('Fired command test-me with flag --f1');
+                    return;
+                }
+
+                if (flags.find(f => f === 'f2')) {
+                    alert('Fired command test-me with flag --f2');
+                    return;
+                }
+
+                if (flags.find(f => f === 'f3')) {
+                    alert('Fired command test-me with flag --f3');
+                    return;
+                }
+
+                flags.forEach(f => {
+                    if (f.split(':').length && f.split(':')[1].split('=')[0] === 'value') {
+                        const val = f.split(':').length && f.split(':')[1].split('=')[1];
+                        alert('Fired command test-me with flag --f3 and with value: ' + val);
+                    }
+                });
+            };
         }
     ]);
 

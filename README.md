@@ -39,18 +39,19 @@ class WODispatcherConfiguration {
 }
 ```
 This is the building block of your application.
-* **desc**: The description for this command. This field will be used when generating the help for the user.
-* **flags**: An array of strings with all the possible flags. For example: ```['files', 'folders']```
 * **command**: The full name of your command. For example ```list```
-* **aliases**: An array of strings with all the aliases. For example: ```['l', 'll']```
+* **desc**: The description for this command. This field will be used when generating the help for the user. For example ```Lists all the folders in the directoy```
+* **flags**: An array of strings with all the possible flags. For example: ```['files', 'folders']```
+* **aliases**: An array of strings with all the aliases. For example: ```['l', 'll', 'ls']```
 * **action**: A function that takes one parameter. This parameter will be the flags passed by the user.
 
 Inside the action you can build your command logic, let's see a quick example.
 We will create a command called ```test-me```. We will provide one alias ```tm``` and three flags ```['f1', 'f2', 'f3']```. 
 
-In the configuration, only two properties are required. The **command** and the **action**. 
-
-The flags aren't actually used yet, but in the upcoming releases there will be a ```helpManager``` object that will use these flags to create the help structure for that command.
+In the configuration, three properties are required.
++ **command**
++ **action**
++ **desc**
 
 Note that you declare the flags normally, while the user will have to use them with the specified notation, which by default is a double dash: ```--flag-name```.
 
@@ -61,44 +62,59 @@ const WO = new WebOnionSDK();
 
 WO.addConfigurationsToDispatcher([
     {
-        aliases: ['tm'],
-        command: 'test-me',
-        flags: ['f1', 'f2', 'f3'],
-        desc: 'My first awesome command',
-        action: (flags: string[]) => {
-            if(!flags.length){
-                alert('Command fired test-me without any flag');
-                return;
-            }
-            
-            if(flags.find(f => f === 'f1')){
-                alert('Fired command test-me with flag --f1');
-                return;
-            }
-
-            if(flags.find(f => f === 'f2')){
-                alert('Fired command test-me with flag --f2');
-                return;
-            }
-
-            if(flags.find(f => f === 'f3')){
-                alert('Fired command test-me with flag --f3');
-                return;
-            }
-
-            flags.forEach(f => {
-                if(f.split(':').length && f.split(':')[1].split('=')[0] === 'value'){
-                    const val = f.split(':').length && f.split(':')[1].split('=')[1]);
-                    alert('Fired command test-me with flag --f3 and with value: ' + val);
+            command: 'list',
+            flags: [
+                {
+                    flag: 'f1',
+                    desc: 'Flag one desc'
+                },
+                {
+                    flag: 'f2',
+                    desc: 'Flag two desc'
+                },
+                {
+                    flag: 'f3',
+                    desc: 'Flag three desc'
                 }
-            });
-        };
-    }
+            ],
+            aliases: ['l', 'll', 'ls'],
+            desc: 'My first awesome command',
+            action: (flags: WOFlag[]) => {
+                if (!flags.length) {
+                    alert('Command fired test-me without any flag');
+                    return;
+                }
+
+                if (flags.find(f => f.flag === 'f1')) {
+                    alert('Fired command test-me with flag --f1');
+                    return;
+                }
+
+                if (flags.find(f => f.flag === 'f2')) {
+                    alert('Fired command test-me with flag --f2');
+                    return;
+                }
+
+                if (flags.find(f => f.flag === 'f3')) {
+                    alert('Fired command test-me with flag --f3');
+                    return;
+                }
+
+                flags.forEach(f => {
+                    if (f.flag.split(':').length && f.flag.split(':')[1].split('=')[0] === 'value') {
+                        const val = f.flag.split(':').length && f.flag.split(':')[1].split('=')[1];
+                        alert('Fired command test-me with flag --f3 and with value: ' + val);
+                    }
+                });
+            }
+        }
 ]);
 
 $(document).ready(() => WO.initialize());
 ```
 While the first four statements are pretty simple to understand, the last one can be a bit tricky. But it's not that complex once you get what it does.
+
+Note that you can also run the same command using the given aliases.
 
 Suppose to have this command ```list --f3:value=33```
 
@@ -246,9 +262,10 @@ Gets the input data saved previously from the storage. If the given dataKey matc
 * **@memberof:** ```WOInput```
 
 ## ```WOHelpManager```
-#### ```+ generateHelpFromDispatcherConfig(sdk: WebOnionSDK)```
+#### ```+ generateHelpFromDispatcherConfig()```
 Prints a table that illustrates all the registered commands. With the respective description, aliases, and flags for each command.
 
+* **@param:** ```{WebOnionSDK} sdk ```
 * **@memberof:**  ```WOHelpManager```
 
 # Entities
@@ -284,7 +301,13 @@ class WODispatcherConfiguration {
 }
 ```
 
-#
+#### ```+ WOFlag```
+```typescript
+class WOFlag {
+    flag: string;
+    desc: string;
+}
+```
 
 # Enums
 
