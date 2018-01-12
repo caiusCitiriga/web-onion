@@ -91,20 +91,50 @@ const WO = new web_onion_1.WebOnionSDK();
 $().ready(() => {
     WO.load_timeout = 0;
     WO.dbl_click_focuses_input = true;
-    WO.flag_delimiter = '-';
     WO.addConfigurationsToDispatcher([
         {
-            command: 'test',
-            aliases: ['t', 'tt'],
-            desc: 'Demo test command',
+            command: 'list',
             flags: [
                 {
                     flag: 'f1',
-                    desc: 'Flag one description'
+                    desc: 'Flag one desc'
+                },
+                {
+                    flag: 'f2',
+                    desc: 'Flag two desc'
+                },
+                {
+                    flag: 'f3',
+                    desc: 'Flag three desc'
                 }
             ],
+            aliases: ['l', 'll', 'ls'],
+            desc: 'My first awesome command',
             action: (flags) => {
-                WO.out_lib.printMessage('Command working');
+                if (!flags.length) {
+                    alert('Command fired test-me without any flag');
+                    return;
+                }
+                if (flags.find(f => f.flag === 'f1')) {
+                    alert('Fired command test-me with flag --f1');
+                    return;
+                }
+                if (flags.find(f => f.flag === 'f2')) {
+                    alert('Fired command test-me with flag --f2');
+                    return;
+                }
+                if (flags.find(f => f.flag === 'f3')) {
+                    alert('Fired command test-me with flag --f3');
+                    return;
+                }
+                flags.forEach(f => {
+                    if (f.flag.split(':').length && f.flag.split(':')[1] && f.flag.split(':')[1].split('=')[0] === 'value') {
+                        const val = f.flag.split(':').length && f.flag.split(':')[1].split('=')[1];
+                        alert('Fired command test-me with flag --f3 and with value: ' + val);
+                        return;
+                    }
+                    alert('Unknown flag for this command');
+                });
             }
         }
     ]);
@@ -338,15 +368,19 @@ class WebOnionSDK {
         this.input_lib.focusInput();
     }
     handleEchoCommand(flags) {
-        const message = flags[0].split(':')[1];
+        const message = flags[0].flag.split(':')[1];
         this.out_lib.printMessage(message);
     }
     handleWOCommand(flags) {
-        if (flags[0] === 'info') {
+        if (flags[0] && flags[0].flag === 'help' || !flags.length) {
+            this.help_manager.generateHelpFromDispatcherConfig(this);
+            return;
+        }
+        if (flags[0].flag === 'info') {
             this.out_lib.printMessage(`Current version: ${general_conf_1.GENERAL_CONF.version}`, wo_severity_enum_1.WOSeverityEnum.info);
             return;
         }
-        if (flags[0] === 'inspire') {
+        if (flags[0].flag === 'inspire') {
             $.get({
                 url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
                 cache: false
@@ -357,10 +391,6 @@ class WebOnionSDK {
                 this.out_lib.printMessage(`-${data.title}`, wo_severity_enum_1.WOSeverityEnum.info);
                 this.out_lib.printMessage('');
             });
-            return;
-        }
-        if (flags[0] === 'help' || !flags.length) {
-            this.help_manager.generateHelpFromDispatcherConfig(this);
             return;
         }
         this.out_lib.printMessage(`Unknown flag "${flags[0]}" used`, wo_severity_enum_1.WOSeverityEnum.error);
@@ -1221,7 +1251,7 @@ class WOParser {
             this.command_set.command = raw_command.split(sdk.flagDelimiter)[0].trim(); //  This will take only what's before any flag
             const flags = raw_command.split(sdk.flagDelimiter);
             flags.shift(); // remove the command from the flags array;
-            this.command_set.flags = flags.map(f => f.toLowerCase());
+            this.command_set.flags = flags.map(f => ({ flag: f.toLowerCase() }));
             const checkResult = this.checkSuccessfulParse(this.command_set);
             if (!checkResult.isOk && checkResult.message) {
                 sdk.out_lib.printMessage(checkResult.message, wo_severity_enum_1.WOSeverityEnum.warning);
@@ -1243,7 +1273,7 @@ class WOParser {
         this.command_set.flags = null;
     }
     checkSuccessfulParse(cs) {
-        if (cs.flags && cs.flags[0] === '') {
+        if (cs.flags && cs.flags[0] && cs.flags[0].flag === '') {
             //  This may be caused when the flag delimiter is '-' and the user uses '--'.
             return { isOk: false, message: 'The flag/s provided cannot be used. This may happen when the flag delimiter is "-" but you\'ve used "--"' };
         }
@@ -1312,7 +1342,7 @@ exports.WOHelpManager = WOHelpManager;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GENERAL_CONF = {
-    version: '3.0.0'
+    version: '3.0.1'
 };
 
 

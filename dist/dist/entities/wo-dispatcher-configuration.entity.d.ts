@@ -4,5 +4,5 @@ export declare class WODispatcherConfiguration {
     desc: string;
     aliases?: string[];
     flags?: WOFlag[];
-    action: (flags: string[]) => void;
+    action: (flags: WOFlag[]) => void;
 }

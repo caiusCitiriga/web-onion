@@ -257,6 +257,11 @@ export class WebOnionSDK {
     }
 
     private handleWOCommand(flags: WOFlag[]) {
+        if (flags[0] && flags[0].flag === 'help' || !flags.length) {
+            this.help_manager.generateHelpFromDispatcherConfig(this);
+            return;
+        }
+
         if (flags[0].flag === 'info') {
             this.out_lib.printMessage(`Current version: ${GENERAL_CONF.version}`, WOSeverityEnum.info);
 
@@ -276,11 +281,6 @@ export class WebOnionSDK {
                 this.out_lib.printMessage('');
             });
 
-            return;
-        }
-
-        if (flags[0].flag === 'help' || !flags.length) {
-            this.help_manager.generateHelpFromDispatcherConfig(this);
             return;
         }
 

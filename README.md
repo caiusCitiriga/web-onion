@@ -101,10 +101,13 @@ WO.addConfigurationsToDispatcher([
                 }
 
                 flags.forEach(f => {
-                    if (f.flag.split(':').length && f.flag.split(':')[1].split('=')[0] === 'value') {
+                    if (f.flag.split(':').length && f.flag.split(':')[1] && f.flag.split(':')[1].split('=')[0] === 'value') {
                         const val = f.flag.split(':').length && f.flag.split(':')[1].split('=')[1];
                         alert('Fired command test-me with flag --f3 and with value: ' + val);
+                        return;
                     }
+
+                    alert('Unknown flag for this command');
                 });
             }
         }

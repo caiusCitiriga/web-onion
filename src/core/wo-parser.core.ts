@@ -6,6 +6,7 @@ import { WODispatcher } from './wo-dispatcher.core';
 import { WOCommandSet } from '../entities/wo-command-set.entity';
 import { WODispatcherConfiguration } from '../entities/wo-dispatcher-configuration.entity';
 import { WOSeverityEnum } from '../enums/wo-severity.enum';
+import { WOFlag } from '../entities/wo-flag.entity';
 
 export class WOParser {
 
@@ -34,7 +35,7 @@ export class WOParser {
 
             const flags = raw_command.split(sdk.flagDelimiter);
             flags.shift(); // remove the command from the flags array;
-            this.command_set.flags = flags.map(f => f.toLowerCase());
+            this.command_set.flags = flags.map(f => <WOFlag>{ flag: f.toLowerCase() });
 
             const checkResult = this.checkSuccessfulParse(this.command_set);
             if (!checkResult.isOk && checkResult.message) {
@@ -61,7 +62,7 @@ export class WOParser {
     }
 
     private checkSuccessfulParse(cs: WOCommandSet): { isOk: boolean, message?: string } {
-        if (cs.flags && cs.flags[0] === '') {
+        if (cs.flags && cs.flags[0] && cs.flags[0].flag === '') {
             //  This may be caused when the flag delimiter is '-' and the user uses '--'.
             return { isOk: false, message: 'The flag/s provided cannot be used. This may happen when the flag delimiter is "-" but you\'ve used "--"' };
         }
