@@ -251,19 +251,19 @@ export class WebOnionSDK {
         this.input_lib.focusInput();
     }
 
-    private handleEchoCommand(flags: string[]) {
-        const message = flags[0].split(':')[1];
+    private handleEchoCommand(flags: WOFlag[]) {
+        const message = flags[0].flag.split(':')[1];
         this.out_lib.printMessage(message);
     }
 
-    private handleWOCommand(flags: string[]) {
-        if (flags[0] === 'info') {
+    private handleWOCommand(flags: WOFlag[]) {
+        if (flags[0].flag === 'info') {
             this.out_lib.printMessage(`Current version: ${GENERAL_CONF.version}`, WOSeverityEnum.info);
 
             return;
         }
 
-        if (flags[0] === 'inspire') {
+        if (flags[0].flag === 'inspire') {
             $.get({
                 url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
                 cache: false
@@ -279,7 +279,7 @@ export class WebOnionSDK {
             return;
         }
 
-        if (flags[0] === 'help' || !flags.length) {
+        if (flags[0].flag === 'help' || !flags.length) {
             this.help_manager.generateHelpFromDispatcherConfig(this);
             return;
         }
