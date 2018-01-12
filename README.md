@@ -52,7 +52,7 @@ In the configuration, only two properties are required. The **command** and the 
 
 The flags aren't actually used yet, but in the upcoming releases there will be a ```helpManager``` object that will use these flags to create the help structure for that command.
 
-### Note that you declare the flags normally, while the user will have to use them with the specified notation, which by default is a double dash: ```--flag-name```.
+Note that you declare the flags normally, while the user will have to use them with the specified notation, which by default is a double dash: ```--flag-name```.
 
 ```typescript
 import {WebOnionSDK} from 'web-onion/dist/web-onion';
