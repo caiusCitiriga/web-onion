@@ -2,8 +2,6 @@
 
 A fully extensible SDK for building powerful browser based applications. With an old school CLI user interface and interaction system. 
 
-#### ***This is a complete rewrite of the library in Typescript. The old Javascript library documentation is no more available, but you can find the .js files inside the ```/dist``` folder***
-
 ## Get started
 
 #### #1 Install WebOnion
@@ -54,7 +52,7 @@ In the configuration, only two properties are required. The **command** and the 
 
 The flags aren't actually used yet, but in the upcoming releases there will be a ```helpManager``` object that will use these flags to create the help structure for that command.
 
-#### Note that you declare the flags normally, while the user will have to use them with the double dash notation: ```--flag-name```.
+### Note that you declare the flags normally, while the user will have to use them with the specified notation, which by default is a double dash: ```--flag-name```.
 
 ```typescript
 import {WebOnionSDK} from 'web-onion/dist/web-onion';
