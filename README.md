@@ -300,12 +300,6 @@ enum WOSeverityEnum {
 ```
 ---
 ## Upcoming features
-### **Help manager**
-A library that will read the dispatcher configuration and generates a help screen for the whole application
-
-### **Flags matching character configuration**
-There will be a getter and a setter, along with a new entry in the main configuration object that will allow you to set the character used by the parser to identify the flags. Currently fixed to ```--```
-
 ### **Theme configuration**
 There will be a getter and a setter, along with a new entry in the main configuration object that will allow you to change the console's theme. Right now is fixed to ```Matrix.css```
 
@@ -317,6 +311,9 @@ It will be added a set of methods to this library that will handle complex outpu
 
 ### **Auto completition of commands**
 There will be a library that will handle the autcompletition process for the current commands set
+
+### **Use arrows to navigate used commands history**
+You will be able to use the arrows (up and down) to navigate the previously used commands. Just like in the terminal
 
 
 # Help WebOnion grow
