@@ -2,6 +2,7 @@ import { WODispatcherConfiguration } from '../entities/wo-dispatcher-configurati
 import { WOCommandSet } from '../entities/wo-command-set.entity';
 import { WOOutput } from './wo-output.core';
 import { WebOnionSDK } from '../web-onion';
+import { WOSeverityEnum } from '../enums/wo-severity.enum';
 
 export class WODispatcher {
 
@@ -35,7 +36,7 @@ export class WODispatcher {
 
         //  Last check, if action is still null, fire an invalid command error
         if (!action) {
-            sdk.out_lib.printMessage('Invalid command', 1);
+            sdk.out_lib.printMessage('Invalid command', WOSeverityEnum.error);
             return;
         }
 

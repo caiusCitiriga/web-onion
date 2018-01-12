@@ -9,6 +9,8 @@ import { WODispatcher } from './core/wo-dispatcher.core';
 import { WOParser } from './core/wo-parser.core';
 import { WOFlag } from './entities/wo-flag.entity';
 import { WOHelpManager } from './core/wo-help-manager.core';
+import { GENERAL_CONF } from './conf/general.conf';
+import { WOSeverityEnum } from './enums/wo-severity.enum';
 
 export class WebOnionSDK {
     public readonly out_lib: WOOutput;
@@ -256,8 +258,9 @@ export class WebOnionSDK {
 
     private handleWOCommand(flags: string[]) {
         if (flags[0] === 'info') {
-            this.out_lib.printMessage('Web Onion. A easy to use, open source and extensible SDK for building browser CLI web applications.', 3);
-            this.out_lib.printMessage('Current version: 2.0.1', 3);
+            this.out_lib.printMessage(`Current version: ${GENERAL_CONF.version}`, WOSeverityEnum.info);
+
+            return;
         }
 
         if (flags[0] === 'inspire') {
@@ -269,14 +272,18 @@ export class WebOnionSDK {
 
                 this.out_lib.printMessage('');
                 this.out_lib.printMessage(data.content);
-                this.out_lib.printMessage(`-${data.title}`, 3);
+                this.out_lib.printMessage(`-${data.title}`, WOSeverityEnum.info);
                 this.out_lib.printMessage('');
-            })
+            });
+
+            return;
         }
 
-        if (flags[0] === 'help') {
+        if (flags[0] === 'help' || !flags.length) {
             this.help_manager.generateHelpFromDispatcherConfig(this);
             return;
         }
+
+        this.out_lib.printMessage(`Unknown flag "${flags[0]}" used`, WOSeverityEnum.error);
     }
 }

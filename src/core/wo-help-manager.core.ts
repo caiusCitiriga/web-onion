@@ -44,7 +44,7 @@ export class WOHelpManager {
             if (conf.flags) {
                 conf.flags.forEach(flag => {
                     $('.wo-help-table > tbody > tr > td > ul').last().append('<li>');
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<strong class="flag-name">--${flag.flag}: \t</strong>`);
+                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<strong class="flag-name">${sdk.flagDelimiter + flag.flag}: \t</strong>`);
                     $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<i>${flag.desc}</i>`);
                 });
             }
