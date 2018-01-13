@@ -48,7 +48,7 @@ export class WOOutput {
         $('.wc-message').last().append(message);
         $('.wc-console').append(`<br>`);
 
-        $('.wc-console').scrollTop($('.wc-console')[0].scrollHeight); //scroll to bottom
+        $('.wc-console').scrollTop($('.wc-console') [0].scrollHeight); //scroll to bottom
     }
 
     /**
@@ -101,7 +101,9 @@ export class WOOutput {
      * @memberof WOOutput
      */
     public printKeyValuePairs(set: { key: string, value: string }[], space_char: string = '&nbsp;') {
-        const longestKeyLen = <number>set.reduce((p, c) => p < c.key.length ? c.key.length : false, 0);
+        let longestKeyLen = set[0].key.length;
+        set.forEach(s => longestKeyLen = s.key.length > longestKeyLen ? s.key.length : longestKeyLen);
+
         set.forEach(pair => {
             let spaces = space_char;
             for (let i = 0; i < (longestKeyLen - pair.key.length); i++) {

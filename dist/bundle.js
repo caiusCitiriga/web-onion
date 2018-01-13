@@ -87,11 +87,33 @@ var WOSeverityEnum;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const web_onion_1 = __webpack_require__(2);
-const WO = new web_onion_1.WebOnionSDK();
 $().ready(() => {
+    const WO = new web_onion_1.WebOnionSDK();
     WO.load_timeout = 0;
     WO.dbl_click_focuses_input = true;
     WO.addConfigurationsToDispatcher([
+        {
+            command: 'key',
+            desc: 'Test key-val pairs print',
+            action: () => {
+                WO.out_lib.printKeyValuePairs([
+                    {
+                        key: 'mykey1',
+                        value: 'mykey1 value'
+                    },
+                    {
+                        key: 'mykey2',
+                        value: 'mykey2 value'
+                    }, {
+                        key: 'mylongkey3thisisverylong',
+                        value: 'mylongkey3 loooong value'
+                    }, {
+                        key: 'mykey4',
+                        value: 'mykey4 value'
+                    }
+                ]);
+            }
+        },
         {
             command: 'list',
             flags: [
@@ -1075,7 +1097,8 @@ class WOOutput {
      * @memberof WOOutput
      */
     printKeyValuePairs(set, space_char = '&nbsp;') {
-        const longestKeyLen = set.reduce((p, c) => p < c.key.length ? c.key.length : false, 0);
+        let longestKeyLen = set[0].key.length;
+        set.forEach(s => longestKeyLen = s.key.length > longestKeyLen ? s.key.length : longestKeyLen);
         set.forEach(pair => {
             let spaces = space_char;
             for (let i = 0; i < (longestKeyLen - pair.key.length); i++) {

@@ -1,8 +1,10 @@
 import { WODispatcherConfiguration } from '../entities/wo-dispatcher-configuration.entity';
-import { WOCommandSet } from '../entities/wo-command-set.entity';
-import { WOOutput } from './wo-output.core';
-import { WebOnionSDK } from '../web-onion';
+
 import { WOSeverityEnum } from '../enums/wo-severity.enum';
+import { WOCommandSet } from '../entities/wo-command-set.entity';
+
+import { WebOnionSDK } from '../web-onion';
+import { WOOutput } from './wo-output.core';
 
 export class WODispatcher {
 

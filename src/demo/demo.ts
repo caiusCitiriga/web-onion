@@ -1,12 +1,35 @@
 import { WebOnionSDK } from '../web-onion';
 import { WOFlag } from '../entities/wo-flag.entity';
-const WO = new WebOnionSDK();
 
 $().ready(() => {
+    const WO = new WebOnionSDK();
+
     WO.load_timeout = 0;
     WO.dbl_click_focuses_input = true;
 
     WO.addConfigurationsToDispatcher([
+        {
+            command: 'key',
+            desc: 'Test key-val pairs print',
+            action: () => {
+                WO.out_lib.printKeyValuePairs([
+                    {
+                        key: 'mykey1',
+                        value: 'mykey1 value'
+                    },
+                    {
+                        key: 'mykey2',
+                        value: 'mykey2 value'
+                    }, {
+                        key: 'mylongkey3thisisverylong',
+                        value: 'mylongkey3 loooong value'
+                    }, {
+                        key: 'mykey4',
+                        value: 'mykey4 value'
+                    }
+                ]);
+            }
+        },
         {
             command: 'list',
             flags: [
@@ -47,8 +70,8 @@ $().ready(() => {
                 }
 
                 flags.forEach(f => {
-                    if (f.flag.split(':').length && f.flag.split(':')[1] && f.flag.split(':')[1].split('=')[0] === 'value') {
-                        const val = f.flag.split(':').length && f.flag.split(':')[1].split('=')[1];
+                    if (f.flag.split(':').length && f.flag.split(':') [1] && f.flag.split(':') [1].split('=') [0] === 'value') {
+                        const val = f.flag.split(':').length && f.flag.split(':') [1].split('=') [1];
                         alert('Fired command test-me with flag --f3 and with value: ' + val);
                         return;
                     }
