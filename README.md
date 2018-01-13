@@ -430,7 +430,7 @@ interface WOFlag {
 }
 ```
 
-#### ```+ WOCssRuleSet````
+#### ```+ WOCssRuleSet```
 ```typescript
 interface WOCssRuleSet {
     rule: string;
