@@ -4,12 +4,14 @@ import { WOInput } from './core/wo-input.core';
 import { WODispatcher } from './core/wo-dispatcher.core';
 import { WOParser } from './core/wo-parser.core';
 import { WOHelpManager } from './core/wo-help-manager.core';
+import { WORenderer } from './core/wo-renderer.core';
 export declare class WebOnionSDK {
     readonly out_lib: WOOutput;
     readonly input_lib: WOInput;
     readonly parser_lib: WOParser;
+    readonly renderer_lib: WORenderer;
     readonly dispatcher_lib: WODispatcher;
-    readonly help_manager: WOHelpManager;
+    readonly help_manager_lib: WOHelpManager;
     private configuration;
     constructor();
     /**

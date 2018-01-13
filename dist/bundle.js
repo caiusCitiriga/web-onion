@@ -87,11 +87,40 @@ var WOSeverityEnum;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const web_onion_1 = __webpack_require__(2);
-const WO = new web_onion_1.WebOnionSDK();
 $().ready(() => {
+    const WO = new web_onion_1.WebOnionSDK();
     WO.load_timeout = 0;
     WO.dbl_click_focuses_input = true;
     WO.addConfigurationsToDispatcher([
+        {
+            command: 'key',
+            desc: 'Test key-val pairs print',
+            action: () => {
+                WO.out_lib.printKeyValuePairs([
+                    {
+                        key: 'mykey1',
+                        value: 'mykey1 value'
+                    },
+                    {
+                        key: 'mykey2',
+                        value: 'mykey2 value'
+                    }, {
+                        key: 'mylongkey3thisisverylong',
+                        value: 'mylongkey3 loooong value'
+                    }, {
+                        key: 'mykey4',
+                        value: 'mykey4 value'
+                    }
+                ]);
+            }
+        },
+        {
+            command: 'in',
+            desc: 'Test input',
+            action: () => {
+                WO.input_lib.prompt('Yo?', WO, 'data-key', () => WO.out_lib.printMessage('Works: ' + WO.input_lib.getInputData('data-key')));
+            }
+        },
         {
             command: 'list',
             flags: [
@@ -157,6 +186,7 @@ const wo_parser_core_1 = __webpack_require__(11);
 const wo_help_manager_core_1 = __webpack_require__(12);
 const general_conf_1 = __webpack_require__(13);
 const wo_severity_enum_1 = __webpack_require__(0);
+const wo_renderer_core_1 = __webpack_require__(14);
 class WebOnionSDK {
     constructor() {
         this.configuration = {
@@ -210,11 +240,12 @@ class WebOnionSDK {
         this.out_lib = new wo_output_core_1.WOOutput();
         this.input_lib = new wo_input_core_1.WOInput();
         this.parser_lib = new wo_parser_core_1.WOParser();
+        this.renderer_lib = new wo_renderer_core_1.WORenderer();
+        this.help_manager_lib = new wo_help_manager_core_1.WOHelpManager();
         this.dispatcher_lib = new wo_dispatcher_core_1.WODispatcher();
-        this.help_manager = new wo_help_manager_core_1.WOHelpManager();
         //  Start a listener for the double click on console
-        $('html').dblclick((c) => {
-            if ($('body').hasClass('wo-dbl-click-autofocus')) {
+        wo_renderer_core_1.WORenderer.listenForDblClickOnElement('html', () => {
+            if (wo_renderer_core_1.WORenderer.hasClass('body', 'wo-dbl-click-autofocus')) {
                 this.input_lib.focusInput();
             }
         });
@@ -272,7 +303,7 @@ class WebOnionSDK {
      * @memberof WebOnionSDK
      */
     get dblClickFocusesInput() {
-        return $('body').hasClass('wo-dbl-click-autofocus');
+        return wo_renderer_core_1.WORenderer.hasClass('body', 'wo-dbl-click-autofocus');
     }
     /**
      * Enables or disables the input focus
@@ -283,10 +314,10 @@ class WebOnionSDK {
      */
     set dbl_click_focuses_input(value) {
         if (!value) {
-            $('body').removeClass('wo-dbl-click-autofocus');
+            wo_renderer_core_1.WORenderer.removeClass('body', 'wo-dbl-click-autofocus');
             return;
         }
-        $('body').addClass('wo-dbl-click-autofocus');
+        wo_renderer_core_1.WORenderer.addClass('body', 'wo-dbl-click-autofocus');
     }
     /**
      * Enables or disables the input field
@@ -350,7 +381,7 @@ class WebOnionSDK {
      * @memberof WebOnionSDK
      */
     clearDocument() {
-        $('body').empty();
+        wo_renderer_core_1.WORenderer.empty('body');
     }
     /**
      * Creates the HTML elements needed to render
@@ -360,11 +391,11 @@ class WebOnionSDK {
      * @memberof WebOnionSDK
      */
     createConsole() {
-        $('body').append('<div class="wc-wrp"></div>');
-        $('.wc-wrp').append('<div class="wc-console"></div>');
-        $('.wc-wrp').append('<div class="wc-input"></div>');
-        $('.wc-input').append('<div class="wc-input-pointer">></div>');
-        $('.wc-input').append('<input type="text" class="wc-input-field"/>');
+        wo_renderer_core_1.WORenderer.append('body', '<div class="wc-wrp"></div>');
+        wo_renderer_core_1.WORenderer.append('.wc-wrp', '<div class="wc-console"></div>');
+        wo_renderer_core_1.WORenderer.append('.wc-wrp', '<div class="wc-input"></div>');
+        wo_renderer_core_1.WORenderer.append('.wc-input', '<div class="wc-input-pointer">></div>');
+        wo_renderer_core_1.WORenderer.append('.wc-input', '<input type="text" class="wc-input-field"/>');
         this.input_lib.focusInput();
     }
     handleEchoCommand(flags) {
@@ -373,7 +404,7 @@ class WebOnionSDK {
     }
     handleWOCommand(flags) {
         if (flags[0] && flags[0].flag === 'help' || !flags.length) {
-            this.help_manager.generateHelpFromDispatcherConfig(this);
+            this.help_manager_lib.generateHelpFromDispatcherConfig(this);
             return;
         }
         if (flags[0].flag === 'info') {
@@ -988,6 +1019,8 @@ module.exports = function (css) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = __webpack_require__(0);
+const wo_renderer_core_1 = __webpack_require__(14);
+const general_conf_1 = __webpack_require__(13);
 class WOOutput {
     /**
      * Shows the legacy loading screen (dummy).
@@ -995,8 +1028,8 @@ class WOOutput {
      * @memberof WOOutput
      */
     showInitializationScreen() {
-        $('body').css('background-color', '#000');
-        $('body').append(`<h1 class="wc-intialization">WebCLI is loading...<br><small>v1.0.0</small></h1>`);
+        wo_renderer_core_1.WORenderer.setCSS('body', [{ rule: 'background-color', value: '#000' }]);
+        wo_renderer_core_1.WORenderer.append('body', `<h1 class="wc-intialization">WebCLI is loading...<br><small>v${general_conf_1.GENERAL_CONF.version}</small></h1>`);
     }
     /**
      * Prints a message to the console
@@ -1024,10 +1057,10 @@ class WOOutput {
                 message_wrapper = `<span class="wc-message wc-message-message"></span>`;
                 break;
         }
-        $('.wc-console').append(message_wrapper);
-        $('.wc-message').last().append(message);
-        $('.wc-console').append(`<br>`);
-        $('.wc-console').scrollTop($('.wc-console')[0].scrollHeight); //scroll to bottom
+        wo_renderer_core_1.WORenderer.append('.wc-console', message_wrapper);
+        wo_renderer_core_1.WORenderer.append('.wc-message', message, true);
+        wo_renderer_core_1.WORenderer.append('.wc-console', '<br>');
+        wo_renderer_core_1.WORenderer.scrollTop('.wc-console', wo_renderer_core_1.WORenderer.getElement('.wc-console').scrollHeight); //scroll to bottom
     }
     /**
      * Clears the console
@@ -1035,7 +1068,7 @@ class WOOutput {
      * @memberof WOOutput
      */
     clearConsole() {
-        $('.wc-console').empty();
+        wo_renderer_core_1.WORenderer.empty('.wc-console');
     }
     /**
      * Prints a message styled as title according
@@ -1075,13 +1108,14 @@ class WOOutput {
      * @memberof WOOutput
      */
     printKeyValuePairs(set, space_char = '&nbsp;') {
-        const longestKeyLen = set.reduce((p, c) => p < c.key.length ? c.key.length : false, 0);
+        let longestKeyLen = set[0].key.length;
+        set.forEach(s => longestKeyLen = s.key.length > longestKeyLen ? s.key.length : longestKeyLen);
         set.forEach(pair => {
             let spaces = space_char;
             for (let i = 0; i < (longestKeyLen - pair.key.length); i++) {
                 spaces += space_char;
             }
-            $('.wc-console').append(`<span class="wc-key">${pair.key}:</span><span class="wc-value">${spaces + pair.value}</span><hr class="wc-kv-sep">`);
+            wo_renderer_core_1.WORenderer.append('.wc-console', `<span class="wc-key">${pair.key}:</span><span class="wc-value">${spaces + pair.value}</span><hr class="wc-kv-sep">`);
         });
     }
 }
@@ -1096,6 +1130,7 @@ exports.WOOutput = WOOutput;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = __webpack_require__(0);
+const wo_renderer_core_1 = __webpack_require__(14);
 class WOInput {
     /**
      * Clears the input field
@@ -1103,7 +1138,7 @@ class WOInput {
      * @memberof WOInput
      */
     clearInput() {
-        $('input.wc-input-field').val('');
+        wo_renderer_core_1.WORenderer.setVal('input.wc-input-field', '');
     }
     /**
      * Focuses the cursor in the input field
@@ -1111,7 +1146,7 @@ class WOInput {
      * @memberof WOInput
      */
     focusInput() {
-        $('input.wc-input-field').focus();
+        wo_renderer_core_1.WORenderer.setFocus('input.wc-input-field');
     }
     /**
      * Prompts the user with a question and takes a callback
@@ -1153,18 +1188,13 @@ class WOInput {
      * @memberof WOInput
      */
     handleCallbackExecution(sdk, callback, dataKey) {
-        $('input.wc-input-field').addClass('wc-input-wait'); // this will cause the parser to skip the data
-        $('input.wc-input-field.wc-input-wait').on('keypress', k => {
-            if (k.keyCode !== 13) {
-                return;
-            }
-            const value = $('input.wc-input-field').val();
+        wo_renderer_core_1.WORenderer.addClass('input.wc-input-field', 'wc-input-wait'); // this will cause the parser to skip the data
+        wo_renderer_core_1.WORenderer.listenForKeyPressOnElement('input.wc-input-field.wc-input-wait', 13, () => {
+            const value = wo_renderer_core_1.WORenderer.getVal('input.wc-input-field');
             this.clearInput();
             sessionStorage.setItem(`@wo-user-data-${dataKey}`, value);
-            $('input.wc-input-field.wc-input-wait')
-                .remove(); // remove the previous input field
-            $('.wc-input > .wc-input-pointer')
-                .after('<input type="text" class="wc-input-field"/>'); // and replace it with a new one
+            wo_renderer_core_1.WORenderer.remove('input.wc-input-field.wc-input-wait'); // remove the previous input field
+            wo_renderer_core_1.WORenderer.after('.wc-input > .wc-input-pointer', '<input type="text" class="wc-input-field"/>'); // and replace it with a new one
             this.focusInput();
             sdk.parser_lib.startParser(sdk.dispatcherConfiguration, sdk);
             callback();
@@ -1227,6 +1257,7 @@ exports.WODispatcher = WODispatcher;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = __webpack_require__(0);
+const wo_renderer_core_1 = __webpack_require__(14);
 class WOParser {
     constructor() {
         this.command_set = {
@@ -1242,12 +1273,8 @@ class WOParser {
      * @memberof WOParser
      */
     startParser(dispatcher_conf, sdk) {
-        $('input.wc-input-field').on('keypress', (k) => {
-            if (k.keyCode !== 13 ||
-                k.currentTarget.classList.value.indexOf('wc-input-wait') !== -1) {
-                return;
-            } // if not ENTER or in input wait mode
-            const raw_command = $('input.wc-input-field').val();
+        wo_renderer_core_1.WORenderer.listenForKeyPressOnElement('input.wc-input-field', 13, () => {
+            const raw_command = wo_renderer_core_1.WORenderer.getVal('input.wc-input-field');
             this.command_set.command = raw_command.split(sdk.flagDelimiter)[0].trim(); //  This will take only what's before any flag
             const flags = raw_command.split(sdk.flagDelimiter);
             flags.shift(); // remove the command from the flags array;
@@ -1290,42 +1317,43 @@ exports.WOParser = WOParser;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const wo_renderer_core_1 = __webpack_require__(14);
 class WOHelpManager {
     generateHelpFromDispatcherConfig(sdk) {
         const config = sdk.dispatcherConfiguration;
-        $('.wc-console').append('<table>');
-        $('.wc-console > table').addClass('wo-help-table');
-        $('.wo-help-table').append('<tbody>');
-        $('.wo-help-table > tbody').append('<tr>');
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Command</strong>');
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Description</strong>');
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Aliases</strong>');
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Flags</strong>');
+        wo_renderer_core_1.WORenderer.append('.wc-console', '<table>');
+        wo_renderer_core_1.WORenderer.addClass('.wc-console > table', 'wo-help-table');
+        wo_renderer_core_1.WORenderer.append('.wo-help-table', '<tbody>');
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody', '<tr>');
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Command</strong>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Description</strong>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Aliases</strong>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Flags</strong>', true);
         config.forEach(conf => {
-            $('.wo-help-table > tbody').append('<tr>');
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append(conf.command);
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append(conf.desc);
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append('<ul>');
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody', '<tr>');
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', conf.command, true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', conf.desc, true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<ul>', true);
             if (conf.aliases) {
                 conf.aliases.forEach(als => {
-                    $('.wo-help-table > tbody > tr > td > ul').last().append('<li>');
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(als);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul', '<li>', true);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul > li', als, true);
                 });
             }
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append('<ul>');
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<ul>', true);
             if (conf.flags) {
                 conf.flags.forEach(flag => {
-                    $('.wo-help-table > tbody > tr > td > ul').last().append('<li>');
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<strong class="flag-name">${sdk.flagDelimiter + flag.flag}: \t</strong>`);
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<i>${flag.desc}</i>`);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul', '<li>', true);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul > li', `<strong class="flag-name">${sdk.flagDelimiter + flag.flag}: \t</strong>`, true);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul > li', `<i>${flag.desc}</i>`, true);
                 });
             }
         });
@@ -1342,8 +1370,73 @@ exports.WOHelpManager = WOHelpManager;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GENERAL_CONF = {
-    version: '3.0.2'
+    version: '3.0.3'
 };
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class WORenderer {
+    static append(to, element, appendToLastMatch = false) {
+        appendToLastMatch ? $(to).last().append(element) : $(to).append(element);
+    }
+    static setVal(to, newVal) {
+        $(to).val(newVal);
+    }
+    static getVal(of) {
+        return $(of).val();
+    }
+    static getElement(whichElement, whichOneIfMultiple = 0) {
+        return $(whichElement)[whichOneIfMultiple];
+    }
+    static setFocus(to) {
+        $(to).focus();
+    }
+    static setCSS(to, cssRulesSet) {
+        cssRulesSet.forEach(rs => {
+            $(to).css(rs.rule, rs.value);
+        });
+    }
+    static listenForKeyPressOnElement(elememt, keyCodeToCatch, callback, skipCallbackExecIfElementInWaitMode = true) {
+        $(elememt).on('keypress', k => {
+            //  If the keycode is different that the one to catch or if the element is in wait mode
+            if (k.keyCode !== keyCodeToCatch || k.currentTarget.classList.value.indexOf('wc-input-wait') !== -1) {
+                return;
+            }
+            callback();
+        });
+    }
+    static listenForDblClickOnElement(element, callback) {
+        $(element).dblclick(() => callback());
+    }
+    static hasClass(element, className) {
+        return $(element).hasClass(className);
+    }
+    static addClass(to, className) {
+        $(to).addClass(className);
+    }
+    static removeClass(element, className) {
+        $(element).removeClass(className);
+    }
+    static remove(element) {
+        $(element).remove();
+    }
+    static after(what, elementToSet) {
+        $(what).after(elementToSet);
+    }
+    static scrollTop(onWhichElement, scrollAmount) {
+        $(onWhichElement).scrollTop(scrollAmount);
+    }
+    static empty(whichElement) {
+        $(whichElement).empty();
+    }
+}
+exports.WORenderer = WORenderer;
 
 
 /***/ })
