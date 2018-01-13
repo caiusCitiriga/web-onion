@@ -31,6 +31,13 @@ $().ready(() => {
             }
         },
         {
+            command: 'in',
+            desc: 'Test input',
+            action: () => {
+                WO.input_lib.prompt('Yo?', WO, 'data-key', () => WO.out_lib.printMessage('Works: ' + WO.input_lib.getInputData('data-key')))
+            }
+        },
+        {
             command: 'list',
             flags: [
                 {

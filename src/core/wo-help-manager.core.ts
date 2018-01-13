@@ -1,51 +1,54 @@
 import { WebOnionSDK } from '../web-onion';
+import { WORenderer } from './wo-renderer.core';
+
 export class WOHelpManager {
     public generateHelpFromDispatcherConfig(sdk: WebOnionSDK) {
         const config = sdk.dispatcherConfiguration;
 
-        $('.wc-console').append('<table>');
-        $('.wc-console > table').addClass('wo-help-table');
-        $('.wo-help-table').append('<tbody>');
+        WORenderer.append('.wc-console', '<table>');
+        WORenderer.addClass('.wc-console > table', 'wo-help-table');
+        WORenderer.append('.wo-help-table', '<tbody>');
 
-        $('.wo-help-table > tbody').append('<tr>');
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Command</strong>');
+        WORenderer.append('.wo-help-table > tbody', '<tr>');
+        WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
 
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Description</strong>');
+        WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Command</strong>', true);
 
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Aliases</strong>');
+        WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Description</strong>', true);
 
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Flags</strong>');
+        WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Aliases</strong>', true);
 
+        WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Flags</strong>', true);
 
         config.forEach(conf => {
-            $('.wo-help-table > tbody').append('<tr>');
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append(conf.command);
+            WORenderer.append('.wo-help-table > tbody', '<tr>');
+            WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            WORenderer.append('.wo-help-table > tbody > tr > td', conf.command, true);
 
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append(conf.desc);
+            WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            WORenderer.append('.wo-help-table > tbody > tr > td', conf.desc, true);
 
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append('<ul>');
+            WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            WORenderer.append('.wo-help-table > tbody > tr > td', '<ul>', true);
+
             if (conf.aliases) {
                 conf.aliases.forEach(als => {
-                    $('.wo-help-table > tbody > tr > td > ul').last().append('<li>');
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(als);
+                    WORenderer.append('.wo-help-table > tbody > tr > td > ul', '<li>', true);
+                    WORenderer.append('.wo-help-table > tbody > tr > td > ul > li', als, true);
                 });
             }
 
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append('<ul>');
+            WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            WORenderer.append('.wo-help-table > tbody > tr > td', '<ul>', true);
 
             if (conf.flags) {
                 conf.flags.forEach(flag => {
-                    $('.wo-help-table > tbody > tr > td > ul').last().append('<li>');
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<strong class="flag-name">${sdk.flagDelimiter + flag.flag}: \t</strong>`);
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<i>${flag.desc}</i>`);
+                    WORenderer.append('.wo-help-table > tbody > tr > td > ul', '<li>', true);
+                    WORenderer.append('.wo-help-table > tbody > tr > td > ul > li', `<strong class="flag-name">${sdk.flagDelimiter + flag.flag}: \t</strong>`, true);
+                    WORenderer.append('.wo-help-table > tbody > tr > td > ul > li', `<i>${flag.desc}</i>`, true);
                 });
             }
         });

@@ -2,6 +2,7 @@ import { WOSeverityEnum } from '../enums/wo-severity.enum';
 import { WOOutput } from './wo-output.core';
 import { WOParser } from './wo-parser.core';
 import { WebOnionSDK } from '../web-onion';
+import { WORenderer } from './wo-renderer.core';
 
 export class WOInput {
 
@@ -11,7 +12,7 @@ export class WOInput {
      * @memberof WOInput
      */
     public clearInput() {
-        $('input.wc-input-field').val('');
+        WORenderer.setVal('input.wc-input-field', '');
     }
 
     /**
@@ -20,7 +21,7 @@ export class WOInput {
      * @memberof WOInput
      */
     public focusInput() {
-        $('input.wc-input-field').focus();
+        WORenderer.setFocus('input.wc-input-field');
     }
 
     /**
@@ -71,20 +72,16 @@ export class WOInput {
      * @memberof WOInput
      */
     private handleCallbackExecution(sdk: WebOnionSDK, callback: () => void, dataKey: string) {
-        $('input.wc-input-field').addClass('wc-input-wait'); // this will cause the parser to skip the data
+        WORenderer.addClass('input.wc-input-field', 'wc-input-wait'); // this will cause the parser to skip the data
 
-        $('input.wc-input-field.wc-input-wait').on('keypress', k => {
-            if (k.keyCode !== 13) { return; }
-
-            const value = <string>$('input.wc-input-field').val();
+        WORenderer.listenForKeyPressOnElement('input.wc-input-field.wc-input-wait', 13, () => {
+            const value = WORenderer.getVal('input.wc-input-field') as string;
             this.clearInput();
             sessionStorage.setItem(`@wo-user-data-${dataKey}`, value);
 
-            $('input.wc-input-field.wc-input-wait')
-                .remove();   // remove the previous input field
+            WORenderer.remove('input.wc-input-field.wc-input-wait');   // remove the previous input field
 
-            $('.wc-input > .wc-input-pointer')
-                .after('<input type="text" class="wc-input-field"/>');   // and replace it with a new one
+            WORenderer.after('.wc-input > .wc-input-pointer', '<input type="text" class="wc-input-field"/>');   // and replace it with a new one
 
             this.focusInput();
             sdk.parser_lib.startParser(sdk.dispatcherConfiguration, sdk);

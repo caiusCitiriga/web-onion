@@ -264,7 +264,7 @@ Gets the input data saved previously from the storage. If the given dataKey matc
 * **@returns:** ```{(string | null)} ```
 * **@memberof:** ```WOInput```
 
-## ```WOHelpManager```
+## ```WOHelpManager``` library
 #### ```+ generateHelpFromDispatcherConfig()```
 Prints a table that illustrates all the registered commands. With the respective description, aliases, and flags for each command.
 

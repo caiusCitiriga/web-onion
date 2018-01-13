@@ -115,6 +115,13 @@ $().ready(() => {
             }
         },
         {
+            command: 'in',
+            desc: 'Test input',
+            action: () => {
+                WO.input_lib.prompt('Yo?', WO, 'data-key', () => WO.out_lib.printMessage('Works: ' + WO.input_lib.getInputData('data-key')));
+            }
+        },
+        {
             command: 'list',
             flags: [
                 {
@@ -179,6 +186,7 @@ const wo_parser_core_1 = __webpack_require__(11);
 const wo_help_manager_core_1 = __webpack_require__(12);
 const general_conf_1 = __webpack_require__(13);
 const wo_severity_enum_1 = __webpack_require__(0);
+const wo_renderer_core_1 = __webpack_require__(14);
 class WebOnionSDK {
     constructor() {
         this.configuration = {
@@ -232,8 +240,9 @@ class WebOnionSDK {
         this.out_lib = new wo_output_core_1.WOOutput();
         this.input_lib = new wo_input_core_1.WOInput();
         this.parser_lib = new wo_parser_core_1.WOParser();
+        this.renderer_lib = new wo_renderer_core_1.WORenderer();
+        this.help_manager_lib = new wo_help_manager_core_1.WOHelpManager();
         this.dispatcher_lib = new wo_dispatcher_core_1.WODispatcher();
-        this.help_manager = new wo_help_manager_core_1.WOHelpManager();
         //  Start a listener for the double click on console
         $('html').dblclick((c) => {
             if ($('body').hasClass('wo-dbl-click-autofocus')) {
@@ -395,7 +404,7 @@ class WebOnionSDK {
     }
     handleWOCommand(flags) {
         if (flags[0] && flags[0].flag === 'help' || !flags.length) {
-            this.help_manager.generateHelpFromDispatcherConfig(this);
+            this.help_manager_lib.generateHelpFromDispatcherConfig(this);
             return;
         }
         if (flags[0].flag === 'info') {
@@ -1119,6 +1128,7 @@ exports.WOOutput = WOOutput;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = __webpack_require__(0);
+const wo_renderer_core_1 = __webpack_require__(14);
 class WOInput {
     /**
      * Clears the input field
@@ -1126,7 +1136,7 @@ class WOInput {
      * @memberof WOInput
      */
     clearInput() {
-        $('input.wc-input-field').val('');
+        wo_renderer_core_1.WORenderer.setVal('input.wc-input-field', '');
     }
     /**
      * Focuses the cursor in the input field
@@ -1134,7 +1144,7 @@ class WOInput {
      * @memberof WOInput
      */
     focusInput() {
-        $('input.wc-input-field').focus();
+        wo_renderer_core_1.WORenderer.setFocus('input.wc-input-field');
     }
     /**
      * Prompts the user with a question and takes a callback
@@ -1176,18 +1186,13 @@ class WOInput {
      * @memberof WOInput
      */
     handleCallbackExecution(sdk, callback, dataKey) {
-        $('input.wc-input-field').addClass('wc-input-wait'); // this will cause the parser to skip the data
-        $('input.wc-input-field.wc-input-wait').on('keypress', k => {
-            if (k.keyCode !== 13) {
-                return;
-            }
-            const value = $('input.wc-input-field').val();
+        wo_renderer_core_1.WORenderer.addClass('input.wc-input-field', 'wc-input-wait'); // this will cause the parser to skip the data
+        wo_renderer_core_1.WORenderer.listenForKeyPressOnElement('input.wc-input-field.wc-input-wait', 13, () => {
+            const value = wo_renderer_core_1.WORenderer.getVal('input.wc-input-field');
             this.clearInput();
             sessionStorage.setItem(`@wo-user-data-${dataKey}`, value);
-            $('input.wc-input-field.wc-input-wait')
-                .remove(); // remove the previous input field
-            $('.wc-input > .wc-input-pointer')
-                .after('<input type="text" class="wc-input-field"/>'); // and replace it with a new one
+            wo_renderer_core_1.WORenderer.remove('input.wc-input-field.wc-input-wait'); // remove the previous input field
+            wo_renderer_core_1.WORenderer.after('.wc-input > .wc-input-pointer', '<input type="text" class="wc-input-field"/>'); // and replace it with a new one
             this.focusInput();
             sdk.parser_lib.startParser(sdk.dispatcherConfiguration, sdk);
             callback();
@@ -1313,42 +1318,43 @@ exports.WOParser = WOParser;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const wo_renderer_core_1 = __webpack_require__(14);
 class WOHelpManager {
     generateHelpFromDispatcherConfig(sdk) {
         const config = sdk.dispatcherConfiguration;
-        $('.wc-console').append('<table>');
-        $('.wc-console > table').addClass('wo-help-table');
-        $('.wo-help-table').append('<tbody>');
-        $('.wo-help-table > tbody').append('<tr>');
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Command</strong>');
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Description</strong>');
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Aliases</strong>');
-        $('.wo-help-table > tbody > tr').last().append('<td>');
-        $('.wo-help-table > tbody > tr > td').last().append('<strong>Flags</strong>');
+        wo_renderer_core_1.WORenderer.append('.wc-console', '<table>');
+        wo_renderer_core_1.WORenderer.addClass('.wc-console > table', 'wo-help-table');
+        wo_renderer_core_1.WORenderer.append('.wo-help-table', '<tbody>');
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody', '<tr>');
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Command</strong>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Description</strong>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Aliases</strong>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+        wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<strong>Flags</strong>', true);
         config.forEach(conf => {
-            $('.wo-help-table > tbody').append('<tr>');
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append(conf.command);
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append(conf.desc);
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append('<ul>');
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody', '<tr>');
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', conf.command, true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', conf.desc, true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<ul>', true);
             if (conf.aliases) {
                 conf.aliases.forEach(als => {
-                    $('.wo-help-table > tbody > tr > td > ul').last().append('<li>');
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(als);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul', '<li>', true);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul > li', als, true);
                 });
             }
-            $('.wo-help-table > tbody > tr').last().append('<td>');
-            $('.wo-help-table > tbody > tr > td').last().append('<ul>');
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr', '<td>', true);
+            wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td', '<ul>', true);
             if (conf.flags) {
                 conf.flags.forEach(flag => {
-                    $('.wo-help-table > tbody > tr > td > ul').last().append('<li>');
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<strong class="flag-name">${sdk.flagDelimiter + flag.flag}: \t</strong>`);
-                    $('.wo-help-table > tbody > tr > td > ul > li').last().append(`<i>${flag.desc}</i>`);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul', '<li>', true);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul > li', `<strong class="flag-name">${sdk.flagDelimiter + flag.flag}: \t</strong>`, true);
+                    wo_renderer_core_1.WORenderer.append('.wo-help-table > tbody > tr > td > ul > li', `<i>${flag.desc}</i>`, true);
                 });
             }
         });
@@ -1367,6 +1373,42 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GENERAL_CONF = {
     version: '3.0.2'
 };
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class WORenderer {
+    static append(to, element, appendToLastMatch = false) {
+        appendToLastMatch ? $(to).last().append(element) : $(to).append(element);
+    }
+    static addClass(to, className) {
+        $(to).addClass(className);
+    }
+    static setVal(to, newVal) {
+        $(to).val(newVal);
+    }
+    static getVal(of) {
+        return $(of).val();
+    }
+    static setFocus(to) {
+        $(to).focus();
+    }
+    static listenForKeyPressOnElement(elememt, keyCodeToCatch, callback) {
+        $(elememt).on('keypress', k => k.keyCode === 13 ? callback() : null);
+    }
+    static remove(element) {
+        $(element).remove();
+    }
+    static after(what, elementToSet) {
+        $(what).after(elementToSet);
+    }
+}
+exports.WORenderer = WORenderer;
 
 
 /***/ })

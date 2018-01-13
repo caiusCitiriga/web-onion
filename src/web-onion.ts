@@ -11,13 +11,15 @@ import { WOFlag } from './entities/wo-flag.entity';
 import { WOHelpManager } from './core/wo-help-manager.core';
 import { GENERAL_CONF } from './conf/general.conf';
 import { WOSeverityEnum } from './enums/wo-severity.enum';
+import { WORenderer } from './core/wo-renderer.core';
 
 export class WebOnionSDK {
     public readonly out_lib: WOOutput;
     public readonly input_lib: WOInput;
     public readonly parser_lib: WOParser;
+    public readonly renderer_lib: WORenderer;
     public readonly dispatcher_lib: WODispatcher;
-    public readonly help_manager: WOHelpManager;
+    public readonly help_manager_lib: WOHelpManager;
 
     private configuration: WOSDKConfiguration = {
         dispatcher: [
@@ -76,8 +78,9 @@ export class WebOnionSDK {
         this.out_lib = new WOOutput();
         this.input_lib = new WOInput();
         this.parser_lib = new WOParser();
+        this.renderer_lib = new WORenderer();
+        this.help_manager_lib = new WOHelpManager();
         this.dispatcher_lib = new WODispatcher();
-        this.help_manager = new WOHelpManager();
         //  Start a listener for the double click on console
 
         $('html').dblclick((c: any) => {
@@ -252,13 +255,13 @@ export class WebOnionSDK {
     }
 
     private handleEchoCommand(flags: WOFlag[]) {
-        const message = flags[0].flag.split(':')[1];
+        const message = flags[0].flag.split(':') [1];
         this.out_lib.printMessage(message);
     }
 
     private handleWOCommand(flags: WOFlag[]) {
         if (flags[0] && flags[0].flag === 'help' || !flags.length) {
-            this.help_manager.generateHelpFromDispatcherConfig(this);
+            this.help_manager_lib.generateHelpFromDispatcherConfig(this);
             return;
         }
 
