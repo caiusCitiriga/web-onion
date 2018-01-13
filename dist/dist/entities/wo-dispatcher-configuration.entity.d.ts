@@ -1,5 +1,5 @@
 import { WOFlag } from './wo-flag.entity';
-export declare class WODispatcherConfiguration {
+export interface WODispatcherConfiguration {
     command: string;
     desc: string;
     aliases?: string[];

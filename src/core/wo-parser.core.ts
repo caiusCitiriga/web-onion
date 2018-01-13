@@ -7,6 +7,7 @@ import { WOCommandSet } from '../entities/wo-command-set.entity';
 import { WODispatcherConfiguration } from '../entities/wo-dispatcher-configuration.entity';
 import { WOSeverityEnum } from '../enums/wo-severity.enum';
 import { WOFlag } from '../entities/wo-flag.entity';
+import { WORenderer } from './wo-renderer.core';
 
 export class WOParser {
 
@@ -23,15 +24,10 @@ export class WOParser {
      * @memberof WOParser
      */
     public startParser(dispatcher_conf: WODispatcherConfiguration[], sdk: WebOnionSDK) {
-        $('input.wc-input-field').on('keypress', (k: any) => {
-            if (
-                k.keyCode !== 13 ||
-                k.currentTarget.classList.value.indexOf('wc-input-wait') !== -1
-            ) { return; } // if not ENTER or in input wait mode
+        WORenderer.listenForKeyPressOnElement('input.wc-input-field', 13, () => {
+            const raw_command = WORenderer.getVal('input.wc-input-field') as string;
 
-            const raw_command = <string>$('input.wc-input-field').val();
-
-            this.command_set.command = raw_command.split(sdk.flagDelimiter)[0].trim(); //  This will take only what's before any flag
+            this.command_set.command = raw_command.split(sdk.flagDelimiter) [0].trim(); //  This will take only what's before any flag
 
             const flags = raw_command.split(sdk.flagDelimiter);
             flags.shift(); // remove the command from the flags array;

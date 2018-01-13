@@ -1,5 +1,5 @@
 import { WODispatcherConfiguration } from './wo-dispatcher-configuration.entity';
-export declare class WOSDKConfiguration {
+export interface WOSDKConfiguration {
     dispatcher: WODispatcherConfiguration[];
     input_field: {
         clear_after_submit: boolean;

@@ -1,4 +1,4 @@
-export declare class WOFlag {
+export interface WOFlag {
     flag: string;
     desc: string;
 }
