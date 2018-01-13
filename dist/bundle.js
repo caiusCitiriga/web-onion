@@ -1019,6 +1019,8 @@ module.exports = function (css) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = __webpack_require__(0);
+const wo_renderer_core_1 = __webpack_require__(14);
+const general_conf_1 = __webpack_require__(13);
 class WOOutput {
     /**
      * Shows the legacy loading screen (dummy).
@@ -1026,8 +1028,8 @@ class WOOutput {
      * @memberof WOOutput
      */
     showInitializationScreen() {
-        $('body').css('background-color', '#000');
-        $('body').append(`<h1 class="wc-intialization">WebCLI is loading...<br><small>v1.0.0</small></h1>`);
+        wo_renderer_core_1.WORenderer.setCSS('body', [{ rule: 'background-color', value: '#000' }]);
+        wo_renderer_core_1.WORenderer.append('body', `<h1 class="wc-intialization">WebCLI is loading...<br><small>v${general_conf_1.GENERAL_CONF.version}</small></h1>`);
     }
     /**
      * Prints a message to the console
@@ -1055,10 +1057,10 @@ class WOOutput {
                 message_wrapper = `<span class="wc-message wc-message-message"></span>`;
                 break;
         }
-        $('.wc-console').append(message_wrapper);
-        $('.wc-message').last().append(message);
-        $('.wc-console').append(`<br>`);
-        $('.wc-console').scrollTop($('.wc-console')[0].scrollHeight); //scroll to bottom
+        wo_renderer_core_1.WORenderer.append('.wc-console', message_wrapper);
+        wo_renderer_core_1.WORenderer.append('.wc-message', message, true);
+        wo_renderer_core_1.WORenderer.append('.wc-console', '<br>');
+        wo_renderer_core_1.WORenderer.scrollTop('.wc-console', wo_renderer_core_1.WORenderer.getElement('.wc-console').scrollHeight); //scroll to bottom
     }
     /**
      * Clears the console
@@ -1066,7 +1068,7 @@ class WOOutput {
      * @memberof WOOutput
      */
     clearConsole() {
-        $('.wc-console').empty();
+        wo_renderer_core_1.WORenderer.empty('.wc-console');
     }
     /**
      * Prints a message styled as title according
@@ -1113,7 +1115,7 @@ class WOOutput {
             for (let i = 0; i < (longestKeyLen - pair.key.length); i++) {
                 spaces += space_char;
             }
-            $('.wc-console').append(`<span class="wc-key">${pair.key}:</span><span class="wc-value">${spaces + pair.value}</span><hr class="wc-kv-sep">`);
+            wo_renderer_core_1.WORenderer.append('.wc-console', `<span class="wc-key">${pair.key}:</span><span class="wc-value">${spaces + pair.value}</span><hr class="wc-kv-sep">`);
         });
     }
 }
@@ -1395,8 +1397,16 @@ class WORenderer {
     static getVal(of) {
         return $(of).val();
     }
+    static getElement(whichElement, whichOneIfMultiple = 0) {
+        return $(whichElement)[whichOneIfMultiple];
+    }
     static setFocus(to) {
         $(to).focus();
+    }
+    static setCSS(to, cssRulesSet) {
+        cssRulesSet.forEach(rs => {
+            $(to).css(rs.rule, rs.value);
+        });
     }
     static listenForKeyPressOnElement(elememt, keyCodeToCatch, callback) {
         $(elememt).on('keypress', k => k.keyCode === 13 ? callback() : null);
@@ -1406,6 +1416,12 @@ class WORenderer {
     }
     static after(what, elementToSet) {
         $(what).after(elementToSet);
+    }
+    static scrollTop(onWhichElement, scrollAmount) {
+        $(onWhichElement).scrollTop(scrollAmount);
+    }
+    static empty(whichElement) {
+        $(whichElement).empty();
     }
 }
 exports.WORenderer = WORenderer;

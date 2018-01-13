@@ -1,6 +1,6 @@
 import { WOFlag } from "./wo-flag.entity";
 
-export class WOCommandSet {
+export interface WOCommandSet {
     command: string | null;
     flags: WOFlag[] | null;
 }
