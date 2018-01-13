@@ -37,8 +37,8 @@ export class WORenderer {
         });
     }
 
-    public static listenForDblClickOnElement(element: string, action: () => void) {
-        $(element).dblclick(() => action());
+    public static listenForDblClickOnElement(element: string, callback: () => void) {
+        $(element).dblclick(() => callback());
     }
 
     public static hasClass(element: string, className: string): boolean {

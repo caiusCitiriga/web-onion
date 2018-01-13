@@ -30,7 +30,7 @@ WebOnion is meant to be an SDK for building applications that runs on commands. 
 
 This method takes one parameter which is an array of ```WODispatcherConfiguration``` objects.
 ```typescript
-class WODispatcherConfiguration {
+interface WODispatcherConfiguration {
     desc: string;
     flags?: string[];
     command: string;
@@ -271,10 +271,128 @@ Prints a table that illustrates all the registered commands. With the respective
 * **@param:** ```{WebOnionSDK} sdk ```
 * **@memberof:**  ```WOHelpManager```
 
+# Static classes
+## ```WORenderer```
+This class exposes various methods to handle DOM mutations. Its just a wrapper over JQuery.
+It was created to organize **all** DOM mutations into a single place.
+
+#### ```+ append()```
+Appends the given element or string to the desired HTML element. 
+The third parameter is optional, if set to true, it will append the given element to the last match of the selector element.
+
+* **@param:** ```{string} to ```
+* **@param:** ```{HTMLElement | string} element ```
+* **@param:** ```{boolean?} appendToLastMatch ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ setVal()```
+Sets the value to the given element (used with inputs)
+
+* **@param:** ```{string} to ```
+* **@param:** ```{any} newVal ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ getVal()```
+Returns the value from the element (used with inputs)
+
+* **@param:** ```{string} of ```
+* **@returns:** ```{(string | undefined)} ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ setFocus()```
+Sets the focus on the element (used with inputs)
+
+* **@param:** ```{string} to ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ getElement()```
+Returns the HTML element that matches the selector. Undefined otherwise
+The second parameter is optional, if the selector finds multiple matches, it will return the desired match.
+Undefined is returned if the match cannot be found, or the ```whichOneIfMultiple``` has an illegal index.
+
+* **@param:** ```{string} whichElement ```
+* **@param:** ```{number?} whichOneIfMultiple ```
+* **@returns:** ```{(HTMLElement | undefined)} ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ setCSS()```
+Takes an array of ```WOCssRuleSet``` and applies the rules on the desired element.
+
+* **@param:** ```{string} to ```
+* **@param:** ```{WOCssRuleSet[]} cssRulesSet ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ listenForKeyPressOnElement()```
+Starts a listener on the given element for a *keypress* event.
+When the user presses the keycode to catch, the callback will be executed, unless the target element isn't in *wait-mode*.
+This last scenario can be avoided if you set the last optional parameter to false
+
+* **@param:** ```{string} element ```
+* **@param:** ```{number} keyCodeToCatch ```
+* **@param:** ```{() => void} callback ```
+* **@param:** ```{boolean = true} skipCallbackExecIfElementInWaitMode ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ listenForDblClickOnElement()```
+Starts a listener for double clicks on the given element.
+When the double click is catched, the callback is executed.
+
+* **@param:** ```{string} element ```
+* **@param:** ```{() => void} callback ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ hasClass()```
+Returns true or false wheter the element has or not the given class.
+
+* **@param:** ```{string} element ```
+* **@param:** ```{string} className ```
+* **@returns:** ```{boolean}```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ addClass()```
+Adds the given class to the desired element
+
+* **@param:** ```{string} to ```
+* **@param:** ```{string} className ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ removeClass()```
+Removes the given class from the desired element
+
+* **@param:** ```{string} element ```
+* **@param:** ```{string} className ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ remove()```
+Removes the entire element from the DOM
+
+* **@param:** ```{string} element ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ after()```
+Operates setting the given element on the ```::after``` of the selector used.
+
+* **@param:** ```{string} element ```
+* **@param:** ```{HTMLElement | string} elementToSet ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ scrollTop()```
+Scrolls to the top of the given element with the given scroll amount.
+
+* **@param:** ```{string} onWhichElement ```
+* **@param:** ```{number} scrollAmount ```
+* **@memberof:**  ```WORenderer```
+
+#### ```+ empty()```
+Flushes the given element
+
+* **@param:** ```{string} whichElement ```
+* **@memberof:**  ```WORenderer```
+
 # Entities
 #### ```+ WOCommandSet```
 ```typescript
-class WOCommandSet {
+interface WOCommandSet {
     command: string | null;
     flags: string[] | null;
 }
@@ -282,7 +400,7 @@ class WOCommandSet {
 
 #### ```+ WOSDKConfiguration```
 ```typescript
-class WOSDKConfiguration {
+interface WOSDKConfiguration {
     dispatcher: WODispatcherConfiguration[];
     input_field: {
         clear_after_submit: boolean
@@ -296,7 +414,7 @@ class WOSDKConfiguration {
 
 #### ```+ WODispatcherConfiguration```
 ```typescript
-class WODispatcherConfiguration {
+interface WODispatcherConfiguration {
     command: string;
     aliases?: string[];
     flags?: string[];
@@ -306,9 +424,17 @@ class WODispatcherConfiguration {
 
 #### ```+ WOFlag```
 ```typescript
-class WOFlag {
+interface WOFlag {
     flag: string;
     desc: string;
+}
+```
+
+#### ```+ WOCssRuleSet````
+```typescript
+interface WOCssRuleSet {
+    rule: string;
+    value: string;
 }
 ```
 

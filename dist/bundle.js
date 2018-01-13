@@ -1411,8 +1411,8 @@ class WORenderer {
             callback();
         });
     }
-    static listenForDblClickOnElement(element, action) {
-        $(element).dblclick(() => action());
+    static listenForDblClickOnElement(element, callback) {
+        $(element).dblclick(() => callback());
     }
     static hasClass(element, className) {
         return $(element).hasClass(className);
