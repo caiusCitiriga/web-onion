@@ -244,8 +244,8 @@ class WebOnionSDK {
         this.help_manager_lib = new wo_help_manager_core_1.WOHelpManager();
         this.dispatcher_lib = new wo_dispatcher_core_1.WODispatcher();
         //  Start a listener for the double click on console
-        $('html').dblclick((c) => {
-            if ($('body').hasClass('wo-dbl-click-autofocus')) {
+        wo_renderer_core_1.WORenderer.listenForDblClickOnElement('html', () => {
+            if (wo_renderer_core_1.WORenderer.hasClass('body', 'wo-dbl-click-autofocus')) {
                 this.input_lib.focusInput();
             }
         });
@@ -303,7 +303,7 @@ class WebOnionSDK {
      * @memberof WebOnionSDK
      */
     get dblClickFocusesInput() {
-        return $('body').hasClass('wo-dbl-click-autofocus');
+        return wo_renderer_core_1.WORenderer.hasClass('body', 'wo-dbl-click-autofocus');
     }
     /**
      * Enables or disables the input focus
@@ -314,10 +314,10 @@ class WebOnionSDK {
      */
     set dbl_click_focuses_input(value) {
         if (!value) {
-            $('body').removeClass('wo-dbl-click-autofocus');
+            wo_renderer_core_1.WORenderer.removeClass('body', 'wo-dbl-click-autofocus');
             return;
         }
-        $('body').addClass('wo-dbl-click-autofocus');
+        wo_renderer_core_1.WORenderer.addClass('body', 'wo-dbl-click-autofocus');
     }
     /**
      * Enables or disables the input field
@@ -381,7 +381,7 @@ class WebOnionSDK {
      * @memberof WebOnionSDK
      */
     clearDocument() {
-        $('body').empty();
+        wo_renderer_core_1.WORenderer.empty('body');
     }
     /**
      * Creates the HTML elements needed to render
@@ -391,11 +391,11 @@ class WebOnionSDK {
      * @memberof WebOnionSDK
      */
     createConsole() {
-        $('body').append('<div class="wc-wrp"></div>');
-        $('.wc-wrp').append('<div class="wc-console"></div>');
-        $('.wc-wrp').append('<div class="wc-input"></div>');
-        $('.wc-input').append('<div class="wc-input-pointer">></div>');
-        $('.wc-input').append('<input type="text" class="wc-input-field"/>');
+        wo_renderer_core_1.WORenderer.append('body', '<div class="wc-wrp"></div>');
+        wo_renderer_core_1.WORenderer.append('.wc-wrp', '<div class="wc-console"></div>');
+        wo_renderer_core_1.WORenderer.append('.wc-wrp', '<div class="wc-input"></div>');
+        wo_renderer_core_1.WORenderer.append('.wc-input', '<div class="wc-input-pointer">></div>');
+        wo_renderer_core_1.WORenderer.append('.wc-input', '<input type="text" class="wc-input-field"/>');
         this.input_lib.focusInput();
     }
     handleEchoCommand(flags) {
@@ -1257,6 +1257,7 @@ exports.WODispatcher = WODispatcher;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = __webpack_require__(0);
+const wo_renderer_core_1 = __webpack_require__(14);
 class WOParser {
     constructor() {
         this.command_set = {
@@ -1272,12 +1273,8 @@ class WOParser {
      * @memberof WOParser
      */
     startParser(dispatcher_conf, sdk) {
-        $('input.wc-input-field').on('keypress', (k) => {
-            if (k.keyCode !== 13 ||
-                k.currentTarget.classList.value.indexOf('wc-input-wait') !== -1) {
-                return;
-            } // if not ENTER or in input wait mode
-            const raw_command = $('input.wc-input-field').val();
+        wo_renderer_core_1.WORenderer.listenForKeyPressOnElement('input.wc-input-field', 13, () => {
+            const raw_command = wo_renderer_core_1.WORenderer.getVal('input.wc-input-field');
             this.command_set.command = raw_command.split(sdk.flagDelimiter)[0].trim(); //  This will take only what's before any flag
             const flags = raw_command.split(sdk.flagDelimiter);
             flags.shift(); // remove the command from the flags array;
@@ -1388,9 +1385,6 @@ class WORenderer {
     static append(to, element, appendToLastMatch = false) {
         appendToLastMatch ? $(to).last().append(element) : $(to).append(element);
     }
-    static addClass(to, className) {
-        $(to).addClass(className);
-    }
     static setVal(to, newVal) {
         $(to).val(newVal);
     }
@@ -1408,8 +1402,26 @@ class WORenderer {
             $(to).css(rs.rule, rs.value);
         });
     }
-    static listenForKeyPressOnElement(elememt, keyCodeToCatch, callback) {
-        $(elememt).on('keypress', k => k.keyCode === 13 ? callback() : null);
+    static listenForKeyPressOnElement(elememt, keyCodeToCatch, callback, skipCallbackExecIfElementInWaitMode = true) {
+        $(elememt).on('keypress', k => {
+            //  If the keycode is different that the one to catch or if the element is in wait mode
+            if (k.keyCode !== keyCodeToCatch || k.currentTarget.classList.value.indexOf('wc-input-wait') !== -1) {
+                return;
+            }
+            callback();
+        });
+    }
+    static listenForDblClickOnElement(element, action) {
+        $(element).dblclick(() => action());
+    }
+    static hasClass(element, className) {
+        return $(element).hasClass(className);
+    }
+    static addClass(to, className) {
+        $(to).addClass(className);
+    }
+    static removeClass(element, className) {
+        $(element).removeClass(className);
     }
     static remove(element) {
         $(element).remove();
