@@ -25,6 +25,10 @@ export class WOParser {
      */
     public startParser(dispatcher_conf: WODispatcherConfiguration[], sdk: WebOnionSDK) {
         WORenderer.listenForKeyPressOnElement('input.wc-input-field', 13, () => {
+            if (this.inputIsInWaitMode()) {
+                debugger;
+                return;
+            }
             const raw_command = WORenderer.getVal('input.wc-input-field') as string;
 
             this.command_set.command = raw_command.split(sdk.flagDelimiter) [0].trim(); //  This will take only what's before any flag
@@ -64,5 +68,9 @@ export class WOParser {
         }
 
         return { isOk: true };
+    }
+
+    private inputIsInWaitMode(): boolean {
+        return $('input.wc-input-field').hasClass('wc-input-wait');
     }
 }
