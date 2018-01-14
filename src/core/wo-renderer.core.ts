@@ -28,12 +28,13 @@ export class WORenderer {
         });
     }
 
-    public static listenForKeyPressOnElement(elememt: string, keyCodeToCatch: number, callback: () => void, skipCallbackExecIfElementInWaitMode = true) {
-        $(elememt).on('keypress', k => {
+    public static listenForKeyPressOnElement(elememt: string, keyCodeToCatch: number, callback: () => void, disposeListenerAfterCallbackExec = false) {
+        const el = $(elememt).on('keypress', k => {
             //  If the keycode is different that the one to catch or if the element is in wait mode
-            if (k.keyCode !== keyCodeToCatch || (<any>k.currentTarget.classList).value.indexOf('wc-input-wait') !== -1) { return; }
-
-            callback();
+            if (k.keyCode === keyCodeToCatch) {
+                callback();
+                disposeListenerAfterCallbackExec ? el.off() : null;
+            }
         });
     }
 

@@ -1188,6 +1188,7 @@ class WOInput {
      * @memberof WOInput
      */
     handleCallbackExecution(sdk, callback, dataKey) {
+        debugger;
         wo_renderer_core_1.WORenderer.addClass('input.wc-input-field', 'wc-input-wait'); // this will cause the parser to skip the data
         wo_renderer_core_1.WORenderer.listenForKeyPressOnElement('input.wc-input-field.wc-input-wait', 13, () => {
             const value = wo_renderer_core_1.WORenderer.getVal('input.wc-input-field');
@@ -1198,7 +1199,7 @@ class WOInput {
             this.focusInput();
             sdk.parser_lib.startParser(sdk.dispatcherConfiguration, sdk);
             callback();
-        });
+        }, true);
     }
 }
 exports.WOInput = WOInput;
@@ -1274,6 +1275,10 @@ class WOParser {
      */
     startParser(dispatcher_conf, sdk) {
         wo_renderer_core_1.WORenderer.listenForKeyPressOnElement('input.wc-input-field', 13, () => {
+            if (this.inputIsInWaitMode()) {
+                debugger;
+                return;
+            }
             const raw_command = wo_renderer_core_1.WORenderer.getVal('input.wc-input-field');
             this.command_set.command = raw_command.split(sdk.flagDelimiter)[0].trim(); //  This will take only what's before any flag
             const flags = raw_command.split(sdk.flagDelimiter);
@@ -1305,6 +1310,9 @@ class WOParser {
             return { isOk: false, message: 'The flag/s provided cannot be used. This may happen when the flag delimiter is "-" but you\'ve used "--"' };
         }
         return { isOk: true };
+    }
+    inputIsInWaitMode() {
+        return $('input.wc-input-field').hasClass('wc-input-wait');
     }
 }
 exports.WOParser = WOParser;
@@ -1370,7 +1378,7 @@ exports.WOHelpManager = WOHelpManager;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GENERAL_CONF = {
-    version: '3.0.3'
+    version: '3.0.4'
 };
 
 
@@ -1402,13 +1410,13 @@ class WORenderer {
             $(to).css(rs.rule, rs.value);
         });
     }
-    static listenForKeyPressOnElement(elememt, keyCodeToCatch, callback, skipCallbackExecIfElementInWaitMode = true) {
-        $(elememt).on('keypress', k => {
+    static listenForKeyPressOnElement(elememt, keyCodeToCatch, callback, disposeListenerAfterCallbackExec = false) {
+        const el = $(elememt).on('keypress', k => {
             //  If the keycode is different that the one to catch or if the element is in wait mode
-            if (k.keyCode !== keyCodeToCatch || k.currentTarget.classList.value.indexOf('wc-input-wait') !== -1) {
-                return;
+            if (k.keyCode === keyCodeToCatch) {
+                callback();
+                disposeListenerAfterCallbackExec ? el.off() : null;
             }
-            callback();
         });
     }
     static listenForDblClickOnElement(element, callback) {

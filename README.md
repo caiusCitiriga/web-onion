@@ -130,48 +130,48 @@ The last statement:
 Using this trick you can build advanced and complex commands.
 
 # Core methods
-### ```+ addConfigurationsToDispatcher()```
+### addConfigurationsToDispatcher()
 Adds the array of dispatcher configurations to the current configurations.
 * **@param:** ```{WODispatcherConfiguration[]} configurations``` 
 * **@memberof:** ```WebOnionSDK```
 
-### ```+ initialize()```
+### initialize()
 Initializes the SDK with the given configurations
 * **@memberof:** ```WebOnionSDK```
 
 # Getters 
-### ```+ loadTimeout()```
+### loadTimeout()
 Returns the loading screen timeout if set. Null will be returned otherwise
 * **@return:** ```{(number | null)}```
 * **@memberof:** ```WebOnionSDK```
 
-### ```+ clearAfterSubmit()```
+### clearAfterSubmit()
 Returns true if the input gets cleared after each ENTER press. False otherwise
 * **@return:** ```{boolean}```
 * **@memberof:** ```WebOnionSDK```
 
-### ```+ dblClickFocusesInput()```
+### dblClickFocusesInput()
 Returns true if the input focuses automatically when double clicking on the console. False otherwise
 * **@return:** ```{boolean}```
 * **@memberof:** ```WebOnionSDK```
 
-### ```+ dispatcherConfiguration()```
+### dispatcherConfiguration()
 Returns the array containing the dispatcher configurations
 * **@type:** ```{WODispatcherConfiguration[]}```
 * **@memberof:** ```WebOnionSDK```
 
 # Setters
-### ```+ dbl_click_focuses_input```
+### dbl_click_focuses_input
 Enables or disables the input autofocus when double-clicking on the console
 * **@param:** ```{boolean} value```
 * **@memberof:** ```WebOnionSDK```
 
-### ```+ clear_after_submit```
+### clear_after_submit
 Enables or disables the input field auto clear on each ENTER press
 * **@param:** ```{boolean} value```
 * **@memberof:** ```WebOnionSDK```
 
-### ```+ load_timeout```
+### load_timeout
 Sets the amount of time to wait before
 the legacy loading screen hides
 * **@param:** ```{number} value```
@@ -191,57 +191,57 @@ const WO = new WebOnionSDK();
 WO.out_lib      // WOOut library
 WO.input_lib    // WOInput library
 ```
-## ```WOOutput``` library
+## WOOutput
 #### ```+ showInitializationScreen()```
 Shows the legacy loading screen
 
 * **@memberof:**  ```WOOutput```
 
-#### ```+ printMessage()```
+#### printMessage()
 Prints a message to the console.
 
 * **@param:** ```{string}``` **message** The text of the message
 * **@param:** ```{WOSeverityEnum}``` **severity** The severity of the message
 * **@memberof:**  ```WOOutput```
 
-#### ```+ clearConsole()```
+#### clearConsole()
 Clears the console from the content
 
 * **@memberof:** ```WOOutput```
 
 
-#### ```+ printTitle()```
+#### printTitle()
 Prints a message styled as title according to the current style in use
 
 * **@param:** ```{string} text``` 
 * **@memberof:** ```WOOutput```
 
-#### ```+ printBoxedTitle()```
+#### printBoxedTitle()
 Prints a message styled as title, surrounded with borders according to the current style in use
 
 * **@param:** ```{string} text``` 
 * **@param:** ```{boolean} full_width=true``` 
 * **@memberof:** ```WOOutput```
 
-#### ```+ printKeyValuePairs()```
+#### printKeyValuePairs()
 Prints a list of key value pairs.
 
 * **@param:** ```{{ key: string, value: string }[]} set ```
 * **@param:** ```{string} [space_char='&nbsp;'] ```
 * **@memberof:** ```WOOutput```
 
-## ```WOInput``` library
+## WOInput library
 #### ```+ clearInput()```
 Clears the input field
 
 * **@memberof:** ```WOInput```
 
-#### ```+ focusInput()```
+#### focusInput()
 Focuses the cursor in the input field
 
 * **@memberof:** ```WOInput```
 
-#### ```+ prompt()```
+#### prompt()
 Prompts the user with a question and takes a callback
 that will be executed when the user continues by pressing ENTER and providing a value through the input-field.
 
@@ -257,14 +257,14 @@ This method is a powerful tool that you can use to interact with the user. Besid
 
 The same library exposes a method to retrieve the data stored by the prompt, and it can be used anytime to retrieve values stored previously. This method is called ```getInputData()```
 
-#### ```+ getInputData()```
+#### + getInputData()
 Gets the input data saved previously from the storage. If the given dataKey matches one identifier in the storage, the value will be returned. Otherwise null will be returned
 
 * **@param:** ```{string} dataKey ```
 * **@returns:** ```{(string | null)} ```
 * **@memberof:** ```WOInput```
 
-## ```WOHelpManager``` library
+## WOHelpManager library
 #### ```+ generateHelpFromDispatcherConfig()```
 Prints a table that illustrates all the registered commands. With the respective description, aliases, and flags for each command.
 
@@ -272,11 +272,11 @@ Prints a table that illustrates all the registered commands. With the respective
 * **@memberof:**  ```WOHelpManager```
 
 # Static classes
-## ```WORenderer```
+## WORenderer
 This class exposes various methods to handle DOM mutations. Its just a wrapper over JQuery.
 It was created to organize **all** DOM mutations into a single place.
 
-#### ```+ append()```
+#### append()
 Appends the given element or string to the desired HTML element. 
 The third parameter is optional, if set to true, it will append the given element to the last match of the selector element.
 
@@ -285,27 +285,27 @@ The third parameter is optional, if set to true, it will append the given elemen
 * **@param:** ```{boolean?} appendToLastMatch ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ setVal()```
+#### setVal()
 Sets the value to the given element (used with inputs)
 
 * **@param:** ```{string} to ```
 * **@param:** ```{any} newVal ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ getVal()```
+#### getVal()
 Returns the value from the element (used with inputs)
 
 * **@param:** ```{string} of ```
 * **@returns:** ```{(string | undefined)} ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ setFocus()```
+#### setFocus()
 Sets the focus on the element (used with inputs)
 
 * **@param:** ```{string} to ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ getElement()```
+#### getElement()
 Returns the HTML element that matches the selector. Undefined otherwise
 The second parameter is optional, if the selector finds multiple matches, it will return the desired match.
 Undefined is returned if the match cannot be found, or the ```whichOneIfMultiple``` has an illegal index.
@@ -315,25 +315,25 @@ Undefined is returned if the match cannot be found, or the ```whichOneIfMultiple
 * **@returns:** ```{(HTMLElement | undefined)} ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ setCSS()```
+#### setCSS()
 Takes an array of ```WOCssRuleSet``` and applies the rules on the desired element.
 
 * **@param:** ```{string} to ```
 * **@param:** ```{WOCssRuleSet[]} cssRulesSet ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ listenForKeyPressOnElement()```
+#### listenForKeyPressOnElement()
 Starts a listener on the given element for a *keypress* event.
-When the user presses the keycode to catch, the callback will be executed, unless the target element isn't in *wait-mode*.
-This last scenario can be avoided if you set the last optional parameter to false
+When the user presses the keycode to catch, the callback will be executed.
+The last optional parameter tells to the method to remove the listener after the callback has been executed.
 
 * **@param:** ```{string} element ```
 * **@param:** ```{number} keyCodeToCatch ```
 * **@param:** ```{() => void} callback ```
-* **@param:** ```{boolean = true} skipCallbackExecIfElementInWaitMode ```
+* **@param:** ```{boolean = true} disposeListenerAfterCallbackExec ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ listenForDblClickOnElement()```
+#### listenForDblClickOnElement()
 Starts a listener for double clicks on the given element.
 When the double click is catched, the callback is executed.
 
@@ -341,7 +341,7 @@ When the double click is catched, the callback is executed.
 * **@param:** ```{() => void} callback ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ hasClass()```
+#### hasClass()
 Returns true or false wheter the element has or not the given class.
 
 * **@param:** ```{string} element ```
@@ -349,48 +349,48 @@ Returns true or false wheter the element has or not the given class.
 * **@returns:** ```{boolean}```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ addClass()```
+#### addClass()
 Adds the given class to the desired element
 
 * **@param:** ```{string} to ```
 * **@param:** ```{string} className ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ removeClass()```
+#### removeClass()
 Removes the given class from the desired element
 
 * **@param:** ```{string} element ```
 * **@param:** ```{string} className ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ remove()```
+#### remove()
 Removes the entire element from the DOM
 
 * **@param:** ```{string} element ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ after()```
+#### after()
 Operates setting the given element on the ```::after``` of the selector used.
 
 * **@param:** ```{string} element ```
 * **@param:** ```{HTMLElement | string} elementToSet ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ scrollTop()```
+#### scrollTop()
 Scrolls to the top of the given element with the given scroll amount.
 
 * **@param:** ```{string} onWhichElement ```
 * **@param:** ```{number} scrollAmount ```
 * **@memberof:**  ```WORenderer```
 
-#### ```+ empty()```
+#### empty()
 Flushes the given element
 
 * **@param:** ```{string} whichElement ```
 * **@memberof:**  ```WORenderer```
 
 # Entities
-#### ```+ WOCommandSet```
+#### WOCommandSet
 ```typescript
 interface WOCommandSet {
     command: string | null;
@@ -398,7 +398,7 @@ interface WOCommandSet {
 }
 ```
 
-#### ```+ WOSDKConfiguration```
+#### WOSDKConfiguration
 ```typescript
 interface WOSDKConfiguration {
     dispatcher: WODispatcherConfiguration[];
@@ -412,7 +412,7 @@ interface WOSDKConfiguration {
 }
 ```
 
-#### ```+ WODispatcherConfiguration```
+#### WODispatcherConfiguration
 ```typescript
 interface WODispatcherConfiguration {
     command: string;
@@ -422,7 +422,7 @@ interface WODispatcherConfiguration {
 }
 ```
 
-#### ```+ WOFlag```
+#### WOFlag
 ```typescript
 interface WOFlag {
     flag: string;
@@ -430,7 +430,7 @@ interface WOFlag {
 }
 ```
 
-#### ```+ WOCssRuleSet```
+#### WOCssRuleSet
 ```typescript
 interface WOCssRuleSet {
     rule: string;
@@ -440,7 +440,7 @@ interface WOCssRuleSet {
 
 # Enums
 
-#### ```+ WOSeverityEnum```
+#### WOSeverityEnum
 The severity types of the messages printed out by the ```WOOut``` and ```WOIn``` libraries.
 ```typescript
 enum WOSeverityEnum {
