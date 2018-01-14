@@ -1,3 +1,10 @@
+## 3.0.4
+#### Bugfixes
++ [HOTFIX] added skip on parser when the input field is in wait-mode.
+
+#### Misc
++ updated README.md
+
 ## 3.0.3
 
 #### Improvements

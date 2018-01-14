@@ -18,4 +18,5 @@ export declare class WOParser {
      */
     private resetCommandSet();
     private checkSuccessfulParse(cs);
+    private inputIsInWaitMode();
 }

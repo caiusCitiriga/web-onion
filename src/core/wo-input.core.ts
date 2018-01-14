@@ -72,6 +72,7 @@ export class WOInput {
      * @memberof WOInput
      */
     private handleCallbackExecution(sdk: WebOnionSDK, callback: () => void, dataKey: string) {
+        debugger;
         WORenderer.addClass('input.wc-input-field', 'wc-input-wait'); // this will cause the parser to skip the data
 
         WORenderer.listenForKeyPressOnElement('input.wc-input-field.wc-input-wait', 13, () => {
@@ -87,6 +88,6 @@ export class WOInput {
             sdk.parser_lib.startParser(sdk.dispatcherConfiguration, sdk);
 
             callback();
-        });
+        }, true);
     }
 }

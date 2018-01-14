@@ -6,7 +6,7 @@ export declare class WORenderer {
     static getElement(whichElement: string, whichOneIfMultiple?: number): HTMLElement;
     static setFocus(to: string): void;
     static setCSS(to: string, cssRulesSet: WOCssRuleSet[]): void;
-    static listenForKeyPressOnElement(elememt: string, keyCodeToCatch: number, callback: () => void, skipCallbackExecIfElementInWaitMode?: boolean): void;
+    static listenForKeyPressOnElement(elememt: string, keyCodeToCatch: number, callback: () => void, disposeListenerAfterCallbackExec?: boolean): void;
     static listenForDblClickOnElement(element: string, callback: () => void): void;
     static hasClass(element: string, className: string): boolean;
     static addClass(to: string, className: string): void;
