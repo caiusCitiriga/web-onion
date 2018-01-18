@@ -1,3 +1,3 @@
 export const GENERAL_CONF = {
-    version: '3.0.5'
+    version: '3.0.8'
 };
