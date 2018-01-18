@@ -1,1 +1,1 @@
-{"version":3,"file":"general.conf.js","sourceRoot":"","sources":["../../src/conf/general.conf.ts"],"names":[],"mappings":";;AAAa,QAAA,YAAY,GAAG;IACxB,OAAO,EAAE,cAAc;CAC1B,CAAC"}
+{"version":3,"file":"general.conf.js","sourceRoot":"","sources":["../../src/conf/general.conf.ts"],"names":[],"mappings":";;AAAa,QAAA,YAAY,GAAG;IACxB,OAAO,EAAE,OAAO;CACnB,CAAC"}
