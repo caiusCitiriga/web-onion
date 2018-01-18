@@ -1,4 +1,5 @@
-export declare class WOCommandSet {
+import { WOFlag } from "./wo-flag.entity";
+export interface WOCommandSet {
     command: string | null;
-    flags: string[] | null;
+    flags: WOFlag[] | null;
 }

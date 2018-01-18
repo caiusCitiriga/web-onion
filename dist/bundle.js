@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -86,7 +86,84 @@ var WOSeverityEnum;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const web_onion_1 = __webpack_require__(2);
+class WORenderer {
+    static append(to, element, appendToLastMatch = false) {
+        appendToLastMatch ? $(to).last().append(element) : $(to).append(element);
+    }
+    static setVal(to, newVal) {
+        $(to).val(newVal);
+    }
+    static getVal(of) {
+        return $(of).val();
+    }
+    static getElement(whichElement, whichOneIfMultiple = 0) {
+        return $(whichElement)[whichOneIfMultiple];
+    }
+    static setFocus(to) {
+        $(to).focus();
+    }
+    static setCSS(to, cssRulesSet) {
+        cssRulesSet.forEach(rs => {
+            $(to).css(rs.rule, rs.value);
+        });
+    }
+    static listenForKeyPressOnElement(elememt, keyCodeToCatch, callback, disposeListenerAfterCallbackExec = false) {
+        const el = $(elememt).on('keypress', k => {
+            //  If the keycode is different that the one to catch or if the element is in wait mode
+            if (k.keyCode === keyCodeToCatch) {
+                callback();
+                disposeListenerAfterCallbackExec ? el.off() : null;
+            }
+        });
+    }
+    static listenForDblClickOnElement(element, callback) {
+        $(element).dblclick(() => callback());
+    }
+    static hasClass(element, className) {
+        return $(element).hasClass(className);
+    }
+    static addClass(to, className) {
+        $(to).addClass(className);
+    }
+    static removeClass(element, className) {
+        $(element).removeClass(className);
+    }
+    static remove(element) {
+        $(element).remove();
+    }
+    static after(what, elementToSet) {
+        $(what).after(elementToSet);
+    }
+    static scrollTop(onWhichElement, scrollAmount) {
+        $(onWhichElement).scrollTop(scrollAmount);
+    }
+    static empty(whichElement) {
+        $(whichElement).empty();
+    }
+}
+exports.WORenderer = WORenderer;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GENERAL_CONF = {
+    version: '3.0.5'
+};
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const web_onion_1 = __webpack_require__(4);
 $().ready(() => {
     const WO = new web_onion_1.WebOnionSDK();
     WO.load_timeout = 0;
@@ -172,21 +249,21 @@ $().ready(() => {
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(3);
-const wo_output_core_1 = __webpack_require__(8);
-const wo_input_core_1 = __webpack_require__(9);
-const wo_dispatcher_core_1 = __webpack_require__(10);
-const wo_parser_core_1 = __webpack_require__(11);
-const wo_help_manager_core_1 = __webpack_require__(12);
-const general_conf_1 = __webpack_require__(13);
+__webpack_require__(5);
+const wo_output_core_1 = __webpack_require__(10);
+const wo_input_core_1 = __webpack_require__(11);
+const wo_dispatcher_core_1 = __webpack_require__(12);
+const wo_parser_core_1 = __webpack_require__(13);
+const wo_help_manager_core_1 = __webpack_require__(14);
+const general_conf_1 = __webpack_require__(2);
 const wo_severity_enum_1 = __webpack_require__(0);
-const wo_renderer_core_1 = __webpack_require__(14);
+const wo_renderer_core_1 = __webpack_require__(1);
 class WebOnionSDK {
     constructor() {
         this.configuration = {
@@ -431,13 +508,13 @@ exports.WebOnionSDK = WebOnionSDK;
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(4);
+var content = __webpack_require__(6);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -445,7 +522,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, options);
+var update = __webpack_require__(8)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -462,10 +539,10 @@ if(false) {
 }
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(undefined);
+exports = module.exports = __webpack_require__(7)(undefined);
 // imports
 
 
@@ -476,7 +553,7 @@ exports.push([module.i, ":root {\n    font-size: 14px;\n    --lime: #32cd32;\n  
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /*
@@ -558,7 +635,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -604,7 +681,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(7);
+var	fixUrls = __webpack_require__(9);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -917,7 +994,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports) {
 
 
@@ -1012,15 +1089,15 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = __webpack_require__(0);
-const wo_renderer_core_1 = __webpack_require__(14);
-const general_conf_1 = __webpack_require__(13);
+const wo_renderer_core_1 = __webpack_require__(1);
+const general_conf_1 = __webpack_require__(2);
 class WOOutput {
     /**
      * Shows the legacy loading screen (dummy).
@@ -1123,14 +1200,14 @@ exports.WOOutput = WOOutput;
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = __webpack_require__(0);
-const wo_renderer_core_1 = __webpack_require__(14);
+const wo_renderer_core_1 = __webpack_require__(1);
 class WOInput {
     /**
      * Clears the input field
@@ -1206,7 +1283,7 @@ exports.WOInput = WOInput;
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1251,14 +1328,14 @@ exports.WODispatcher = WODispatcher;
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const wo_severity_enum_1 = __webpack_require__(0);
-const wo_renderer_core_1 = __webpack_require__(14);
+const wo_renderer_core_1 = __webpack_require__(1);
 class WOParser {
     constructor() {
         this.command_set = {
@@ -1319,13 +1396,13 @@ exports.WOParser = WOParser;
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const wo_renderer_core_1 = __webpack_require__(14);
+const wo_renderer_core_1 = __webpack_require__(1);
 class WOHelpManager {
     generateHelpFromDispatcherConfig(sdk) {
         const config = sdk.dispatcherConfiguration;
@@ -1368,83 +1445,6 @@ class WOHelpManager {
     }
 }
 exports.WOHelpManager = WOHelpManager;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GENERAL_CONF = {
-    version: '3.0.4'
-};
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-class WORenderer {
-    static append(to, element, appendToLastMatch = false) {
-        appendToLastMatch ? $(to).last().append(element) : $(to).append(element);
-    }
-    static setVal(to, newVal) {
-        $(to).val(newVal);
-    }
-    static getVal(of) {
-        return $(of).val();
-    }
-    static getElement(whichElement, whichOneIfMultiple = 0) {
-        return $(whichElement)[whichOneIfMultiple];
-    }
-    static setFocus(to) {
-        $(to).focus();
-    }
-    static setCSS(to, cssRulesSet) {
-        cssRulesSet.forEach(rs => {
-            $(to).css(rs.rule, rs.value);
-        });
-    }
-    static listenForKeyPressOnElement(elememt, keyCodeToCatch, callback, disposeListenerAfterCallbackExec = false) {
-        const el = $(elememt).on('keypress', k => {
-            //  If the keycode is different that the one to catch or if the element is in wait mode
-            if (k.keyCode === keyCodeToCatch) {
-                callback();
-                disposeListenerAfterCallbackExec ? el.off() : null;
-            }
-        });
-    }
-    static listenForDblClickOnElement(element, callback) {
-        $(element).dblclick(() => callback());
-    }
-    static hasClass(element, className) {
-        return $(element).hasClass(className);
-    }
-    static addClass(to, className) {
-        $(to).addClass(className);
-    }
-    static removeClass(element, className) {
-        $(element).removeClass(className);
-    }
-    static remove(element) {
-        $(element).remove();
-    }
-    static after(what, elementToSet) {
-        $(what).after(elementToSet);
-    }
-    static scrollTop(onWhichElement, scrollAmount) {
-        $(onWhichElement).scrollTop(scrollAmount);
-    }
-    static empty(whichElement) {
-        $(whichElement).empty();
-    }
-}
-exports.WORenderer = WORenderer;
 
 
 /***/ })
