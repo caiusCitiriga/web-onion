@@ -1,10 +1,10 @@
 var path = require("path");
 
 module.exports = {
-    watch: true,
-    entry: "./src/demo/demo.ts",
+    watch: false,
+    entry: "./src/web-onion.ts",
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname),
         filename: "web-onion.js"
     },
     resolve: {

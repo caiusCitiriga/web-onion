@@ -1,12 +1,10 @@
-import { WebOnionSDK } from '../web-onion';
-import { WOFlag } from '../entities/wo-flag.entity';
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const web_onion_1 = require("../web-onion");
 $().ready(() => {
-    const WO = new WebOnionSDK();
-
+    const WO = new web_onion_1.WebOnionSDK();
     // WO.load_timeout = 0;
     // WO.dbl_click_focuses_input = true;
-
     // WO.addConfigurationsToDispatcher([
     //     {
     //         command: 'key',
@@ -60,34 +58,29 @@ $().ready(() => {
     //                 alert('Command fired test-me without any flag');
     //                 return;
     //             }
-
     //             if (flags.find(f => f.flag === 'f1')) {
     //                 alert('Fired command test-me with flag --f1');
     //                 return;
     //             }
-
     //             if (flags.find(f => f.flag === 'f2')) {
     //                 alert('Fired command test-me with flag --f2');
     //                 return;
     //             }
-
     //             if (flags.find(f => f.flag === 'f3')) {
     //                 alert('Fired command test-me with flag --f3');
     //                 return;
     //             }
-
     //             flags.forEach(f => {
     //                 if (f.flag.split(':').length && f.flag.split(':') [1] && f.flag.split(':') [1].split('=') [0] === 'value') {
     //                     const val = f.flag.split(':').length && f.flag.split(':') [1].split('=') [1];
     //                     alert('Fired command test-me with flag --f3 and with value: ' + val);
     //                     return;
     //                 }
-
     //                 alert('Unknown flag for this command');
     //             });
     //         }
     //     }
     // ]);
-
     WO.initialize();
 });
+//# sourceMappingURL=demo.js.map

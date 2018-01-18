@@ -4,10 +4,10 @@
     "description": "A fully extesible SDK for building browser based applications, with an old school CLI UX",
     "main": "web-onion.js",
     "scripts": {
-        "prePublishOnly": "rimraf ./dist && tsc  && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/",
         "test": "echo \"Error: no test specified\" && exit 1",
         "demo": "webpack",
-        "build-dev": "rimraf ./dist && tsc  && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/"
+        "build-dev": "rimraf ./dist && tsc  && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/",
+        "release": "rimraf ./dist && tsc  && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/"
     },
     "author": "Caius Citiriga",
     "license": "MIT",
