@@ -81,8 +81,8 @@ export class WebOnionSDK {
         this.renderer_lib = new WORenderer();
         this.help_manager_lib = new WOHelpManager();
         this.dispatcher_lib = new WODispatcher();
-        //  Start a listener for the double click on console
 
+        //  Start a listener for the double click on console
         WORenderer.listenForDblClickOnElement('html', () => {
             if (WORenderer.hasClass('body', 'wo-dbl-click-autofocus')) {
                 this.input_lib.focusInput();
@@ -255,7 +255,7 @@ export class WebOnionSDK {
     }
 
     private handleEchoCommand(flags: WOFlag[]) {
-        const message = flags[0].flag.split(':') [1];
+        const message = flags[0].flag.split(':')[1];
         this.out_lib.printMessage(message);
     }
 
@@ -282,11 +282,14 @@ export class WebOnionSDK {
                 this.out_lib.printMessage(data.content);
                 this.out_lib.printMessage(`-${data.title}`, WOSeverityEnum.info);
                 this.out_lib.printMessage('');
+            }).catch((err: any) => {
+                this.out_lib.printMessage(`Sorry, cannot inspire you right now. Something blew up D:`, WOSeverityEnum.warning);
+                return;
             });
 
             return;
         }
 
-        this.out_lib.printMessage(`Unknown flag "${flags[0]}" used`, WOSeverityEnum.error);
+        this.out_lib.printMessage(`Unknown flag "${flags[0].flag}" used`, WOSeverityEnum.error);
     }
 }

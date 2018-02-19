@@ -30,6 +30,16 @@ class WORenderer {
             }
         });
     }
+    static listenForKeyDownOnElement(elememt, keyCodeToCatch, callback, disposeListenerAfterCallbackExec = false) {
+        const el = $(elememt).on('keydown', k => {
+            //  If the keycode is different that the one to catch or if the element is in wait mode
+            if (k.keyCode === keyCodeToCatch) {
+                k.preventDefault();
+                callback();
+                disposeListenerAfterCallbackExec ? el.off() : null;
+            }
+        });
+    }
     static listenForDblClickOnElement(element, callback) {
         $(element).dblclick(() => callback());
     }

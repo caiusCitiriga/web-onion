@@ -450,6 +450,24 @@ enum WOSeverityEnum {
     info = 3
 }
 ```
+
+## How to run in dev-mode 
+If you'd like to contribute with new features or bugfixes to this repo, there is already a demo project set up inside WebOnion.
+
+Inside the ```src/demo``` folder, you will find a ```demo.ts``` file that includes the WebOnionSDK. It sets some demo configurations (these configurations may changes from release to release, since are the demo features, used for development.) and finally initializes the SDK.
+
+If you take a look to the ```index.html``` file, that includes **JQuery**, you will notice that also a ```demo-bundle.js``` file is included too.
+
+This is a webpack bundle. You don't need to setup any configuration, it's allready defined inside the ```webpack.config.js``` file for you, however feel free to adjust it to your needs. Just don't include it inside the PR. (if any) 
+
+All you need to do, is to develop your demo environment starting from the ```src/demo/demo.ts``` file. When you're ready, run this npm command:
+
+```
+npm run demo
+```
+
+This will give you a brand new ```dist``` folder, just load the ```index.html``` file inside that folder, and test your changes in the browser.
+
 ---
 ## Upcoming features
 ### **Theme configuration**

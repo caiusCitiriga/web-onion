@@ -42,7 +42,7 @@ export class WOOutput {
                 message_wrapper = `<span class="wc-message wc-message-info"></span>`;
                 break;
             default:
-                message_wrapper = `<span class="wc-message wc-message-message"></span>`;
+                message_wrapper = `<span class="wc-message wc-message-message">${message}</span>`;
                 break;
         }
 
