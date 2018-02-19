@@ -15,7 +15,7 @@ export class WORenderer {
     }
 
     public static getElement(whichElement: string, whichOneIfMultiple = 0): HTMLElement {
-        return $(whichElement) [whichOneIfMultiple];
+        return $(whichElement)[whichOneIfMultiple];
     }
 
     public static setFocus(to: string) {
@@ -32,6 +32,17 @@ export class WORenderer {
         const el = $(elememt).on('keypress', k => {
             //  If the keycode is different that the one to catch or if the element is in wait mode
             if (k.keyCode === keyCodeToCatch) {
+                callback();
+                disposeListenerAfterCallbackExec ? el.off() : null;
+            }
+        });
+    }
+
+    public static listenForKeyDownOnElement(elememt: string, keyCodeToCatch: number, callback: () => void, disposeListenerAfterCallbackExec = false) {
+        const el = $(elememt).on('keydown', k => {
+            //  If the keycode is different that the one to catch or if the element is in wait mode
+            if (k.keyCode === keyCodeToCatch) {
+                k.preventDefault();
                 callback();
                 disposeListenerAfterCallbackExec ? el.off() : null;
             }

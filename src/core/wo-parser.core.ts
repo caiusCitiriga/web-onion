@@ -12,8 +12,8 @@ import { WOCommandSet } from '../entities/wo-command-set.entity';
 export class WOParser {
 
     private sdk: WebOnionSDK;
-    private history_index = 0;
-    private session_commands_history: WOCommandSet[] = [];
+    private history_index: number;
+    private session_commands_history: string[] = [];
 
     private command_set: WOCommandSet = {
         command: null,
@@ -29,7 +29,6 @@ export class WOParser {
      */
     public startParser(dispatcher_conf: WODispatcherConfiguration[], sdk: WebOnionSDK) {
         this.sdk = sdk;
-
         WORenderer.listenForKeyPressOnElement('input.wc-input-field', 13, () => {
             if (this.inputIsInWaitMode()) { return; }
 
@@ -37,10 +36,32 @@ export class WOParser {
             //  TODO handle a missing required flag (like echo command)
             //  TODO handle wrong flag delimiters (warn user)
 
-            this.addCommandToHistory();
             this.dispatchCommand(dispatcher_conf);
             this.resetCommandSet();
             this.clearCommandInputIfNeeded();
+        });
+
+        //  This is the keycode for the ARROW-UP
+        //  TODO set this into the configuration, so the developer can change it
+        WORenderer.listenForKeyDownOnElement('input.wc-input-field', 40, () => {
+            !this.history_index && this.history_index !== 0 ? this.history_index = 0 : this.history_index++;
+            this.history_index > (this.session_commands_history.length - 1) ? this.history_index = (this.session_commands_history.length - 1) : null;
+
+            const command = this.session_commands_history[this.history_index];
+            if (!command) { return; }
+            WORenderer.setVal('input.wc-input-field', command);
+
+        });
+
+        //  This is the keycode for the ARROW-DOWN
+        //  TODO set this into the configuration, so the developer can change it
+        WORenderer.listenForKeyDownOnElement('input.wc-input-field', 38, () => {
+            !this.history_index && this.history_index !== 0 ? this.history_index = 0 : this.history_index--;
+            this.history_index < 0 ? this.history_index = 0 : null;
+
+            const command = this.session_commands_history[this.history_index];
+            if (!command) { return; }
+            WORenderer.setVal('input.wc-input-field', command);
         });
     }
 
@@ -52,7 +73,9 @@ export class WOParser {
      * @memberof WOParser
      */
     private assignCommandSet(): void {
-        this.command_set = this.parseRAWCommand(this.extractRAWCommand());
+        const raw_command = this.extractRAWCommand();
+        this.addCommandToHistory(raw_command);
+        this.command_set = this.parseRAWCommand(raw_command);
     }
 
 
@@ -91,13 +114,16 @@ export class WOParser {
     }
 
     /**
-     * Pushes the current command_set in the session's commands histroy
+     * Pushes the current command string in the session's commands histroy
      * 
      * @private
      * @memberof WOParser
      */
-    private addCommandToHistory(): void {
-        this.session_commands_history.push(this.command_set);
+    private addCommandToHistory(raw_command: string): void {
+        this.session_commands_history.push(raw_command);
+
+        //  Increase the history index, to keep it up with the last command.
+        this.history_index = this.session_commands_history.length;
     }
 
     /**

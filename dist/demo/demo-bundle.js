@@ -70,22 +70,6 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var WOSeverityEnum;
-(function (WOSeverityEnum) {
-    WOSeverityEnum[WOSeverityEnum["message"] = 0] = "message";
-    WOSeverityEnum[WOSeverityEnum["error"] = 1] = "error";
-    WOSeverityEnum[WOSeverityEnum["warning"] = 2] = "warning";
-    WOSeverityEnum[WOSeverityEnum["info"] = 3] = "info";
-})(WOSeverityEnum = exports.WOSeverityEnum || (exports.WOSeverityEnum = {}));
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 class WORenderer {
     static append(to, element, appendToLastMatch = false) {
         appendToLastMatch ? $(to).last().append(element) : $(to).append(element);
@@ -111,6 +95,16 @@ class WORenderer {
         const el = $(elememt).on('keypress', k => {
             //  If the keycode is different that the one to catch or if the element is in wait mode
             if (k.keyCode === keyCodeToCatch) {
+                callback();
+                disposeListenerAfterCallbackExec ? el.off() : null;
+            }
+        });
+    }
+    static listenForKeyDownOnElement(elememt, keyCodeToCatch, callback, disposeListenerAfterCallbackExec = false) {
+        const el = $(elememt).on('keydown', k => {
+            //  If the keycode is different that the one to catch or if the element is in wait mode
+            if (k.keyCode === keyCodeToCatch) {
+                k.preventDefault();
                 callback();
                 disposeListenerAfterCallbackExec ? el.off() : null;
             }
@@ -142,6 +136,22 @@ class WORenderer {
     }
 }
 exports.WORenderer = WORenderer;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var WOSeverityEnum;
+(function (WOSeverityEnum) {
+    WOSeverityEnum[WOSeverityEnum["message"] = 0] = "message";
+    WOSeverityEnum[WOSeverityEnum["error"] = 1] = "error";
+    WOSeverityEnum[WOSeverityEnum["warning"] = 2] = "warning";
+    WOSeverityEnum[WOSeverityEnum["info"] = 3] = "info";
+})(WOSeverityEnum = exports.WOSeverityEnum || (exports.WOSeverityEnum = {}));
 
 
 /***/ }),
@@ -262,8 +272,8 @@ const wo_dispatcher_core_1 = __webpack_require__(12);
 const wo_parser_core_1 = __webpack_require__(13);
 const wo_help_manager_core_1 = __webpack_require__(14);
 const general_conf_1 = __webpack_require__(2);
-const wo_severity_enum_1 = __webpack_require__(0);
-const wo_renderer_core_1 = __webpack_require__(1);
+const wo_severity_enum_1 = __webpack_require__(1);
+const wo_renderer_core_1 = __webpack_require__(0);
 class WebOnionSDK {
     constructor() {
         this.configuration = {
@@ -498,10 +508,13 @@ class WebOnionSDK {
                 this.out_lib.printMessage(data.content);
                 this.out_lib.printMessage(`-${data.title}`, wo_severity_enum_1.WOSeverityEnum.info);
                 this.out_lib.printMessage('');
+            }).catch((err) => {
+                this.out_lib.printMessage(`Sorry, cannot inspire you right now. Something blew up D:`, wo_severity_enum_1.WOSeverityEnum.warning);
+                return;
             });
             return;
         }
-        this.out_lib.printMessage(`Unknown flag "${flags[0]}" used`, wo_severity_enum_1.WOSeverityEnum.error);
+        this.out_lib.printMessage(`Unknown flag "${flags[0].flag}" used`, wo_severity_enum_1.WOSeverityEnum.error);
     }
 }
 exports.WebOnionSDK = WebOnionSDK;
@@ -1095,8 +1108,8 @@ module.exports = function (css) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const wo_severity_enum_1 = __webpack_require__(0);
-const wo_renderer_core_1 = __webpack_require__(1);
+const wo_severity_enum_1 = __webpack_require__(1);
+const wo_renderer_core_1 = __webpack_require__(0);
 const general_conf_1 = __webpack_require__(2);
 class WOOutput {
     /**
@@ -1131,7 +1144,7 @@ class WOOutput {
                 message_wrapper = `<span class="wc-message wc-message-info"></span>`;
                 break;
             default:
-                message_wrapper = `<span class="wc-message wc-message-message"></span>`;
+                message_wrapper = `<span class="wc-message wc-message-message">${message}</span>`;
                 break;
         }
         wo_renderer_core_1.WORenderer.append('.wc-console', message_wrapper);
@@ -1206,8 +1219,8 @@ exports.WOOutput = WOOutput;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const wo_severity_enum_1 = __webpack_require__(0);
-const wo_renderer_core_1 = __webpack_require__(1);
+const wo_severity_enum_1 = __webpack_require__(1);
+const wo_renderer_core_1 = __webpack_require__(0);
 class WOInput {
     /**
      * Clears the input field
@@ -1289,7 +1302,7 @@ exports.WOInput = WOInput;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const wo_severity_enum_1 = __webpack_require__(0);
+const wo_severity_enum_1 = __webpack_require__(1);
 class WODispatcher {
     /**
      * Takes the configuration containing all the available commands, the current command set,
@@ -1334,12 +1347,10 @@ exports.WODispatcher = WODispatcher;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const wo_severity_enum_1 = __webpack_require__(0);
-const wo_renderer_core_1 = __webpack_require__(1);
+const wo_renderer_core_1 = __webpack_require__(0);
 class WOParser {
     constructor() {
-        this.history_index = 0;
-        this.session_history = [];
+        this.session_commands_history = [];
         this.command_set = {
             command: null,
             flags: null
@@ -1353,34 +1364,101 @@ class WOParser {
      * @memberof WOParser
      */
     startParser(dispatcher_conf, sdk) {
+        this.sdk = sdk;
         wo_renderer_core_1.WORenderer.listenForKeyPressOnElement('input.wc-input-field', 13, () => {
             if (this.inputIsInWaitMode()) {
                 return;
             }
-            this.assignCommandSet(sdk);
-            const checkResult = this.checkSuccessfulParse(this.command_set);
-            if (!checkResult.isOk && checkResult.message) {
-                sdk.out_lib.printMessage(checkResult.message, wo_severity_enum_1.WOSeverityEnum.warning);
+            this.assignCommandSet();
+            //  TODO handle a missing required flag (like echo command)
+            //  TODO handle wrong flag delimiters (warn user)
+            this.dispatchCommand(dispatcher_conf);
+            this.resetCommandSet();
+            this.clearCommandInputIfNeeded();
+        });
+        //  This is the keycode for the ARROW-UP
+        //  TODO set this into the configuration, so the developer can change it
+        wo_renderer_core_1.WORenderer.listenForKeyDownOnElement('input.wc-input-field', 40, () => {
+            !this.history_index && this.history_index !== 0 ? this.history_index = 0 : this.history_index++;
+            this.history_index > (this.session_commands_history.length - 1) ? this.history_index = (this.session_commands_history.length - 1) : null;
+            const command = this.session_commands_history[this.history_index];
+            if (!command) {
                 return;
             }
-            sdk.dispatcher_lib.dispatch(dispatcher_conf, this.command_set, sdk);
-            this.resetCommandSet();
-            sdk.clearAfterSubmit ? sdk.input_lib.clearInput() : null;
+            wo_renderer_core_1.WORenderer.setVal('input.wc-input-field', command);
+        });
+        //  This is the keycode for the ARROW-DOWN
+        //  TODO set this into the configuration, so the developer can change it
+        wo_renderer_core_1.WORenderer.listenForKeyDownOnElement('input.wc-input-field', 38, () => {
+            !this.history_index && this.history_index !== 0 ? this.history_index = 0 : this.history_index--;
+            this.history_index < 0 ? this.history_index = 0 : null;
+            const command = this.session_commands_history[this.history_index];
+            if (!command) {
+                return;
+            }
+            wo_renderer_core_1.WORenderer.setVal('input.wc-input-field', command);
         });
     }
-    assignCommandSet(sdk) {
-        this.command_set = this.parseRAWCommand(wo_renderer_core_1.WORenderer.getVal('input.wc-input-field'), sdk);
+    /**
+     * Assigns the command set internally
+     *
+     * @private
+     * @memberof WOParser
+     */
+    assignCommandSet() {
+        const raw_command = this.extractRAWCommand();
+        this.addCommandToHistory(raw_command);
+        this.command_set = this.parseRAWCommand(raw_command);
     }
-    parseRAWCommand(raw_command, sdk) {
+    /**
+     * Extracts the command from the input field
+     *
+     * @private
+     * @returns {string}
+     * @memberof WOParser
+     */
+    extractRAWCommand() {
+        return wo_renderer_core_1.WORenderer.getVal('input.wc-input-field');
+    }
+    /**
+     * Assigns the command set internally
+     *
+     * @private
+     * @param {string} raw_command
+     * @returns {WOCommandSet}
+     * @memberof WOParser
+     */
+    parseRAWCommand(raw_command) {
         const command_set = {
             command: null,
             flags: null
         };
-        command_set.command = raw_command.split(sdk.flagDelimiter)[0].trim(); //  This will take only what's before any flag
-        const flags = raw_command.split(sdk.flagDelimiter);
+        command_set.command = raw_command.split(this.sdk.flagDelimiter)[0].trim(); //  This will take only what's before any flag
+        const flags = raw_command.split(this.sdk.flagDelimiter);
         flags.shift(); // remove the command from the flags array;
         command_set.flags = flags.map(f => ({ flag: f.toLowerCase() }));
         return command_set;
+    }
+    /**
+     * Pushes the current command string in the session's commands histroy
+     *
+     * @private
+     * @memberof WOParser
+     */
+    addCommandToHistory(raw_command) {
+        this.session_commands_history.push(raw_command);
+        //  Increase the history index, to keep it up with the last command.
+        this.history_index = this.session_commands_history.length;
+    }
+    /**
+     * Dispatches the command using the SDK's dispatcher
+     *
+     * @private
+     * @param {WODispatcherConfiguration[]} dispatcher_conf
+     * @memberof WOParser
+     */
+    dispatchCommand(dispatcher_conf) {
+        this.sdk.dispatcher_lib.dispatch(dispatcher_conf, this.command_set, this.sdk);
     }
     /**
      * Resets the command set
@@ -1392,13 +1470,23 @@ class WOParser {
         this.command_set.command = null;
         this.command_set.flags = null;
     }
-    checkSuccessfulParse(cs) {
-        if (cs.flags && cs.flags[0] && cs.flags[0].flag === '') {
-            //  This may be caused when the flag delimiter is '-' and the user uses '--'.
-            return { isOk: false, message: 'The flag/s provided cannot be used. This may happen when the flag delimiter is "-" but you\'ve used "--"' };
-        }
-        return { isOk: true };
+    /**
+     * If the configs is set to clear the input, it will clear it
+     *
+     * @private
+     * @memberof WOParser
+     */
+    clearCommandInputIfNeeded() {
+        this.sdk.clearAfterSubmit ? this.sdk.input_lib.clearInput() : null;
     }
+    /**
+     * If the input is in "wait mode", meaning that the command should be treated as a info from the user.
+     * If so, it will have a wc-input-wait class on it and returns TRUE
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof WOParser
+     */
     inputIsInWaitMode() {
         return $('input.wc-input-field').hasClass('wc-input-wait');
     }
@@ -1413,7 +1501,7 @@ exports.WOParser = WOParser;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const wo_renderer_core_1 = __webpack_require__(1);
+const wo_renderer_core_1 = __webpack_require__(0);
 class WOHelpManager {
     generateHelpFromDispatcherConfig(sdk) {
         const config = sdk.dispatcherConfiguration;

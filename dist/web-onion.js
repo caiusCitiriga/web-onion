@@ -243,10 +243,13 @@ class WebOnionSDK {
                 this.out_lib.printMessage(data.content);
                 this.out_lib.printMessage(`-${data.title}`, wo_severity_enum_1.WOSeverityEnum.info);
                 this.out_lib.printMessage('');
+            }).catch((err) => {
+                this.out_lib.printMessage(`Sorry, cannot inspire you right now. Something blew up D:`, wo_severity_enum_1.WOSeverityEnum.warning);
+                return;
             });
             return;
         }
-        this.out_lib.printMessage(`Unknown flag "${flags[0]}" used`, wo_severity_enum_1.WOSeverityEnum.error);
+        this.out_lib.printMessage(`Unknown flag "${flags[0].flag}" used`, wo_severity_enum_1.WOSeverityEnum.error);
     }
 }
 exports.WebOnionSDK = WebOnionSDK;
