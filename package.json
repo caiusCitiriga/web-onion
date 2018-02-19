@@ -5,7 +5,7 @@
     "main": "web-onion.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "demo": "webpack",
+        "demo": "npm run build-dev && webpack && cp ./src/demo/index.html ./dist/demo/ && mv ./demo-bundle.js ./dist/demo/",
         "build-dev": "rimraf ./dist && tsc  && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/",
         "release": "rimraf ./dist && tsc  && cp -r ./src/assets ./dist/assets && cp ./src/matrix.css ./dist/"
     },

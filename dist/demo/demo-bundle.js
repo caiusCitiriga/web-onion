@@ -152,7 +152,7 @@ exports.WORenderer = WORenderer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GENERAL_CONF = {
-    version: '3.0.7-beta.1'
+    version: '3.0.8'
 };
 
 
@@ -163,12 +163,104 @@ exports.GENERAL_CONF = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(4);
-const wo_output_core_1 = __webpack_require__(9);
-const wo_input_core_1 = __webpack_require__(10);
-const wo_dispatcher_core_1 = __webpack_require__(11);
-const wo_parser_core_1 = __webpack_require__(12);
-const wo_help_manager_core_1 = __webpack_require__(13);
+const web_onion_1 = __webpack_require__(4);
+$().ready(() => {
+    const WO = new web_onion_1.WebOnionSDK();
+    WO.load_timeout = 0;
+    WO.dbl_click_focuses_input = true;
+    WO.addConfigurationsToDispatcher([
+        {
+            command: 'key',
+            desc: 'Test key-val pairs print',
+            action: () => {
+                WO.out_lib.printKeyValuePairs([
+                    {
+                        key: 'mykey1',
+                        value: 'mykey1 value'
+                    },
+                    {
+                        key: 'mykey2',
+                        value: 'mykey2 value'
+                    }, {
+                        key: 'mylongkey3thisisverylong',
+                        value: 'mylongkey3 loooong value'
+                    }, {
+                        key: 'mykey4',
+                        value: 'mykey4 value'
+                    }
+                ]);
+            }
+        },
+        {
+            command: 'in',
+            desc: 'Test input',
+            action: () => {
+                WO.input_lib.prompt('Yo?', WO, 'data-key', () => WO.out_lib.printMessage('Works: ' + WO.input_lib.getInputData('data-key')));
+            }
+        },
+        {
+            command: 'list',
+            flags: [
+                {
+                    flag: 'f1',
+                    desc: 'Flag one desc'
+                },
+                {
+                    flag: 'f2',
+                    desc: 'Flag two desc'
+                },
+                {
+                    flag: 'f3',
+                    desc: 'Flag three desc'
+                }
+            ],
+            aliases: ['l', 'll', 'ls'],
+            desc: 'My first awesome command',
+            action: (flags) => {
+                if (!flags.length) {
+                    alert('Command fired test-me without any flag');
+                    return;
+                }
+                if (flags.find(f => f.flag === 'f1')) {
+                    alert('Fired command test-me with flag --f1');
+                    return;
+                }
+                if (flags.find(f => f.flag === 'f2')) {
+                    alert('Fired command test-me with flag --f2');
+                    return;
+                }
+                if (flags.find(f => f.flag === 'f3')) {
+                    alert('Fired command test-me with flag --f3');
+                    return;
+                }
+                flags.forEach(f => {
+                    if (f.flag.split(':').length && f.flag.split(':')[1] && f.flag.split(':')[1].split('=')[0] === 'value') {
+                        const val = f.flag.split(':').length && f.flag.split(':')[1].split('=')[1];
+                        alert('Fired command test-me with flag --f3 and with value: ' + val);
+                        return;
+                    }
+                    alert('Unknown flag for this command');
+                });
+            }
+        }
+    ]);
+    WO.initialize();
+});
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(5);
+const wo_output_core_1 = __webpack_require__(10);
+const wo_input_core_1 = __webpack_require__(11);
+const wo_dispatcher_core_1 = __webpack_require__(12);
+const wo_parser_core_1 = __webpack_require__(13);
+const wo_help_manager_core_1 = __webpack_require__(14);
 const general_conf_1 = __webpack_require__(2);
 const wo_severity_enum_1 = __webpack_require__(0);
 const wo_renderer_core_1 = __webpack_require__(1);
@@ -416,13 +508,13 @@ exports.WebOnionSDK = WebOnionSDK;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(5);
+var content = __webpack_require__(6);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -430,7 +522,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(7)(content, options);
+var update = __webpack_require__(8)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -447,10 +539,10 @@ if(false) {
 }
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(undefined);
+exports = module.exports = __webpack_require__(7)(undefined);
 // imports
 
 
@@ -461,7 +553,7 @@ exports.push([module.i, ":root {\n    font-size: 14px;\n    --lime: #32cd32;\n  
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /*
@@ -543,7 +635,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -589,7 +681,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(8);
+var	fixUrls = __webpack_require__(9);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -902,7 +994,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 
@@ -997,7 +1089,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1108,7 +1200,7 @@ exports.WOOutput = WOOutput;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1191,7 +1283,7 @@ exports.WOInput = WOInput;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1236,7 +1328,7 @@ exports.WODispatcher = WODispatcher;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1304,7 +1396,7 @@ exports.WOParser = WOParser;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
