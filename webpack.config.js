@@ -2,10 +2,10 @@ var path = require("path");
 
 module.exports = {
     watch: false,
-    entry: "./src/web-onion.ts",
+    entry: "./src/demo/demo.ts",
     output: {
         path: path.resolve(__dirname),
-        filename: "web-onion.js"
+        filename: "demo-bundle.js"
     },
     resolve: {
         extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
