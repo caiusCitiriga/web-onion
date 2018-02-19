@@ -1,6 +1,13 @@
 # WebOnion SDK
 
-A fully extensible SDK for building powerful browser based applications. With an old school CLI user interface and interaction system. 
+Turn yoru browser into a terminal.
+WebOnion is a fully extensible SDK for building powerful browser based applications, with a CLI interface.
+
+# Features
++ Help manager that auto generates a help table for your application
++ Commands history navigation like in real terminals
++ Built in get input from user feature
++ Various tools to deal with the UI
 
 ## Get started
 
@@ -128,6 +135,24 @@ The last statement:
 * takes the second value in the array. The value passed along with the flag
 
 Using this trick you can build advanced and complex commands.
+
+## How to run in dev-mode 
+If you'd like to contribute with new features or bugfixes to this repo, there is already a demo project set up inside WebOnion.
+
+Inside the ```src/demo``` folder, you will find a ```demo.ts``` file that includes the WebOnionSDK. It sets some demo configurations (these configurations may changes from release to release, since are the demo features, used for development.) and finally initializes the SDK.
+
+If you take a look to the ```index.html``` file, that includes **JQuery**, you will notice that also a ```demo-bundle.js``` file is included too.
+
+This is a webpack bundle. You don't need to setup any configuration, it's allready defined inside the ```webpack.config.js``` file for you, however feel free to adjust it to your needs. Just don't include it inside the PR. (if any) 
+
+All you need to do, is to develop your demo environment starting from the ```src/demo/demo.ts``` file. When you're ready, run this npm command:
+
+```
+npm run demo
+```
+
+This will give you a brand new ```dist``` folder, just load the ```index.html``` file inside that folder, and test your changes in the browser.
+
 
 # Core methods
 ### addConfigurationsToDispatcher()
@@ -451,23 +476,6 @@ enum WOSeverityEnum {
 }
 ```
 
-## How to run in dev-mode 
-If you'd like to contribute with new features or bugfixes to this repo, there is already a demo project set up inside WebOnion.
-
-Inside the ```src/demo``` folder, you will find a ```demo.ts``` file that includes the WebOnionSDK. It sets some demo configurations (these configurations may changes from release to release, since are the demo features, used for development.) and finally initializes the SDK.
-
-If you take a look to the ```index.html``` file, that includes **JQuery**, you will notice that also a ```demo-bundle.js``` file is included too.
-
-This is a webpack bundle. You don't need to setup any configuration, it's allready defined inside the ```webpack.config.js``` file for you, however feel free to adjust it to your needs. Just don't include it inside the PR. (if any) 
-
-All you need to do, is to develop your demo environment starting from the ```src/demo/demo.ts``` file. When you're ready, run this npm command:
-
-```
-npm run demo
-```
-
-This will give you a brand new ```dist``` folder, just load the ```index.html``` file inside that folder, and test your changes in the browser.
-
 ---
 ## Upcoming features
 ### **Theme configuration**
@@ -481,10 +489,6 @@ It will be added a set of methods to this library that will handle complex outpu
 
 ### **Auto completition of commands**
 There will be a library that will handle the autcompletition process for the current commands set
-
-### **Use arrows to navigate used commands history**
-You will be able to use the arrows (up and down) to navigate the previously used commands. Just like in the terminal
-
 
 # Help WebOnion grow
 If you like this project please help me with your feedback. Found a bug? Want a feature? Want some help? Feel free to open a [Issue on GitHub](https://github.com/caiuscitiriga/smart-cli/issues).
